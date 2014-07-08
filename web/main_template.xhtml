@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!-- Load CSS -->        
+        <h:outputStylesheet name="/css/metro-bootstrap.css"/>
+        <h:outputStylesheet name="/css/iconFont.css"/>
+        <h:outputStylesheet name="/css/metro-bootstrap-responsive.css"/>
+        <h:outputStylesheet name="/css/docs.css"/>
+        <h:outputStylesheet name="/js/prettify/prettify.css"/>
+
+        <!-- Load JavaScript -->       
+        <h:outputStylesheet name="/js/prettify/prettify.css"/>
+        <h:outputScript name="/js/jquery/jquery.min.js" />
+        <h:outputScript name="/js/jquery/jquery.widget.min.js" />
+        <h:outputScript name="/js/metro.min.js" />
+
+        <title>ChangChang Travel</title>
+        <link rel="shortcut icon" type="image/x-icon" href="/resources/images/favicon.ico"/>
+    </h:head>
+
+    <h:body class="metro">
+
+        <div style="margin-left: 100px;">
+            <h:graphicImage url="/resources/images/travel1.png"/>
+        </div>
+        <header class="bg-pink">         
+            <nav class="navigation-bar bg-pink" >
+                <div class="navigation-bar-content">
+                    <a href="/" class="element"><span class="icon-heart"></span> ChangChang <sup>Travel</sup></a>
+<!--                    <form action="/faces/search.xhtml">
+                        <div class="element input-element">
+                            <div class="input-control text">
+                                <input name="keyword" placeholder="Search" />
+                            </div>
+                        </div>
+                        <button type="submit" class="element"><span class="icon-search"></span> Search</button>
+                    </form>-->
+                    <c:if test="${login.userInfo == null}">
+                        <h:form>
+                            <div class="place-right">                
+
+                                <div class="element input-element">
+                                    <div class="input-control text" style='width: 150px;'>
+                                        <h:inputText value="#{login.userName}" p:placeholder="Username"/>
+                                    </div>
+                                    <div class="input-control password" style='width: 150px;'>
+                                        <h:inputSecret value="#{login.password}" p:placeholder="Password"/>
+                                    </div>
+
+                                </div>  
+                                <h:commandLink class="element" action="#{login.login()}" value="Login" /> 
+                                <h:outputLink class="element" value="/faces/register.xhtml">Register</h:outputLink>  
+                            </div>     
+                        </h:form>
+                        <c:if test="#{login.haveMsg()}">
+                            <div class="element place-right">
+                                <div class="notice marker-on-right">
+                                    #{login.msg}
+                                </div>
+                            </div>
+                        </c:if>
+                    </c:if>
+
+                    <c:if test="${login.userInfo != null}">  
+                        <div class="place-right">
+                            <h:form>
+                                <div class="element bg-transparent">
+                                    <span class="icon-star-2"></span>
+                                    Welcome, 
+                                    #{login.userInfo.userName}
+                                </div>
+                                <h:commandLink class="element" action="#{login.logout()}" value="Logout"/> 
+
+                            </h:form>      
+
+                        </div>
+                    </c:if>
+
+
+                    <c:if test="${login.userInfo.isGuide == true}">
+                        <h:outputLink class="element place-left" value="/faces/guide/add_place.xhtml">
+                            <i class="icon-yelp fg-white"></i> Add New Place
+                        </h:outputLink>
+                    </c:if>   
+
+                </div>
+            </nav>
+        </header>  
+
+        <div class="grid fluid">
+            <div class="row">
+                <div class="span2">
+                    <nav class="vertical-menu">
+                        <ul>
+                            <form action="/faces/search.xhtml">
+                                <div class="element input-element" style="width: 215px;">
+                                    <div class="input-control text">
+                                        <input name="keyword" placeholder="Search" />
+                            
+                                    </div>
+                                </div>
+                            </form>
+                            <li class="title">Destination</li>
+                            <ui:repeat value="" var="">
+                                <li><h:outputLink value="/faces/details.xhtml?id="></h:outputLink></li>
+                            </ui:repeat>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="span9">
+                    <ui:insert name="content">Content</ui:insert>
+                </div>
+            </div>
+        </div>
+        <div class="bg-pink padding10 fg-white">
+            @ChangChang Travel 2014 - Contact: Han Young Ran
+        </div>
+
+    </h:body>
+
+</html>

@@ -24,6 +24,7 @@ import entity.Report;
 import entity.Request;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -411,6 +412,19 @@ public class AccountJpaController implements Serializable {
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
+        }
+    }
+
+    public Account getAccount(String username, String password) {
+        String queryString = "SELECT a FROM Account a WHERE a.username = :username AND a.password = :password";
+        TypedQuery<Account> query = getEntityManager().createQuery(queryString, Account.class);
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        List<Account> accounts = query.getResultList();
+        if (accounts.isEmpty()) {
+            return null;
+        } else {
+            return accounts.get(0);
         }
     }
     

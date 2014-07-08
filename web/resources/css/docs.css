@@ -1,0 +1,160 @@
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.metro .page {
+    width: 980px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.metro #loginPage {
+    width: 100% !important;
+}
+
+.metro #accountPage {
+    width: 100% !important;
+}
+
+#loginPage .loginPanel {
+    width: 400px;
+    height: 500px;
+    margin: -200px -200px;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+}
+
+#accountPage .accountPanel {
+    width: 400px;
+    height: 500px;
+    margin-left: 335px;
+    margin-top: 100px;
+}
+
+#loginPage .loginPanel a,
+#accountPage .accountPanel a{
+    color: #fff;
+}
+
+
+#loginPage .loginPanel .login-body {
+    margin-top: 20px;
+    padding-bottom: 50px;
+    background: #fff;
+}
+
+#accountPage .accountPanel .account-body {
+    margin-top: 20px;
+    padding-bottom: 50px;
+    background: #fff;
+}
+
+#loginPage .loginPanel .login-body h2 {
+    font-weight: 300;
+    color: #333;
+    font-size: 24px;
+    padding: 20px 30px 5px 30px;
+}
+
+#loginPage .loginPanel .login-body form {
+    margin: 0 50px;
+}
+
+#accountPage .accountPanel .account-body form {
+    margin: 0 50px;
+}
+
+#loginPage .loginPanel .login-body .input-control {
+    margin: 20px auto;
+}
+
+#accountPage .accountPanel .account-body .input-control {
+    margin: 20px auto;
+}
+
+.form-actions {
+    margin-top: 25px;
+}
+
+.example .info {
+    margin-left: 50px;
+}
+
+.error .page {
+    width: 100%;
+}
+
+.error .wrapper {
+    width: 300px;
+    height: 230px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -165px -150px;
+}
+
+body.error .wrapper .errcode {
+    color: #fff;
+    font-size: 90px;
+    text-align: center;
+}
+
+body.error .wrapper .errcode span {
+    margin-right: 15px;
+}
+
+body.error .wrapper .desc {
+    color: #fff;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.description {
+    margin: 10px 0;
+}
+
+.show-grid .row [class*="span"] {
+    line-height: 40px;
+    background: rgba(193, 179, 123, 0.52);
+    text-align: center;
+    min-height: 10px !important;
+}
+
+.color-stack li,#icon-list li {
+    margin-bottom: 5px;
+}
+
+.example>img {
+    margin: 5px;
+    display: inline-block;
+}
+
+.example .image-container {
+    margin: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.layout {
+    min-height: 100%;
+    position: relative;
+}
+
+header {
+    height: 45px;
+    position: relative;
+}
+
+footer {
+    width: 100%;
+    height: 25px;
+}
+
+@media only screen and (max-width: 640px) {
+    .prettyprint,.example {
+        display: none;
+    }
+}
