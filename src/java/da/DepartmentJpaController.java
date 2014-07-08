@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import da.exceptions.NonexistentEntityException;
@@ -16,10 +15,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Account;
 import entity.Department;
+import entity.Request;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -37,6 +38,16 @@ public class DepartmentJpaController implements Serializable {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public Department getDepartment(String name) {
+        TypedQuery<Department> query = getEntityManager().createQuery("SELECT d FROM Department d WHERE d.name = :name", Department.class);
+        List<Department> deps = query.getResultList();
+        if (deps.isEmpty()) {
+            return null;
+        } else {
+            return deps.get(0);
+        }
     }
 
     public void create(Department department) throws PreexistingEntityException, RollbackFailureException, Exception {
@@ -214,5 +225,5 @@ public class DepartmentJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
