@@ -19,6 +19,7 @@ import entity.Request;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -38,6 +39,10 @@ public class RequestJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public List<Request> getRequests(String username){
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username", Request.class);
+        return query.getResultList();
+    }
     public void create(Request request) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
