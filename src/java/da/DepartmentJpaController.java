@@ -226,4 +226,11 @@ public class DepartmentJpaController implements Serializable {
         }
     }
 
+    public List<Department> getDepartmentById(int departmentId) {
+        String queryString = "SELECT d FROM Department d WHERE d.id = :id";
+        TypedQuery<Department> query = getEntityManager().createQuery(queryString, Department.class);
+        query.setParameter("id", departmentId);  
+        return query.getResultList();
+    }
+
 }

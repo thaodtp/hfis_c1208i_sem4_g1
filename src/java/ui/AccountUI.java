@@ -7,6 +7,7 @@
 package ui;
 
 import biz.AccountManager;
+import biz.DepartmentManager;
 import entity.Account;
 import java.util.Date;
 import java.util.logging.Level;
@@ -71,7 +72,7 @@ public class AccountUI {
             return "/faces/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't register at the moment.";
-            Logger.getLogger(UserInfoUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }
