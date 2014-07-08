@@ -39,7 +39,7 @@ public class RequestManager {
         return daController;
     }
     
-    public List<Request> getAccountRequest(String username){
-        
+    public List<Request> getRequests(String username){
+        return getDaController().getRequests(username);
     }
 }

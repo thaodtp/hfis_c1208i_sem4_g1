@@ -37,6 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "LabSchedule.findByDate", query = "SELECT l FROM LabSchedule l WHERE l.date = :date"),
     @NamedQuery(name = "LabSchedule.findByDetail", query = "SELECT l FROM LabSchedule l WHERE l.detail = :detail")})
 public class LabSchedule implements Serializable {
+    @JoinColumn(name = "LabId", referencedColumnName = "Id")
+    @ManyToOne
+    private Lab labId;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -125,6 +128,14 @@ public class LabSchedule implements Serializable {
     @Override
     public String toString() {
         return "entity.LabSchedule[ id=" + id + " ]";
+    }
+
+    public Lab getLabId() {
+        return labId;
+    }
+
+    public void setLabId(Lab labId) {
+        this.labId = labId;
     }
     
 }

@@ -11,13 +11,15 @@ import da.exceptions.PreexistingEntityException;
 import da.exceptions.RollbackFailureException;
 import entity.Lab;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import entity.LabSchedule;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
 
 /**
@@ -38,11 +40,29 @@ public class LabJpaController implements Serializable {
     }
 
     public void create(Lab lab) throws PreexistingEntityException, RollbackFailureException, Exception {
+        if (lab.getLabScheduleList() == null) {
+            lab.setLabScheduleList(new ArrayList<LabSchedule>());
+        }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            List<LabSchedule> attachedLabScheduleList = new ArrayList<LabSchedule>();
+            for (LabSchedule labScheduleListLabScheduleToAttach : lab.getLabScheduleList()) {
+                labScheduleListLabScheduleToAttach = em.getReference(labScheduleListLabScheduleToAttach.getClass(), labScheduleListLabScheduleToAttach.getId());
+                attachedLabScheduleList.add(labScheduleListLabScheduleToAttach);
+            }
+            lab.setLabScheduleList(attachedLabScheduleList);
             em.persist(lab);
+            for (LabSchedule labScheduleListLabSchedule : lab.getLabScheduleList()) {
+                Lab oldLabIdOfLabScheduleListLabSchedule = labScheduleListLabSchedule.getLabId();
+                labScheduleListLabSchedule.setLabId(lab);
+                labScheduleListLabSchedule = em.merge(labScheduleListLabSchedule);
+                if (oldLabIdOfLabScheduleListLabSchedule != null) {
+                    oldLabIdOfLabScheduleListLabSchedule.getLabScheduleList().remove(labScheduleListLabSchedule);
+                    oldLabIdOfLabScheduleListLabSchedule = em.merge(oldLabIdOfLabScheduleListLabSchedule);
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -66,7 +86,34 @@ public class LabJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
+            Lab persistentLab = em.find(Lab.class, lab.getId());
+            List<LabSchedule> labScheduleListOld = persistentLab.getLabScheduleList();
+            List<LabSchedule> labScheduleListNew = lab.getLabScheduleList();
+            List<LabSchedule> attachedLabScheduleListNew = new ArrayList<LabSchedule>();
+            for (LabSchedule labScheduleListNewLabScheduleToAttach : labScheduleListNew) {
+                labScheduleListNewLabScheduleToAttach = em.getReference(labScheduleListNewLabScheduleToAttach.getClass(), labScheduleListNewLabScheduleToAttach.getId());
+                attachedLabScheduleListNew.add(labScheduleListNewLabScheduleToAttach);
+            }
+            labScheduleListNew = attachedLabScheduleListNew;
+            lab.setLabScheduleList(labScheduleListNew);
             lab = em.merge(lab);
+            for (LabSchedule labScheduleListOldLabSchedule : labScheduleListOld) {
+                if (!labScheduleListNew.contains(labScheduleListOldLabSchedule)) {
+                    labScheduleListOldLabSchedule.setLabId(null);
+                    labScheduleListOldLabSchedule = em.merge(labScheduleListOldLabSchedule);
+                }
+            }
+            for (LabSchedule labScheduleListNewLabSchedule : labScheduleListNew) {
+                if (!labScheduleListOld.contains(labScheduleListNewLabSchedule)) {
+                    Lab oldLabIdOfLabScheduleListNewLabSchedule = labScheduleListNewLabSchedule.getLabId();
+                    labScheduleListNewLabSchedule.setLabId(lab);
+                    labScheduleListNewLabSchedule = em.merge(labScheduleListNewLabSchedule);
+                    if (oldLabIdOfLabScheduleListNewLabSchedule != null && !oldLabIdOfLabScheduleListNewLabSchedule.equals(lab)) {
+                        oldLabIdOfLabScheduleListNewLabSchedule.getLabScheduleList().remove(labScheduleListNewLabSchedule);
+                        oldLabIdOfLabScheduleListNewLabSchedule = em.merge(oldLabIdOfLabScheduleListNewLabSchedule);
+                    }
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -100,6 +147,11 @@ public class LabJpaController implements Serializable {
                 lab.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The lab with id " + id + " no longer exists.", enfe);
+            }
+            List<LabSchedule> labScheduleList = lab.getLabScheduleList();
+            for (LabSchedule labScheduleListLabSchedule : labScheduleList) {
+                labScheduleListLabSchedule.setLabId(null);
+                labScheduleListLabSchedule = em.merge(labScheduleListLabSchedule);
             }
             em.remove(lab);
             utx.commit();
