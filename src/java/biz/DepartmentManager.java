@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package biz;
 
-import da.AccountJpaController;
+import da.DepartmentJpaController;
 import da.RequestJpaController;
 import da.exceptions.RollbackFailureException;
-import entity.Request;
-import java.util.List;
+import entity.Department;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -26,55 +26,49 @@ import javax.transaction.UserTransaction;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class RequestManager {
-
+public class DepartmentManager {
     @PersistenceContext(unitName = "eAdministrationPU")
     private EntityManagerFactory em;
     @Resource
     private UserTransaction utx;
 
-    private RequestJpaController daController;
+    private DepartmentJpaController daController;
 
-    public RequestJpaController getDaController() {
+    public DepartmentJpaController getDaController() {
         if (daController == null) {
-            daController = new RequestJpaController(utx, em);
+            daController = new DepartmentJpaController(utx, em);
         }
         return daController;
     }
-
-    public List<Request> getRequests(String username) {
-        return getDaController().getRequests(username);
-    }
-
-    public List<Request> getRequests() {
-        return getDaController().getRequests();
-    }
-
-    public void create(Request request) {
+    
+    public void create(Department department){
         try {
-            getDaController().create(request);
+            getDaController().create(department);
         } catch (RollbackFailureException ex) {
-            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    public void edit(Request request){
-        try {
-            getDaController().edit(request);
-        } catch (RollbackFailureException ex) {
-            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public void delete(int id){
         try {
             getDaController().destroy(id);
         } catch (RollbackFailureException ex) {
-            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void edit(Department department){
+        try {
+            getDaController().edit(department);
+        } catch (RollbackFailureException ex) {
+            Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void getDepartment(String name){}
 }
