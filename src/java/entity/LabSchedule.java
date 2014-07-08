@@ -7,16 +7,18 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,44 +28,38 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author The
  */
 @Entity
-@Table(name = "Request")
+@Table(name = "LabSchedule")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Request.findAll", query = "SELECT r FROM Request r"),
-    @NamedQuery(name = "Request.findById", query = "SELECT r FROM Request r WHERE r.id = :id"),
-    @NamedQuery(name = "Request.findByStatus", query = "SELECT r FROM Request r WHERE r.status = :status")})
-public class Request implements Serializable {
+    @NamedQuery(name = "LabSchedule.findAll", query = "SELECT l FROM LabSchedule l"),
+    @NamedQuery(name = "LabSchedule.findById", query = "SELECT l FROM LabSchedule l WHERE l.id = :id"),
+    @NamedQuery(name = "LabSchedule.findBySlot", query = "SELECT l FROM LabSchedule l WHERE l.slot = :slot"),
+    @NamedQuery(name = "LabSchedule.findByDate", query = "SELECT l FROM LabSchedule l WHERE l.date = :date"),
+    @NamedQuery(name = "LabSchedule.findByDetail", query = "SELECT l FROM LabSchedule l WHERE l.detail = :detail")})
+public class LabSchedule implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "Id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "Content")
-    private String content;
-    @Column(name = "Status")
-    private Integer status;
-    @JoinColumn(name = "ResolveAccount", referencedColumnName = "Username")
-    @ManyToOne(optional = false)
-    private Account resolveAccount;
+    @Column(name = "Slot")
+    private Integer slot;
+    @Column(name = "Date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+    @Size(max = 50)
+    @Column(name = "Detail")
+    private String detail;
     @JoinColumn(name = "RequestAccount", referencedColumnName = "Username")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Account requestAccount;
 
-    public Request() {
+    public LabSchedule() {
     }
 
-    public Request(Integer id) {
+    public LabSchedule(Integer id) {
         this.id = id;
-    }
-
-    public Request(Integer id, String content) {
-        this.id = id;
-        this.content = content;
     }
 
     public Integer getId() {
@@ -74,28 +70,28 @@ public class Request implements Serializable {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public Integer getSlot() {
+        return slot;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setSlot(Integer slot) {
+        this.slot = slot;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Date getDate() {
+        return date;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public Account getResolveAccount() {
-        return resolveAccount;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setResolveAccount(Account resolveAccount) {
-        this.resolveAccount = resolveAccount;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public Account getRequestAccount() {
@@ -116,10 +112,10 @@ public class Request implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Request)) {
+        if (!(object instanceof LabSchedule)) {
             return false;
         }
-        Request other = (Request) object;
+        LabSchedule other = (LabSchedule) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -128,7 +124,7 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Request[ id=" + id + " ]";
+        return "entity.LabSchedule[ id=" + id + " ]";
     }
     
 }

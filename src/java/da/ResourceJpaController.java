@@ -9,7 +9,7 @@ package da;
 import da.exceptions.NonexistentEntityException;
 import da.exceptions.PreexistingEntityException;
 import da.exceptions.RollbackFailureException;
-import entity.Hardware;
+import entity.Resource;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -24,9 +24,9 @@ import javax.transaction.UserTransaction;
  *
  * @author The
  */
-public class HardwareJpaController implements Serializable {
+public class ResourceJpaController implements Serializable {
 
-    public HardwareJpaController(UserTransaction utx, EntityManagerFactory emf) {
+    public ResourceJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
@@ -37,12 +37,12 @@ public class HardwareJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Hardware hardware) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(Resource resource) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            em.persist(hardware);
+            em.persist(resource);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -50,8 +50,8 @@ public class HardwareJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findHardware(hardware.getId()) != null) {
-                throw new PreexistingEntityException("Hardware " + hardware + " already exists.", ex);
+            if (findResource(resource.getId()) != null) {
+                throw new PreexistingEntityException("Resource " + resource + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -61,12 +61,12 @@ public class HardwareJpaController implements Serializable {
         }
     }
 
-    public void edit(Hardware hardware) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Resource resource) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            hardware = em.merge(hardware);
+            resource = em.merge(resource);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -76,9 +76,9 @@ public class HardwareJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = hardware.getId();
-                if (findHardware(id) == null) {
-                    throw new NonexistentEntityException("The hardware with id " + id + " no longer exists.");
+                Integer id = resource.getId();
+                if (findResource(id) == null) {
+                    throw new NonexistentEntityException("The resource with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -94,14 +94,14 @@ public class HardwareJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Hardware hardware;
+            Resource resource;
             try {
-                hardware = em.getReference(Hardware.class, id);
-                hardware.getId();
+                resource = em.getReference(Resource.class, id);
+                resource.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The hardware with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The resource with id " + id + " no longer exists.", enfe);
             }
-            em.remove(hardware);
+            em.remove(resource);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -117,19 +117,19 @@ public class HardwareJpaController implements Serializable {
         }
     }
 
-    public List<Hardware> findHardwareEntities() {
-        return findHardwareEntities(true, -1, -1);
+    public List<Resource> findResourceEntities() {
+        return findResourceEntities(true, -1, -1);
     }
 
-    public List<Hardware> findHardwareEntities(int maxResults, int firstResult) {
-        return findHardwareEntities(false, maxResults, firstResult);
+    public List<Resource> findResourceEntities(int maxResults, int firstResult) {
+        return findResourceEntities(false, maxResults, firstResult);
     }
 
-    private List<Hardware> findHardwareEntities(boolean all, int maxResults, int firstResult) {
+    private List<Resource> findResourceEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Hardware.class));
+            cq.select(cq.from(Resource.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -141,20 +141,20 @@ public class HardwareJpaController implements Serializable {
         }
     }
 
-    public Hardware findHardware(Integer id) {
+    public Resource findResource(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Hardware.class, id);
+            return em.find(Resource.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getHardwareCount() {
+    public int getResourceCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Hardware> rt = cq.from(Hardware.class);
+            Root<Resource> rt = cq.from(Resource.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

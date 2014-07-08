@@ -9,24 +9,25 @@ package da;
 import da.exceptions.NonexistentEntityException;
 import da.exceptions.PreexistingEntityException;
 import da.exceptions.RollbackFailureException;
-import entity.ELearning;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import entity.Account;
+import entity.LabSchedule;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
 
 /**
  *
  * @author The
  */
-public class ELearningJpaController implements Serializable {
+public class LabScheduleJpaController implements Serializable {
 
-    public ELearningJpaController(UserTransaction utx, EntityManagerFactory emf) {
+    public LabScheduleJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
@@ -37,12 +38,21 @@ public class ELearningJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(ELearning ELearning) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(LabSchedule labSchedule) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            em.persist(ELearning);
+            Account requestAccount = labSchedule.getRequestAccount();
+            if (requestAccount != null) {
+                requestAccount = em.getReference(requestAccount.getClass(), requestAccount.getUsername());
+                labSchedule.setRequestAccount(requestAccount);
+            }
+            em.persist(labSchedule);
+            if (requestAccount != null) {
+                requestAccount.getLabScheduleList().add(labSchedule);
+                requestAccount = em.merge(requestAccount);
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -50,8 +60,8 @@ public class ELearningJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findELearning(ELearning.getId()) != null) {
-                throw new PreexistingEntityException("ELearning " + ELearning + " already exists.", ex);
+            if (findLabSchedule(labSchedule.getId()) != null) {
+                throw new PreexistingEntityException("LabSchedule " + labSchedule + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -61,12 +71,27 @@ public class ELearningJpaController implements Serializable {
         }
     }
 
-    public void edit(ELearning ELearning) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(LabSchedule labSchedule) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            ELearning = em.merge(ELearning);
+            LabSchedule persistentLabSchedule = em.find(LabSchedule.class, labSchedule.getId());
+            Account requestAccountOld = persistentLabSchedule.getRequestAccount();
+            Account requestAccountNew = labSchedule.getRequestAccount();
+            if (requestAccountNew != null) {
+                requestAccountNew = em.getReference(requestAccountNew.getClass(), requestAccountNew.getUsername());
+                labSchedule.setRequestAccount(requestAccountNew);
+            }
+            labSchedule = em.merge(labSchedule);
+            if (requestAccountOld != null && !requestAccountOld.equals(requestAccountNew)) {
+                requestAccountOld.getLabScheduleList().remove(labSchedule);
+                requestAccountOld = em.merge(requestAccountOld);
+            }
+            if (requestAccountNew != null && !requestAccountNew.equals(requestAccountOld)) {
+                requestAccountNew.getLabScheduleList().add(labSchedule);
+                requestAccountNew = em.merge(requestAccountNew);
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -76,9 +101,9 @@ public class ELearningJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = ELearning.getId();
-                if (findELearning(id) == null) {
-                    throw new NonexistentEntityException("The eLearning with id " + id + " no longer exists.");
+                Integer id = labSchedule.getId();
+                if (findLabSchedule(id) == null) {
+                    throw new NonexistentEntityException("The labSchedule with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -94,14 +119,19 @@ public class ELearningJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            ELearning ELearning;
+            LabSchedule labSchedule;
             try {
-                ELearning = em.getReference(ELearning.class, id);
-                ELearning.getId();
+                labSchedule = em.getReference(LabSchedule.class, id);
+                labSchedule.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The ELearning with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The labSchedule with id " + id + " no longer exists.", enfe);
             }
-            em.remove(ELearning);
+            Account requestAccount = labSchedule.getRequestAccount();
+            if (requestAccount != null) {
+                requestAccount.getLabScheduleList().remove(labSchedule);
+                requestAccount = em.merge(requestAccount);
+            }
+            em.remove(labSchedule);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -117,19 +147,19 @@ public class ELearningJpaController implements Serializable {
         }
     }
 
-    public List<ELearning> findELearningEntities() {
-        return findELearningEntities(true, -1, -1);
+    public List<LabSchedule> findLabScheduleEntities() {
+        return findLabScheduleEntities(true, -1, -1);
     }
 
-    public List<ELearning> findELearningEntities(int maxResults, int firstResult) {
-        return findELearningEntities(false, maxResults, firstResult);
+    public List<LabSchedule> findLabScheduleEntities(int maxResults, int firstResult) {
+        return findLabScheduleEntities(false, maxResults, firstResult);
     }
 
-    private List<ELearning> findELearningEntities(boolean all, int maxResults, int firstResult) {
+    private List<LabSchedule> findLabScheduleEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(ELearning.class));
+            cq.select(cq.from(LabSchedule.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -141,20 +171,20 @@ public class ELearningJpaController implements Serializable {
         }
     }
 
-    public ELearning findELearning(Integer id) {
+    public LabSchedule findLabSchedule(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(ELearning.class, id);
+            return em.find(LabSchedule.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getELearningCount() {
+    public int getLabScheduleCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<ELearning> rt = cq.from(ELearning.class);
+            Root<LabSchedule> rt = cq.from(LabSchedule.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

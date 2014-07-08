@@ -42,8 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Account.findByName", query = "SELECT a FROM Account a WHERE a.name = :name"),
     @NamedQuery(name = "Account.findByBirthday", query = "SELECT a FROM Account a WHERE a.birthday = :birthday"),
     @NamedQuery(name = "Account.findByEmail", query = "SELECT a FROM Account a WHERE a.email = :email"),
-    @NamedQuery(name = "Account.findByPhone", query = "SELECT a FROM Account a WHERE a.phone = :phone"),
-    @NamedQuery(name = "Account.findByAbility", query = "SELECT a FROM Account a WHERE a.ability = :ability")})
+    @NamedQuery(name = "Account.findByPhone", query = "SELECT a FROM Account a WHERE a.phone = :phone")})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -84,24 +83,17 @@ public class Account implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "Phone")
     private String phone;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 200)
-    @Column(name = "ABILITY")
-    private String ability;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiveAccount")
-    private List<Message> messageList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sendAccount")
-    private List<Message> messageList1;
+    @OneToMany(mappedBy = "requestAccount")
+    private List<LabSchedule> labScheduleList;
     @JoinColumn(name = "DepartmentId", referencedColumnName = "Id")
     @ManyToOne
     private Department departmentId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resolveAccount")
-    private List<Complaint> complaintList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "complainAccount")
-    private List<Complaint> complaintList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "requestAccount")
+    private List<Report> reportList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resolveAccount")
     private List<Request> requestList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "requestAccount")
+    private List<Request> requestList1;
 
     public Account() {
     }
@@ -110,7 +102,7 @@ public class Account implements Serializable {
         this.username = username;
     }
 
-    public Account(String username, String password, String role, String name, Date birthday, String email, String phone, String ability) {
+    public Account(String username, String password, String role, String name, Date birthday, String email, String phone) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -118,7 +110,6 @@ public class Account implements Serializable {
         this.birthday = birthday;
         this.email = email;
         this.phone = phone;
-        this.ability = ability;
     }
 
     public String getUsername() {
@@ -177,30 +168,13 @@ public class Account implements Serializable {
         this.phone = phone;
     }
 
-    public String getAbility() {
-        return ability;
-    }
-
-    public void setAbility(String ability) {
-        this.ability = ability;
-    }
-
     @XmlTransient
-    public List<Message> getMessageList() {
-        return messageList;
+    public List<LabSchedule> getLabScheduleList() {
+        return labScheduleList;
     }
 
-    public void setMessageList(List<Message> messageList) {
-        this.messageList = messageList;
-    }
-
-    @XmlTransient
-    public List<Message> getMessageList1() {
-        return messageList1;
-    }
-
-    public void setMessageList1(List<Message> messageList1) {
-        this.messageList1 = messageList1;
+    public void setLabScheduleList(List<LabSchedule> labScheduleList) {
+        this.labScheduleList = labScheduleList;
     }
 
     public Department getDepartmentId() {
@@ -212,21 +186,12 @@ public class Account implements Serializable {
     }
 
     @XmlTransient
-    public List<Complaint> getComplaintList() {
-        return complaintList;
+    public List<Report> getReportList() {
+        return reportList;
     }
 
-    public void setComplaintList(List<Complaint> complaintList) {
-        this.complaintList = complaintList;
-    }
-
-    @XmlTransient
-    public List<Complaint> getComplaintList1() {
-        return complaintList1;
-    }
-
-    public void setComplaintList1(List<Complaint> complaintList1) {
-        this.complaintList1 = complaintList1;
+    public void setReportList(List<Report> reportList) {
+        this.reportList = reportList;
     }
 
     @XmlTransient
@@ -236,6 +201,15 @@ public class Account implements Serializable {
 
     public void setRequestList(List<Request> requestList) {
         this.requestList = requestList;
+    }
+
+    @XmlTransient
+    public List<Request> getRequestList1() {
+        return requestList1;
+    }
+
+    public void setRequestList1(List<Request> requestList1) {
+        this.requestList1 = requestList1;
     }
 
     @Override

@@ -24,19 +24,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author The
  */
 @Entity
-@Table(name = "Syllabus")
+@Table(name = "Resource")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Syllabus.findAll", query = "SELECT s FROM Syllabus s"),
-    @NamedQuery(name = "Syllabus.findById", query = "SELECT s FROM Syllabus s WHERE s.id = :id"),
-    @NamedQuery(name = "Syllabus.findByTitle", query = "SELECT s FROM Syllabus s WHERE s.title = :title")})
-public class Syllabus implements Serializable {
+    @NamedQuery(name = "Resource.findAll", query = "SELECT r FROM Resource r"),
+    @NamedQuery(name = "Resource.findById", query = "SELECT r FROM Resource r WHERE r.id = :id"),
+    @NamedQuery(name = "Resource.findByType", query = "SELECT r FROM Resource r WHERE r.type = :type"),
+    @NamedQuery(name = "Resource.findByTitle", query = "SELECT r FROM Resource r WHERE r.title = :title")})
+public class Resource implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "Id")
     private Integer id;
+    @Column(name = "Type")
+    private Integer type;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 300)
@@ -49,14 +52,14 @@ public class Syllabus implements Serializable {
     @Column(name = "Content")
     private String content;
 
-    public Syllabus() {
+    public Resource() {
     }
 
-    public Syllabus(Integer id) {
+    public Resource(Integer id) {
         this.id = id;
     }
 
-    public Syllabus(Integer id, String title, String content) {
+    public Resource(Integer id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -68,6 +71,14 @@ public class Syllabus implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getTitle() {
@@ -96,10 +107,10 @@ public class Syllabus implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Syllabus)) {
+        if (!(object instanceof Resource)) {
             return false;
         }
-        Syllabus other = (Syllabus) object;
+        Resource other = (Resource) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -108,7 +119,7 @@ public class Syllabus implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Syllabus[ id=" + id + " ]";
+        return "entity.Resource[ id=" + id + " ]";
     }
     
 }

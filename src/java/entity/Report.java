@@ -11,7 +11,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,13 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author The
  */
 @Entity
-@Table(name = "Hardware")
+@Table(name = "Report")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Hardware.findAll", query = "SELECT h FROM Hardware h"),
-    @NamedQuery(name = "Hardware.findById", query = "SELECT h FROM Hardware h WHERE h.id = :id"),
-    @NamedQuery(name = "Hardware.findByName", query = "SELECT h FROM Hardware h WHERE h.name = :name")})
-public class Hardware implements Serializable {
+    @NamedQuery(name = "Report.findAll", query = "SELECT r FROM Report r"),
+    @NamedQuery(name = "Report.findById", query = "SELECT r FROM Report r WHERE r.id = :id"),
+    @NamedQuery(name = "Report.findByStatus", query = "SELECT r FROM Report r WHERE r.status = :status")})
+public class Report implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -39,34 +41,26 @@ public class Hardware implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "Name")
-    private String name;
-    @Basic(optional = false)
-    @NotNull
     @Lob
     @Size(min = 1, max = 2147483647)
-    @Column(name = "InstallationProcedure")
-    private String installationProcedure;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "Warranty")
-    private String warranty;
+    @Column(name = "Content")
+    private String content;
+    @Column(name = "Status")
+    private Integer status;
+    @JoinColumn(name = "RequestAccount", referencedColumnName = "Username")
+    @ManyToOne(optional = false)
+    private Account requestAccount;
 
-    public Hardware() {
+    public Report() {
     }
 
-    public Hardware(Integer id) {
+    public Report(Integer id) {
         this.id = id;
     }
 
-    public Hardware(Integer id, String name, String installationProcedure, String warranty) {
+    public Report(Integer id, String content) {
         this.id = id;
-        this.name = name;
-        this.installationProcedure = installationProcedure;
-        this.warranty = warranty;
+        this.content = content;
     }
 
     public Integer getId() {
@@ -77,28 +71,28 @@ public class Hardware implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getContent() {
+        return content;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getInstallationProcedure() {
-        return installationProcedure;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setInstallationProcedure(String installationProcedure) {
-        this.installationProcedure = installationProcedure;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public String getWarranty() {
-        return warranty;
+    public Account getRequestAccount() {
+        return requestAccount;
     }
 
-    public void setWarranty(String warranty) {
-        this.warranty = warranty;
+    public void setRequestAccount(Account requestAccount) {
+        this.requestAccount = requestAccount;
     }
 
     @Override
@@ -111,10 +105,10 @@ public class Hardware implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Hardware)) {
+        if (!(object instanceof Report)) {
             return false;
         }
-        Hardware other = (Hardware) object;
+        Report other = (Report) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -123,7 +117,7 @@ public class Hardware implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Hardware[ id=" + id + " ]";
+        return "entity.Report[ id=" + id + " ]";
     }
     
 }

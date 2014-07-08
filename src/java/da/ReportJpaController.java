@@ -9,24 +9,25 @@ package da;
 import da.exceptions.NonexistentEntityException;
 import da.exceptions.PreexistingEntityException;
 import da.exceptions.RollbackFailureException;
-import entity.Software;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import entity.Account;
+import entity.Report;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
 
 /**
  *
  * @author The
  */
-public class SoftwareJpaController implements Serializable {
+public class ReportJpaController implements Serializable {
 
-    public SoftwareJpaController(UserTransaction utx, EntityManagerFactory emf) {
+    public ReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
@@ -37,12 +38,21 @@ public class SoftwareJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Software software) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(Report report) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            em.persist(software);
+            Account requestAccount = report.getRequestAccount();
+            if (requestAccount != null) {
+                requestAccount = em.getReference(requestAccount.getClass(), requestAccount.getUsername());
+                report.setRequestAccount(requestAccount);
+            }
+            em.persist(report);
+            if (requestAccount != null) {
+                requestAccount.getReportList().add(report);
+                requestAccount = em.merge(requestAccount);
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -50,8 +60,8 @@ public class SoftwareJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findSoftware(software.getId()) != null) {
-                throw new PreexistingEntityException("Software " + software + " already exists.", ex);
+            if (findReport(report.getId()) != null) {
+                throw new PreexistingEntityException("Report " + report + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -61,12 +71,27 @@ public class SoftwareJpaController implements Serializable {
         }
     }
 
-    public void edit(Software software) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Report report) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            software = em.merge(software);
+            Report persistentReport = em.find(Report.class, report.getId());
+            Account requestAccountOld = persistentReport.getRequestAccount();
+            Account requestAccountNew = report.getRequestAccount();
+            if (requestAccountNew != null) {
+                requestAccountNew = em.getReference(requestAccountNew.getClass(), requestAccountNew.getUsername());
+                report.setRequestAccount(requestAccountNew);
+            }
+            report = em.merge(report);
+            if (requestAccountOld != null && !requestAccountOld.equals(requestAccountNew)) {
+                requestAccountOld.getReportList().remove(report);
+                requestAccountOld = em.merge(requestAccountOld);
+            }
+            if (requestAccountNew != null && !requestAccountNew.equals(requestAccountOld)) {
+                requestAccountNew.getReportList().add(report);
+                requestAccountNew = em.merge(requestAccountNew);
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -76,9 +101,9 @@ public class SoftwareJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = software.getId();
-                if (findSoftware(id) == null) {
-                    throw new NonexistentEntityException("The software with id " + id + " no longer exists.");
+                Integer id = report.getId();
+                if (findReport(id) == null) {
+                    throw new NonexistentEntityException("The report with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -94,14 +119,19 @@ public class SoftwareJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Software software;
+            Report report;
             try {
-                software = em.getReference(Software.class, id);
-                software.getId();
+                report = em.getReference(Report.class, id);
+                report.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The software with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The report with id " + id + " no longer exists.", enfe);
             }
-            em.remove(software);
+            Account requestAccount = report.getRequestAccount();
+            if (requestAccount != null) {
+                requestAccount.getReportList().remove(report);
+                requestAccount = em.merge(requestAccount);
+            }
+            em.remove(report);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -117,19 +147,19 @@ public class SoftwareJpaController implements Serializable {
         }
     }
 
-    public List<Software> findSoftwareEntities() {
-        return findSoftwareEntities(true, -1, -1);
+    public List<Report> findReportEntities() {
+        return findReportEntities(true, -1, -1);
     }
 
-    public List<Software> findSoftwareEntities(int maxResults, int firstResult) {
-        return findSoftwareEntities(false, maxResults, firstResult);
+    public List<Report> findReportEntities(int maxResults, int firstResult) {
+        return findReportEntities(false, maxResults, firstResult);
     }
 
-    private List<Software> findSoftwareEntities(boolean all, int maxResults, int firstResult) {
+    private List<Report> findReportEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Software.class));
+            cq.select(cq.from(Report.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -141,20 +171,20 @@ public class SoftwareJpaController implements Serializable {
         }
     }
 
-    public Software findSoftware(Integer id) {
+    public Report findReport(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Software.class, id);
+            return em.find(Report.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getSoftwareCount() {
+    public int getReportCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Software> rt = cq.from(Software.class);
+            Root<Report> rt = cq.from(Report.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

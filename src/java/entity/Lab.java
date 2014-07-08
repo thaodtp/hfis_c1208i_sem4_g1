@@ -11,7 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -42,18 +41,6 @@ public class Lab implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "Name")
     private String name;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "Detail")
-    private String detail;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "Timetable")
-    private String timetable;
 
     public Lab() {
     }
@@ -62,11 +49,9 @@ public class Lab implements Serializable {
         this.id = id;
     }
 
-    public Lab(Integer id, String name, String detail, String timetable) {
+    public Lab(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.detail = detail;
-        this.timetable = timetable;
     }
 
     public Integer getId() {
@@ -83,22 +68,6 @@ public class Lab implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public String getTimetable() {
-        return timetable;
-    }
-
-    public void setTimetable(String timetable) {
-        this.timetable = timetable;
     }
 
     @Override

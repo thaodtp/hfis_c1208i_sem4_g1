@@ -17,10 +17,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Department;
-import entity.Message;
+import entity.LabSchedule;
 import java.util.ArrayList;
 import java.util.List;
-import entity.Complaint;
+import entity.Report;
 import entity.Request;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -44,20 +44,17 @@ public class AccountJpaController implements Serializable {
     }
 
     public void create(Account account) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (account.getMessageList() == null) {
-            account.setMessageList(new ArrayList<Message>());
+        if (account.getLabScheduleList() == null) {
+            account.setLabScheduleList(new ArrayList<LabSchedule>());
         }
-        if (account.getMessageList1() == null) {
-            account.setMessageList1(new ArrayList<Message>());
-        }
-        if (account.getComplaintList() == null) {
-            account.setComplaintList(new ArrayList<Complaint>());
-        }
-        if (account.getComplaintList1() == null) {
-            account.setComplaintList1(new ArrayList<Complaint>());
+        if (account.getReportList() == null) {
+            account.setReportList(new ArrayList<Report>());
         }
         if (account.getRequestList() == null) {
             account.setRequestList(new ArrayList<Request>());
+        }
+        if (account.getRequestList1() == null) {
+            account.setRequestList1(new ArrayList<Request>());
         }
         EntityManager em = null;
         try {
@@ -68,84 +65,69 @@ public class AccountJpaController implements Serializable {
                 departmentId = em.getReference(departmentId.getClass(), departmentId.getId());
                 account.setDepartmentId(departmentId);
             }
-            List<Message> attachedMessageList = new ArrayList<Message>();
-            for (Message messageListMessageToAttach : account.getMessageList()) {
-                messageListMessageToAttach = em.getReference(messageListMessageToAttach.getClass(), messageListMessageToAttach.getId());
-                attachedMessageList.add(messageListMessageToAttach);
+            List<LabSchedule> attachedLabScheduleList = new ArrayList<LabSchedule>();
+            for (LabSchedule labScheduleListLabScheduleToAttach : account.getLabScheduleList()) {
+                labScheduleListLabScheduleToAttach = em.getReference(labScheduleListLabScheduleToAttach.getClass(), labScheduleListLabScheduleToAttach.getId());
+                attachedLabScheduleList.add(labScheduleListLabScheduleToAttach);
             }
-            account.setMessageList(attachedMessageList);
-            List<Message> attachedMessageList1 = new ArrayList<Message>();
-            for (Message messageList1MessageToAttach : account.getMessageList1()) {
-                messageList1MessageToAttach = em.getReference(messageList1MessageToAttach.getClass(), messageList1MessageToAttach.getId());
-                attachedMessageList1.add(messageList1MessageToAttach);
+            account.setLabScheduleList(attachedLabScheduleList);
+            List<Report> attachedReportList = new ArrayList<Report>();
+            for (Report reportListReportToAttach : account.getReportList()) {
+                reportListReportToAttach = em.getReference(reportListReportToAttach.getClass(), reportListReportToAttach.getId());
+                attachedReportList.add(reportListReportToAttach);
             }
-            account.setMessageList1(attachedMessageList1);
-            List<Complaint> attachedComplaintList = new ArrayList<Complaint>();
-            for (Complaint complaintListComplaintToAttach : account.getComplaintList()) {
-                complaintListComplaintToAttach = em.getReference(complaintListComplaintToAttach.getClass(), complaintListComplaintToAttach.getId());
-                attachedComplaintList.add(complaintListComplaintToAttach);
-            }
-            account.setComplaintList(attachedComplaintList);
-            List<Complaint> attachedComplaintList1 = new ArrayList<Complaint>();
-            for (Complaint complaintList1ComplaintToAttach : account.getComplaintList1()) {
-                complaintList1ComplaintToAttach = em.getReference(complaintList1ComplaintToAttach.getClass(), complaintList1ComplaintToAttach.getId());
-                attachedComplaintList1.add(complaintList1ComplaintToAttach);
-            }
-            account.setComplaintList1(attachedComplaintList1);
+            account.setReportList(attachedReportList);
             List<Request> attachedRequestList = new ArrayList<Request>();
             for (Request requestListRequestToAttach : account.getRequestList()) {
                 requestListRequestToAttach = em.getReference(requestListRequestToAttach.getClass(), requestListRequestToAttach.getId());
                 attachedRequestList.add(requestListRequestToAttach);
             }
             account.setRequestList(attachedRequestList);
+            List<Request> attachedRequestList1 = new ArrayList<Request>();
+            for (Request requestList1RequestToAttach : account.getRequestList1()) {
+                requestList1RequestToAttach = em.getReference(requestList1RequestToAttach.getClass(), requestList1RequestToAttach.getId());
+                attachedRequestList1.add(requestList1RequestToAttach);
+            }
+            account.setRequestList1(attachedRequestList1);
             em.persist(account);
             if (departmentId != null) {
                 departmentId.getAccountList().add(account);
                 departmentId = em.merge(departmentId);
             }
-            for (Message messageListMessage : account.getMessageList()) {
-                Account oldReceiveAccountOfMessageListMessage = messageListMessage.getReceiveAccount();
-                messageListMessage.setReceiveAccount(account);
-                messageListMessage = em.merge(messageListMessage);
-                if (oldReceiveAccountOfMessageListMessage != null) {
-                    oldReceiveAccountOfMessageListMessage.getMessageList().remove(messageListMessage);
-                    oldReceiveAccountOfMessageListMessage = em.merge(oldReceiveAccountOfMessageListMessage);
+            for (LabSchedule labScheduleListLabSchedule : account.getLabScheduleList()) {
+                Account oldRequestAccountOfLabScheduleListLabSchedule = labScheduleListLabSchedule.getRequestAccount();
+                labScheduleListLabSchedule.setRequestAccount(account);
+                labScheduleListLabSchedule = em.merge(labScheduleListLabSchedule);
+                if (oldRequestAccountOfLabScheduleListLabSchedule != null) {
+                    oldRequestAccountOfLabScheduleListLabSchedule.getLabScheduleList().remove(labScheduleListLabSchedule);
+                    oldRequestAccountOfLabScheduleListLabSchedule = em.merge(oldRequestAccountOfLabScheduleListLabSchedule);
                 }
             }
-            for (Message messageList1Message : account.getMessageList1()) {
-                Account oldSendAccountOfMessageList1Message = messageList1Message.getSendAccount();
-                messageList1Message.setSendAccount(account);
-                messageList1Message = em.merge(messageList1Message);
-                if (oldSendAccountOfMessageList1Message != null) {
-                    oldSendAccountOfMessageList1Message.getMessageList1().remove(messageList1Message);
-                    oldSendAccountOfMessageList1Message = em.merge(oldSendAccountOfMessageList1Message);
-                }
-            }
-            for (Complaint complaintListComplaint : account.getComplaintList()) {
-                Account oldResolveAccountOfComplaintListComplaint = complaintListComplaint.getResolveAccount();
-                complaintListComplaint.setResolveAccount(account);
-                complaintListComplaint = em.merge(complaintListComplaint);
-                if (oldResolveAccountOfComplaintListComplaint != null) {
-                    oldResolveAccountOfComplaintListComplaint.getComplaintList().remove(complaintListComplaint);
-                    oldResolveAccountOfComplaintListComplaint = em.merge(oldResolveAccountOfComplaintListComplaint);
-                }
-            }
-            for (Complaint complaintList1Complaint : account.getComplaintList1()) {
-                Account oldComplainAccountOfComplaintList1Complaint = complaintList1Complaint.getComplainAccount();
-                complaintList1Complaint.setComplainAccount(account);
-                complaintList1Complaint = em.merge(complaintList1Complaint);
-                if (oldComplainAccountOfComplaintList1Complaint != null) {
-                    oldComplainAccountOfComplaintList1Complaint.getComplaintList1().remove(complaintList1Complaint);
-                    oldComplainAccountOfComplaintList1Complaint = em.merge(oldComplainAccountOfComplaintList1Complaint);
+            for (Report reportListReport : account.getReportList()) {
+                Account oldRequestAccountOfReportListReport = reportListReport.getRequestAccount();
+                reportListReport.setRequestAccount(account);
+                reportListReport = em.merge(reportListReport);
+                if (oldRequestAccountOfReportListReport != null) {
+                    oldRequestAccountOfReportListReport.getReportList().remove(reportListReport);
+                    oldRequestAccountOfReportListReport = em.merge(oldRequestAccountOfReportListReport);
                 }
             }
             for (Request requestListRequest : account.getRequestList()) {
-                Account oldRequestAccountOfRequestListRequest = requestListRequest.getRequestAccount();
-                requestListRequest.setRequestAccount(account);
+                Account oldResolveAccountOfRequestListRequest = requestListRequest.getResolveAccount();
+                requestListRequest.setResolveAccount(account);
                 requestListRequest = em.merge(requestListRequest);
-                if (oldRequestAccountOfRequestListRequest != null) {
-                    oldRequestAccountOfRequestListRequest.getRequestList().remove(requestListRequest);
-                    oldRequestAccountOfRequestListRequest = em.merge(oldRequestAccountOfRequestListRequest);
+                if (oldResolveAccountOfRequestListRequest != null) {
+                    oldResolveAccountOfRequestListRequest.getRequestList().remove(requestListRequest);
+                    oldResolveAccountOfRequestListRequest = em.merge(oldResolveAccountOfRequestListRequest);
+                }
+            }
+            for (Request requestList1Request : account.getRequestList1()) {
+                Account oldRequestAccountOfRequestList1Request = requestList1Request.getRequestAccount();
+                requestList1Request.setRequestAccount(account);
+                requestList1Request = em.merge(requestList1Request);
+                if (oldRequestAccountOfRequestList1Request != null) {
+                    oldRequestAccountOfRequestList1Request.getRequestList1().remove(requestList1Request);
+                    oldRequestAccountOfRequestList1Request = em.merge(oldRequestAccountOfRequestList1Request);
                 }
             }
             utx.commit();
@@ -174,47 +156,21 @@ public class AccountJpaController implements Serializable {
             Account persistentAccount = em.find(Account.class, account.getUsername());
             Department departmentIdOld = persistentAccount.getDepartmentId();
             Department departmentIdNew = account.getDepartmentId();
-            List<Message> messageListOld = persistentAccount.getMessageList();
-            List<Message> messageListNew = account.getMessageList();
-            List<Message> messageList1Old = persistentAccount.getMessageList1();
-            List<Message> messageList1New = account.getMessageList1();
-            List<Complaint> complaintListOld = persistentAccount.getComplaintList();
-            List<Complaint> complaintListNew = account.getComplaintList();
-            List<Complaint> complaintList1Old = persistentAccount.getComplaintList1();
-            List<Complaint> complaintList1New = account.getComplaintList1();
+            List<LabSchedule> labScheduleListOld = persistentAccount.getLabScheduleList();
+            List<LabSchedule> labScheduleListNew = account.getLabScheduleList();
+            List<Report> reportListOld = persistentAccount.getReportList();
+            List<Report> reportListNew = account.getReportList();
             List<Request> requestListOld = persistentAccount.getRequestList();
             List<Request> requestListNew = account.getRequestList();
+            List<Request> requestList1Old = persistentAccount.getRequestList1();
+            List<Request> requestList1New = account.getRequestList1();
             List<String> illegalOrphanMessages = null;
-            for (Message messageListOldMessage : messageListOld) {
-                if (!messageListNew.contains(messageListOldMessage)) {
+            for (Report reportListOldReport : reportListOld) {
+                if (!reportListNew.contains(reportListOldReport)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Message " + messageListOldMessage + " since its receiveAccount field is not nullable.");
-                }
-            }
-            for (Message messageList1OldMessage : messageList1Old) {
-                if (!messageList1New.contains(messageList1OldMessage)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Message " + messageList1OldMessage + " since its sendAccount field is not nullable.");
-                }
-            }
-            for (Complaint complaintListOldComplaint : complaintListOld) {
-                if (!complaintListNew.contains(complaintListOldComplaint)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Complaint " + complaintListOldComplaint + " since its resolveAccount field is not nullable.");
-                }
-            }
-            for (Complaint complaintList1OldComplaint : complaintList1Old) {
-                if (!complaintList1New.contains(complaintList1OldComplaint)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Complaint " + complaintList1OldComplaint + " since its complainAccount field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Report " + reportListOldReport + " since its requestAccount field is not nullable.");
                 }
             }
             for (Request requestListOldRequest : requestListOld) {
@@ -222,7 +178,15 @@ public class AccountJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Request " + requestListOldRequest + " since its requestAccount field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Request " + requestListOldRequest + " since its resolveAccount field is not nullable.");
+                }
+            }
+            for (Request requestList1OldRequest : requestList1Old) {
+                if (!requestList1New.contains(requestList1OldRequest)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Request " + requestList1OldRequest + " since its requestAccount field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -232,34 +196,20 @@ public class AccountJpaController implements Serializable {
                 departmentIdNew = em.getReference(departmentIdNew.getClass(), departmentIdNew.getId());
                 account.setDepartmentId(departmentIdNew);
             }
-            List<Message> attachedMessageListNew = new ArrayList<Message>();
-            for (Message messageListNewMessageToAttach : messageListNew) {
-                messageListNewMessageToAttach = em.getReference(messageListNewMessageToAttach.getClass(), messageListNewMessageToAttach.getId());
-                attachedMessageListNew.add(messageListNewMessageToAttach);
+            List<LabSchedule> attachedLabScheduleListNew = new ArrayList<LabSchedule>();
+            for (LabSchedule labScheduleListNewLabScheduleToAttach : labScheduleListNew) {
+                labScheduleListNewLabScheduleToAttach = em.getReference(labScheduleListNewLabScheduleToAttach.getClass(), labScheduleListNewLabScheduleToAttach.getId());
+                attachedLabScheduleListNew.add(labScheduleListNewLabScheduleToAttach);
             }
-            messageListNew = attachedMessageListNew;
-            account.setMessageList(messageListNew);
-            List<Message> attachedMessageList1New = new ArrayList<Message>();
-            for (Message messageList1NewMessageToAttach : messageList1New) {
-                messageList1NewMessageToAttach = em.getReference(messageList1NewMessageToAttach.getClass(), messageList1NewMessageToAttach.getId());
-                attachedMessageList1New.add(messageList1NewMessageToAttach);
+            labScheduleListNew = attachedLabScheduleListNew;
+            account.setLabScheduleList(labScheduleListNew);
+            List<Report> attachedReportListNew = new ArrayList<Report>();
+            for (Report reportListNewReportToAttach : reportListNew) {
+                reportListNewReportToAttach = em.getReference(reportListNewReportToAttach.getClass(), reportListNewReportToAttach.getId());
+                attachedReportListNew.add(reportListNewReportToAttach);
             }
-            messageList1New = attachedMessageList1New;
-            account.setMessageList1(messageList1New);
-            List<Complaint> attachedComplaintListNew = new ArrayList<Complaint>();
-            for (Complaint complaintListNewComplaintToAttach : complaintListNew) {
-                complaintListNewComplaintToAttach = em.getReference(complaintListNewComplaintToAttach.getClass(), complaintListNewComplaintToAttach.getId());
-                attachedComplaintListNew.add(complaintListNewComplaintToAttach);
-            }
-            complaintListNew = attachedComplaintListNew;
-            account.setComplaintList(complaintListNew);
-            List<Complaint> attachedComplaintList1New = new ArrayList<Complaint>();
-            for (Complaint complaintList1NewComplaintToAttach : complaintList1New) {
-                complaintList1NewComplaintToAttach = em.getReference(complaintList1NewComplaintToAttach.getClass(), complaintList1NewComplaintToAttach.getId());
-                attachedComplaintList1New.add(complaintList1NewComplaintToAttach);
-            }
-            complaintList1New = attachedComplaintList1New;
-            account.setComplaintList1(complaintList1New);
+            reportListNew = attachedReportListNew;
+            account.setReportList(reportListNew);
             List<Request> attachedRequestListNew = new ArrayList<Request>();
             for (Request requestListNewRequestToAttach : requestListNew) {
                 requestListNewRequestToAttach = em.getReference(requestListNewRequestToAttach.getClass(), requestListNewRequestToAttach.getId());
@@ -267,6 +217,13 @@ public class AccountJpaController implements Serializable {
             }
             requestListNew = attachedRequestListNew;
             account.setRequestList(requestListNew);
+            List<Request> attachedRequestList1New = new ArrayList<Request>();
+            for (Request requestList1NewRequestToAttach : requestList1New) {
+                requestList1NewRequestToAttach = em.getReference(requestList1NewRequestToAttach.getClass(), requestList1NewRequestToAttach.getId());
+                attachedRequestList1New.add(requestList1NewRequestToAttach);
+            }
+            requestList1New = attachedRequestList1New;
+            account.setRequestList1(requestList1New);
             account = em.merge(account);
             if (departmentIdOld != null && !departmentIdOld.equals(departmentIdNew)) {
                 departmentIdOld.getAccountList().remove(account);
@@ -276,58 +233,53 @@ public class AccountJpaController implements Serializable {
                 departmentIdNew.getAccountList().add(account);
                 departmentIdNew = em.merge(departmentIdNew);
             }
-            for (Message messageListNewMessage : messageListNew) {
-                if (!messageListOld.contains(messageListNewMessage)) {
-                    Account oldReceiveAccountOfMessageListNewMessage = messageListNewMessage.getReceiveAccount();
-                    messageListNewMessage.setReceiveAccount(account);
-                    messageListNewMessage = em.merge(messageListNewMessage);
-                    if (oldReceiveAccountOfMessageListNewMessage != null && !oldReceiveAccountOfMessageListNewMessage.equals(account)) {
-                        oldReceiveAccountOfMessageListNewMessage.getMessageList().remove(messageListNewMessage);
-                        oldReceiveAccountOfMessageListNewMessage = em.merge(oldReceiveAccountOfMessageListNewMessage);
+            for (LabSchedule labScheduleListOldLabSchedule : labScheduleListOld) {
+                if (!labScheduleListNew.contains(labScheduleListOldLabSchedule)) {
+                    labScheduleListOldLabSchedule.setRequestAccount(null);
+                    labScheduleListOldLabSchedule = em.merge(labScheduleListOldLabSchedule);
+                }
+            }
+            for (LabSchedule labScheduleListNewLabSchedule : labScheduleListNew) {
+                if (!labScheduleListOld.contains(labScheduleListNewLabSchedule)) {
+                    Account oldRequestAccountOfLabScheduleListNewLabSchedule = labScheduleListNewLabSchedule.getRequestAccount();
+                    labScheduleListNewLabSchedule.setRequestAccount(account);
+                    labScheduleListNewLabSchedule = em.merge(labScheduleListNewLabSchedule);
+                    if (oldRequestAccountOfLabScheduleListNewLabSchedule != null && !oldRequestAccountOfLabScheduleListNewLabSchedule.equals(account)) {
+                        oldRequestAccountOfLabScheduleListNewLabSchedule.getLabScheduleList().remove(labScheduleListNewLabSchedule);
+                        oldRequestAccountOfLabScheduleListNewLabSchedule = em.merge(oldRequestAccountOfLabScheduleListNewLabSchedule);
                     }
                 }
             }
-            for (Message messageList1NewMessage : messageList1New) {
-                if (!messageList1Old.contains(messageList1NewMessage)) {
-                    Account oldSendAccountOfMessageList1NewMessage = messageList1NewMessage.getSendAccount();
-                    messageList1NewMessage.setSendAccount(account);
-                    messageList1NewMessage = em.merge(messageList1NewMessage);
-                    if (oldSendAccountOfMessageList1NewMessage != null && !oldSendAccountOfMessageList1NewMessage.equals(account)) {
-                        oldSendAccountOfMessageList1NewMessage.getMessageList1().remove(messageList1NewMessage);
-                        oldSendAccountOfMessageList1NewMessage = em.merge(oldSendAccountOfMessageList1NewMessage);
-                    }
-                }
-            }
-            for (Complaint complaintListNewComplaint : complaintListNew) {
-                if (!complaintListOld.contains(complaintListNewComplaint)) {
-                    Account oldResolveAccountOfComplaintListNewComplaint = complaintListNewComplaint.getResolveAccount();
-                    complaintListNewComplaint.setResolveAccount(account);
-                    complaintListNewComplaint = em.merge(complaintListNewComplaint);
-                    if (oldResolveAccountOfComplaintListNewComplaint != null && !oldResolveAccountOfComplaintListNewComplaint.equals(account)) {
-                        oldResolveAccountOfComplaintListNewComplaint.getComplaintList().remove(complaintListNewComplaint);
-                        oldResolveAccountOfComplaintListNewComplaint = em.merge(oldResolveAccountOfComplaintListNewComplaint);
-                    }
-                }
-            }
-            for (Complaint complaintList1NewComplaint : complaintList1New) {
-                if (!complaintList1Old.contains(complaintList1NewComplaint)) {
-                    Account oldComplainAccountOfComplaintList1NewComplaint = complaintList1NewComplaint.getComplainAccount();
-                    complaintList1NewComplaint.setComplainAccount(account);
-                    complaintList1NewComplaint = em.merge(complaintList1NewComplaint);
-                    if (oldComplainAccountOfComplaintList1NewComplaint != null && !oldComplainAccountOfComplaintList1NewComplaint.equals(account)) {
-                        oldComplainAccountOfComplaintList1NewComplaint.getComplaintList1().remove(complaintList1NewComplaint);
-                        oldComplainAccountOfComplaintList1NewComplaint = em.merge(oldComplainAccountOfComplaintList1NewComplaint);
+            for (Report reportListNewReport : reportListNew) {
+                if (!reportListOld.contains(reportListNewReport)) {
+                    Account oldRequestAccountOfReportListNewReport = reportListNewReport.getRequestAccount();
+                    reportListNewReport.setRequestAccount(account);
+                    reportListNewReport = em.merge(reportListNewReport);
+                    if (oldRequestAccountOfReportListNewReport != null && !oldRequestAccountOfReportListNewReport.equals(account)) {
+                        oldRequestAccountOfReportListNewReport.getReportList().remove(reportListNewReport);
+                        oldRequestAccountOfReportListNewReport = em.merge(oldRequestAccountOfReportListNewReport);
                     }
                 }
             }
             for (Request requestListNewRequest : requestListNew) {
                 if (!requestListOld.contains(requestListNewRequest)) {
-                    Account oldRequestAccountOfRequestListNewRequest = requestListNewRequest.getRequestAccount();
-                    requestListNewRequest.setRequestAccount(account);
+                    Account oldResolveAccountOfRequestListNewRequest = requestListNewRequest.getResolveAccount();
+                    requestListNewRequest.setResolveAccount(account);
                     requestListNewRequest = em.merge(requestListNewRequest);
-                    if (oldRequestAccountOfRequestListNewRequest != null && !oldRequestAccountOfRequestListNewRequest.equals(account)) {
-                        oldRequestAccountOfRequestListNewRequest.getRequestList().remove(requestListNewRequest);
-                        oldRequestAccountOfRequestListNewRequest = em.merge(oldRequestAccountOfRequestListNewRequest);
+                    if (oldResolveAccountOfRequestListNewRequest != null && !oldResolveAccountOfRequestListNewRequest.equals(account)) {
+                        oldResolveAccountOfRequestListNewRequest.getRequestList().remove(requestListNewRequest);
+                        oldResolveAccountOfRequestListNewRequest = em.merge(oldResolveAccountOfRequestListNewRequest);
+                    }
+                }
+            }
+            for (Request requestList1NewRequest : requestList1New) {
+                if (!requestList1Old.contains(requestList1NewRequest)) {
+                    Account oldRequestAccountOfRequestList1NewRequest = requestList1NewRequest.getRequestAccount();
+                    requestList1NewRequest.setRequestAccount(account);
+                    requestList1NewRequest = em.merge(requestList1NewRequest);
+                    if (oldRequestAccountOfRequestList1NewRequest != null && !oldRequestAccountOfRequestList1NewRequest.equals(account)) {
+                        oldRequestAccountOfRequestList1NewRequest.getRequestList1().remove(requestList1NewRequest);
+                        oldRequestAccountOfRequestList1NewRequest = em.merge(oldRequestAccountOfRequestList1NewRequest);
                     }
                 }
             }
@@ -366,40 +318,26 @@ public class AccountJpaController implements Serializable {
                 throw new NonexistentEntityException("The account with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Message> messageListOrphanCheck = account.getMessageList();
-            for (Message messageListOrphanCheckMessage : messageListOrphanCheck) {
+            List<Report> reportListOrphanCheck = account.getReportList();
+            for (Report reportListOrphanCheckReport : reportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Message " + messageListOrphanCheckMessage + " in its messageList field has a non-nullable receiveAccount field.");
-            }
-            List<Message> messageList1OrphanCheck = account.getMessageList1();
-            for (Message messageList1OrphanCheckMessage : messageList1OrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Message " + messageList1OrphanCheckMessage + " in its messageList1 field has a non-nullable sendAccount field.");
-            }
-            List<Complaint> complaintListOrphanCheck = account.getComplaintList();
-            for (Complaint complaintListOrphanCheckComplaint : complaintListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Complaint " + complaintListOrphanCheckComplaint + " in its complaintList field has a non-nullable resolveAccount field.");
-            }
-            List<Complaint> complaintList1OrphanCheck = account.getComplaintList1();
-            for (Complaint complaintList1OrphanCheckComplaint : complaintList1OrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Complaint " + complaintList1OrphanCheckComplaint + " in its complaintList1 field has a non-nullable complainAccount field.");
+                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Report " + reportListOrphanCheckReport + " in its reportList field has a non-nullable requestAccount field.");
             }
             List<Request> requestListOrphanCheck = account.getRequestList();
             for (Request requestListOrphanCheckRequest : requestListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Request " + requestListOrphanCheckRequest + " in its requestList field has a non-nullable requestAccount field.");
+                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Request " + requestListOrphanCheckRequest + " in its requestList field has a non-nullable resolveAccount field.");
+            }
+            List<Request> requestList1OrphanCheck = account.getRequestList1();
+            for (Request requestList1OrphanCheckRequest : requestList1OrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Request " + requestList1OrphanCheckRequest + " in its requestList1 field has a non-nullable requestAccount field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -408,6 +346,11 @@ public class AccountJpaController implements Serializable {
             if (departmentId != null) {
                 departmentId.getAccountList().remove(account);
                 departmentId = em.merge(departmentId);
+            }
+            List<LabSchedule> labScheduleList = account.getLabScheduleList();
+            for (LabSchedule labScheduleListLabSchedule : labScheduleList) {
+                labScheduleListLabSchedule.setRequestAccount(null);
+                labScheduleListLabSchedule = em.merge(labScheduleListLabSchedule);
             }
             em.remove(account);
             utx.commit();

@@ -43,12 +43,21 @@ public class RequestJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
+            Account resolveAccount = request.getResolveAccount();
+            if (resolveAccount != null) {
+                resolveAccount = em.getReference(resolveAccount.getClass(), resolveAccount.getUsername());
+                request.setResolveAccount(resolveAccount);
+            }
             Account requestAccount = request.getRequestAccount();
             if (requestAccount != null) {
                 requestAccount = em.getReference(requestAccount.getClass(), requestAccount.getUsername());
                 request.setRequestAccount(requestAccount);
             }
             em.persist(request);
+            if (resolveAccount != null) {
+                resolveAccount.getRequestList().add(request);
+                resolveAccount = em.merge(resolveAccount);
+            }
             if (requestAccount != null) {
                 requestAccount.getRequestList().add(request);
                 requestAccount = em.merge(requestAccount);
@@ -77,13 +86,27 @@ public class RequestJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Request persistentRequest = em.find(Request.class, request.getId());
+            Account resolveAccountOld = persistentRequest.getResolveAccount();
+            Account resolveAccountNew = request.getResolveAccount();
             Account requestAccountOld = persistentRequest.getRequestAccount();
             Account requestAccountNew = request.getRequestAccount();
+            if (resolveAccountNew != null) {
+                resolveAccountNew = em.getReference(resolveAccountNew.getClass(), resolveAccountNew.getUsername());
+                request.setResolveAccount(resolveAccountNew);
+            }
             if (requestAccountNew != null) {
                 requestAccountNew = em.getReference(requestAccountNew.getClass(), requestAccountNew.getUsername());
                 request.setRequestAccount(requestAccountNew);
             }
             request = em.merge(request);
+            if (resolveAccountOld != null && !resolveAccountOld.equals(resolveAccountNew)) {
+                resolveAccountOld.getRequestList().remove(request);
+                resolveAccountOld = em.merge(resolveAccountOld);
+            }
+            if (resolveAccountNew != null && !resolveAccountNew.equals(resolveAccountOld)) {
+                resolveAccountNew.getRequestList().add(request);
+                resolveAccountNew = em.merge(resolveAccountNew);
+            }
             if (requestAccountOld != null && !requestAccountOld.equals(requestAccountNew)) {
                 requestAccountOld.getRequestList().remove(request);
                 requestAccountOld = em.merge(requestAccountOld);
@@ -125,6 +148,11 @@ public class RequestJpaController implements Serializable {
                 request.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The request with id " + id + " no longer exists.", enfe);
+            }
+            Account resolveAccount = request.getResolveAccount();
+            if (resolveAccount != null) {
+                resolveAccount.getRequestList().remove(request);
+                resolveAccount = em.merge(resolveAccount);
             }
             Account requestAccount = request.getRequestAccount();
             if (requestAccount != null) {
