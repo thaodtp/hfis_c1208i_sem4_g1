@@ -10,6 +10,7 @@ import da.DepartmentJpaController;
 import da.RequestJpaController;
 import da.exceptions.RollbackFailureException;
 import entity.Department;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -71,4 +72,8 @@ public class DepartmentManager {
     }
     
     public void getDepartment(String name){}
+
+    public List<Department> getDepartmentById(int departmentId) {      
+        return getDaController().getDepartmentById(departmentId);       
+    }
 }
