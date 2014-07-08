@@ -82,4 +82,16 @@ public class AccountManager {
         Account account = getDaController().findAccount(username);
         return account.getPassword().equals(password);
     }
+
+
+
+    public boolean isAccountExist(String username) {
+        return true;
+    }
+
+    public Account getAccount(String username, String password) {
+        return getDaController().getAccount(username, password);
+    }
+
+
 }
