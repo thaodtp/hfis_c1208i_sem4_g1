@@ -89,4 +89,8 @@ public class DepartmentManager {
         }
         return result;
     }
+    
+    public List<Department> getDepartments(){
+        return getDaController().getDepartments();
+    }
 }

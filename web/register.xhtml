@@ -3,7 +3,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./main_template.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
     <ui:define name="content">
@@ -46,7 +47,9 @@
                 <div class="input-control password" style="width: 400px;">
                     <h:inputSecret value="#{accountUI.departmentId}" />
 
-                    <h:outputText value="#{departmentUI.name}" />
+                    <h:selectOneMenu value="#{departmentUI.departments}" >
+                        <f:selectItems value="#{departmentUI.departments}" var="p" itemValue="#{p.name}"/>
+                    </h:selectOneMenu>
                 </div>
                 <br/>
                 <h:commandButton action="#{accountUI.addAccount()}" value="Register" />
