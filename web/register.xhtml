@@ -12,43 +12,41 @@
             <fieldset>
                 <legend>Register</legend>
                 <label>Username</label>
-                <div class="input-control text" style="width: 400px;">
+                <div class="input-control text">
                     <h:inputText value="#{accountUI.username}" />
                 </div>
                 <label>Password</label>
-                <div class="input-control password" style="width: 400px;">
+                <div class="input-control password">
                     <h:inputSecret value="#{accountUI.password}" />
                 </div>
                 <label>Confirm Password</label>
-                <div class="input-control password" style="width: 400px;">
+                <div class="input-control password">
                     <h:inputSecret value="#{accountUI.confirmPassword}" />
                 </div>
                 <label>Role</label>
-                <div class="input-control password" style="width: 400px;">
+                <div class="input-control password">
                     <h:inputSecret value="#{accountUI.role}" />
                 </div>
                 <label>Name</label>
-                <div class="input-control password" style="width: 400px;">
+                <div class="input-control password">
                     <h:inputSecret value="#{accountUI.name}" />
                 </div>
                 <label>Birthday</label>
-                <div class="input-control password" style="width: 400px;">
+                <div class="input-control password">
                     <h:inputSecret value="#{accountUI.birthday}" />
                 </div>
                 <label>Email</label>
-                <div class="input-control password" style="width: 400px;">
+                <div class="input-control password">
                     <h:inputSecret value="#{accountUI.email}" />
                 </div>
                 <label>Phone</label>
-                <div class="input-control password" style="width: 400px;">
+                <div class="input-control password">
                     <h:inputSecret value="#{accountUI.phone}" />
                 </div>
                 <label>Department Id</label>
-                <div class="input-control password" style="width: 400px;">
-                    <h:inputSecret value="#{accountUI.departmentId}" />
-
-                    <h:selectOneMenu value="#{departmentUI.departments}" >
-                        <f:selectItems value="#{departmentUI.departments}" var="p" itemValue="#{p.name}"/>
+                <div class="input-control select">
+                    <h:selectOneMenu>
+                        <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p}"/>
                     </h:selectOneMenu>
                 </div>
                 <br/>

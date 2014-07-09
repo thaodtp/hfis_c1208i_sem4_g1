@@ -13,7 +13,7 @@
         <h:outputStylesheet name="/css/metro-bootstrap-responsive.css"/>
         <h:outputStylesheet name="/css/docs.css"/>
         <h:outputStylesheet name="/js/prettify/prettify.css"/>
-
+        <title>e-Administration</title>
         <!-- Load JavaScript -->       
         <h:outputStylesheet name="/js/prettify/prettify.css"/>
         <h:outputScript name="/js/jquery/jquery.min.js" />
@@ -23,12 +23,8 @@
     </h:head>
 
     <h:body class="metro">
-
-        <div style="margin-left: 100px;">
-            <h:graphicImage url="/resources/images/banner.png"/>
-        </div>
         <header>         
-            <nav class="navigation-bar bg-blue" >
+            <nav class="navigation-bar bg-blue" style="position: fixed; z-index: 999;" >
                 <div class="navigation-bar-content">
                     <a href="/" class="element">Home</a>
                     <a class="element">About</a>
@@ -88,10 +84,12 @@
                 </div>
             </nav>
         </header>  
-
+        <div>
+            <h:graphicImage url="/resources/images/banner.png"/>
+        </div>
         <div class="grid fluid">
             <div class="row">
-                <div class="span2">
+                <div class="span3">
                     <nav class="vertical-menu">
                         <ul>
                             <form action="/faces/search.xhtml">
@@ -112,7 +110,7 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="span9">
+                <div class="span7">
                     <ui:insert name="content">Content</ui:insert>
                 </div>
             </div>

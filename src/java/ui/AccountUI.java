@@ -9,6 +9,7 @@ package ui;
 import biz.AccountManager;
 import biz.DepartmentManager;
 import entity.Account;
+import entity.Department;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +40,7 @@ public class AccountUI {
     private Date birthday;
     private String email;
     private String phone;
-    private int departmentId;
+    private Department department;
     private String msg;
 
     public AccountUI() {
@@ -68,7 +69,7 @@ public class AccountUI {
             if (accountManager.isAccountExist(username)) {
                 msg = "This username has already existed";
             }
-            accountManager.create(new Account(username, password, role, name, birthday, email, phone, departmentManager.getDepartmentById(departmentId)));
+            accountManager.create(new Account(username, password, role, name, birthday, email, phone, department));
             return "/faces/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't register at the moment.";
@@ -164,12 +165,12 @@ public class AccountUI {
         this.phone = phone;
     }
 
-    public int getDepartmentId() {
-        return departmentId;
+    public Department getDepartmentId() {
+        return department;
     }
 
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartmentId(Department department) {
+        this.department = department;
     }
     
     

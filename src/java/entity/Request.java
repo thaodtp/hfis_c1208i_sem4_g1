@@ -34,6 +34,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Request.findByStatus", query = "SELECT r FROM Request r WHERE r.status = :status"),
     @NamedQuery(name = "Request.findByType", query = "SELECT r FROM Request r WHERE r.type = :type")})
 public class Request implements Serializable {
+    public static final int TYPE_REQUEST = 1;
+    public static final int TYPE_COMPLAINT = 2;
+    public static final int TYPE_REPORT = 3;
+    public static final int TYPE_MESSAGE = 4;
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
