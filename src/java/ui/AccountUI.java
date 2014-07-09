@@ -70,7 +70,7 @@ public class AccountUI {
                 msg = "This username has already existed";
             }
             accountManager.create(new Account(username, password, role, name, birthday, email, phone, department));
-            return "/faces/success.xhtml";
+            return "/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't register at the moment.";
             Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);

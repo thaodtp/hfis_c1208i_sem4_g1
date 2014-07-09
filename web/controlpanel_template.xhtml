@@ -19,6 +19,7 @@
         <h:outputScript name="/js/jquery/jquery.min.js" />
         <h:outputScript name="/js/jquery/jquery.widget.min.js" />
         <h:outputScript name="/js/metro.min.js" />
+        <h:outputScript name="/js/metro/metro-dropdown.js" />
         <link rel="shortcut icon" type="image/x-icon" href="/resources/images/favicon.ico"/>
     </h:head>
 
@@ -89,24 +90,20 @@
         </div>
         <div class="grid fluid">
             <div class="row">
-                <div class="span3">
-                    <nav class="vertical-menu">
+                <div class="span3" style="margin-left: 15px;">
+                    <nav class="sidebar">
                         <ul>
-                            <form action="/search.xhtml">
-                                <div class="element input-element" style="width: 215px;">
-                                    <div class="input-control text">
-                                        <input name="keyword" placeholder="Search" />
-
-                                    </div>
-                                </div>
-                            </form>
-                            <li class="title">Lab Info</li>
-                            <li><h:outputLink value="/details.xhtml?id=">Server Room Details</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">e-Learning</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">View Lab Details</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">Lab Time-Table</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">View SW Installation Procedure</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">View syllabus copy</h:outputLink></li>
+                            <li class="title">Users Related</li>
+                            <li class="stick bg-orange"><h:outputLink value="/admin/summary.xhtml">Summary</h:outputLink></li>
+                            <li class="stick bg-red">
+                                <a class="dropdown-toggle" href="#"><i class="icon-tree-view"></i>Details</a>
+                                <ul class="dropdown-menu" data-role="dropdown">
+                                    <li><h:outputLink value="/admin/requests.xhtml">Requests</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/complaint.xhtml">Complaint</h:outputLink></li>
+                                </ul>
+                            </li>
+                            <li class="title">Portal Resource</li>
+                            <li><h:outputLink value="/admin/resource.xhtml">Resource</h:outputLink></li>
                         </ul>
                     </nav>
                 </div>
