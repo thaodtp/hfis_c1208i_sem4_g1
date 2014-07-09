@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package entity;
 
 import java.io.Serializable;
@@ -91,8 +92,6 @@ public class Account implements Serializable {
     @JoinColumn(name = "DepartmentId", referencedColumnName = "Id")
     @ManyToOne
     private Department departmentId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "requestAccount")
-    private List<Report> reportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "resolveAccount")
     private List<Request> requestList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "requestAccount")
@@ -190,15 +189,6 @@ public class Account implements Serializable {
     }
 
     @XmlTransient
-    public List<Report> getReportList() {
-        return reportList;
-    }
-
-    public void setReportList(List<Report> reportList) {
-        this.reportList = reportList;
-    }
-
-    @XmlTransient
     public List<Request> getRequestList() {
         return requestList;
     }
@@ -240,5 +230,5 @@ public class Account implements Serializable {
     public String toString() {
         return "entity.Account[ username=" + username + " ]";
     }
-
+    
 }

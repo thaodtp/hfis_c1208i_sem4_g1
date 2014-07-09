@@ -35,13 +35,9 @@ public class DepartmentUI {
     public void setDepartments(List<Department> departments) {
         this.departments = departments;
     }
-
-   
     
-    
-            
-    public void getAllName(){
-        name = departmentManager.getAllName();
+    public List<String> getDepNames(){
+        return departmentManager.getDepNames();
     }
 
     public String getName() {

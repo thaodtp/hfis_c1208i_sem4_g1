@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Lab.findAll", query = "SELECT l FROM Lab l"),
     @NamedQuery(name = "Lab.findById", query = "SELECT l FROM Lab l WHERE l.id = :id"),
-    @NamedQuery(name = "Lab.findByName", query = "SELECT l FROM Lab l WHERE l.name = :name")})
+    @NamedQuery(name = "Lab.findByName", query = "SELECT l FROM Lab l WHERE l.name = :name"),
+    @NamedQuery(name = "Lab.findByType", query = "SELECT l FROM Lab l WHERE l.type = :type"),
+    @NamedQuery(name = "Lab.findByStatus", query = "SELECT l FROM Lab l WHERE l.status = :status")})
 public class Lab implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,6 +46,14 @@ public class Lab implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "Name")
     private String name;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Type")
+    private int type;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Status")
+    private int status;
     @OneToMany(mappedBy = "labId")
     private List<LabSchedule> labScheduleList;
 
@@ -54,9 +64,11 @@ public class Lab implements Serializable {
         this.id = id;
     }
 
-    public Lab(Integer id, String name) {
+    public Lab(Integer id, String name, int type, int status) {
         this.id = id;
         this.name = name;
+        this.type = type;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -73,6 +85,22 @@ public class Lab implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @XmlTransient

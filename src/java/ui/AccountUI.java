@@ -68,7 +68,7 @@ public class AccountUI {
             if (accountManager.isAccountExist(username)) {
                 msg = "This username has already existed";
             }
-            accountManager.create(new Account(username, password, role, name, birthday, email, phone, departmentManager.getDepartmentById(departmentId).get(0)));
+            accountManager.create(new Account(username, password, role, name, birthday, email, phone, departmentManager.getDepartmentById(departmentId)));
             return "/faces/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't register at the moment.";
