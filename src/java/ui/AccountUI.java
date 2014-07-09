@@ -34,7 +34,7 @@ public class AccountUI {
     private String username;
     private String password;
     private String confirmPassword;
-    private String role;
+    private int role;
     private String name;
     private Date birthday;
     private String email;
@@ -124,11 +124,11 @@ public class AccountUI {
         this.msg = msg;
     }
 
-    public String getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(int role) {
         this.role = role;
     }
 

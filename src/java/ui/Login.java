@@ -10,22 +10,18 @@ package ui;
 import biz.AccountManager;
 import entity.Account;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @ManagedBean
 @SessionScoped
-public class Login {
+public class Login implements Serializable{
     @EJB
     private AccountManager accountManager;
 
@@ -112,7 +108,19 @@ public class Login {
 //        }
 //        return "";
 //    }
-
+    public boolean getRoleAdmin(){
+        return account!=null && account.getRole() == Account.ROLE_ADMIN;
+    }
+    public boolean getRoleIntructor(){
+        return account!=null && account.getRole() == Account.ROLE_INSTRUCTOR;
+    }
+    public boolean getRoleHOD(){
+        return account!=null && account.getRole() == Account.ROLE_HOD;
+    }
+    public boolean getRoleTechnical(){
+        return account!=null && account.getRole() == Account.ROLE_TECHNICAL;
+    }
+    
     public String getAutoLogin() {
         if (account == null) {
             msg = "You don't have user permission to access that resource";
