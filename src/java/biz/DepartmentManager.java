@@ -19,6 +19,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 
 /**
@@ -28,7 +29,7 @@ import javax.transaction.UserTransaction;
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class DepartmentManager {
-    @PersistenceContext(unitName = "eAdministrationPU")
+    @PersistenceUnit(unitName = "eAdministrationPU")
     private EntityManagerFactory em;
     @Resource
     private UserTransaction utx;

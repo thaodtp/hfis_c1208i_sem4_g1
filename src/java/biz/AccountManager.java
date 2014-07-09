@@ -18,6 +18,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 
 /**
@@ -27,8 +28,10 @@ import javax.transaction.UserTransaction;
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class AccountManager {
-    @PersistenceContext(unitName = "eAdministrationPU")
+
+    @PersistenceUnit(unitName = "eAdministrationPU")
     private EntityManagerFactory em;
+
     @Resource
     private UserTransaction utx;
 
@@ -75,15 +78,16 @@ public class AccountManager {
         }
     }
 
-    public List<Account> getAllAccount(){
+    public List<Account> getAllAccount() {
         return getDaController().findAccountEntities();
     }
-    
+
     public boolean isAccountExist(String username) {
-        return getDaController().findAccount(username)!=null;
+        return getDaController().findAccount(username) != null;
     }
 
     public Account getAccount(String username, String password) {
         return getDaController().getAccount(username, password);
     }
+    
 }

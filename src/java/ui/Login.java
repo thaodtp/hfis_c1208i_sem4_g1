@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @SessionScoped
 public class Login implements Serializable{
     @EJB
-    private AccountManager accountManager;
+    private AccountManager manager;
 
     private String username;
     private String password;
@@ -67,9 +67,6 @@ public class Login implements Serializable{
     public void setAccount(Account account) {
         this.account = account;
     }
-    
-    
-
     /**
      * Creates a new instance of Login
      */
@@ -79,8 +76,7 @@ public class Login implements Serializable{
 
     public void login() {
         try {           
-         //   userInfo = new UserInfoDA().getUserInfo(userName, password);
-            account = accountManager.getAccount(username, password);
+            account = manager.getAccount(username, password);
             if (account != null) {
                 msg = "";
                 return;

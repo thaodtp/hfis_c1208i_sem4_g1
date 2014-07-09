@@ -33,8 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Lab.findById", query = "SELECT l FROM Lab l WHERE l.id = :id"),
     @NamedQuery(name = "Lab.findByName", query = "SELECT l FROM Lab l WHERE l.name = :name")})
 public class Lab implements Serializable {
-    @OneToMany(mappedBy = "labId")
-    private List<LabSchedule> labScheduleList;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -46,6 +44,8 @@ public class Lab implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "Name")
     private String name;
+    @OneToMany(mappedBy = "labId")
+    private List<LabSchedule> labScheduleList;
 
     public Lab() {
     }
@@ -75,6 +75,15 @@ public class Lab implements Serializable {
         this.name = name;
     }
 
+    @XmlTransient
+    public List<LabSchedule> getLabScheduleList() {
+        return labScheduleList;
+    }
+
+    public void setLabScheduleList(List<LabSchedule> labScheduleList) {
+        this.labScheduleList = labScheduleList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -98,15 +107,6 @@ public class Lab implements Serializable {
     @Override
     public String toString() {
         return "entity.Lab[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public List<LabSchedule> getLabScheduleList() {
-        return labScheduleList;
-    }
-
-    public void setLabScheduleList(List<LabSchedule> labScheduleList) {
-        this.labScheduleList = labScheduleList;
     }
     
 }
