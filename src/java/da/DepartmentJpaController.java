@@ -49,6 +49,16 @@ public class DepartmentJpaController implements Serializable {
             return deps.get(0);
         }
     }
+    
+    public String getAllName() {
+        TypedQuery<Department> query = getEntityManager().createQuery("SELECT d FROM Department d", Department.class);
+        return query.getSingleResult().getName();
+//        if (deps.isEmpty()) {
+//            return null;
+//        } else {
+//            return deps;
+//        }
+    }
 
     public void create(Department department) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (department.getAccountList() == null) {

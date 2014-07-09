@@ -77,4 +77,8 @@ public class DepartmentManager {
     public List<Department> getDepartmentById(int departmentId) {      
         return getDaController().getDepartmentById(departmentId);       
     }
+    
+    public String getAllName() {
+        return getDaController().getAllName();
+    }
 }
