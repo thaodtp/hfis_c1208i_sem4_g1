@@ -48,11 +48,6 @@ public class Account implements Serializable {
     public static final int ROLE_INSTRUCTOR = 2;
     public static final int ROLE_TECHNICAL = 3;
     public static final int ROLE_HOD = 4;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Role")
-    private int role;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -65,6 +60,10 @@ public class Account implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "Password")
     private String password;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Role")
+    private int role;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -106,7 +105,7 @@ public class Account implements Serializable {
         this.username = username;
     }
 
-    public Account(String username, String password, int role, String name, Date birthday, String email, String phone) {
+    public Account(String username, String password, int role, String name, Date birthday, String email, String phone, Department department) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -114,17 +113,7 @@ public class Account implements Serializable {
         this.birthday = birthday;
         this.email = email;
         this.phone = phone;
-    }
-
-    public Account(String username, String password, int role, String name, Date birthday, String email, String phone, Department departmentId) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.name = name;
-        this.birthday = birthday;
-        this.email = email;
-        this.phone = phone;
-        this.departmentId = departmentId;
+        this.departmentId = department;
     }
 
     public String getUsername() {
@@ -141,6 +130,14 @@ public class Account implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 
     public String getName() {
@@ -242,14 +239,6 @@ public class Account implements Serializable {
     @Override
     public String toString() {
         return "entity.Account[ username=" + username + " ]";
-    }
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
     }
 
 }
