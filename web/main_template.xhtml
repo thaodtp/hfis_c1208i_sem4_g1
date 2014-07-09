@@ -3,7 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:head>
@@ -28,27 +27,27 @@
     <h:body class="metro">
 
         <div style="margin-left: 100px;">
-            <h:graphicImage url="/resources/images/travel1.png"/>
+            <h:graphicImage url="/resources/images/banner.png"/>
         </div>
-        <header class="bg-pink">         
-            <nav class="navigation-bar bg-pink" >
+        <header>         
+            <nav class="navigation-bar bg-blue" >
                 <div class="navigation-bar-content">
-                    <a href="/" class="element"><span class="icon-heart"></span> ChangChang <sup>Travel</sup></a>
-<!--                    <form action="/faces/search.xhtml">
-                        <div class="element input-element">
-                            <div class="input-control text">
-                                <input name="keyword" placeholder="Search" />
-                            </div>
-                        </div>
-                        <button type="submit" class="element"><span class="icon-search"></span> Search</button>
-                    </form>-->
-                    <c:if test="${login.userInfo == null}">
+                    <a href="/" class="element"><span class="icon-heart"></span></a>
+                    <!--                    <form action="/faces/search.xhtml">
+                                            <div class="element input-element">
+                                                <div class="input-control text">
+                                                    <input name="keyword" placeholder="Search" />
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="element"><span class="icon-search"></span> Search</button>
+                                        </form>-->
+                    <h:panelGroup rendered="${login.account == null}">
                         <h:form>
                             <div class="place-right">                
 
                                 <div class="element input-element">
                                     <div class="input-control text" style='width: 150px;'>
-                                        <h:inputText value="#{login.userName}" p:placeholder="Username"/>
+                                        <h:inputText value="#{login.username}" p:placeholder="Username"/>
                                     </div>
                                     <div class="input-control password" style='width: 150px;'>
                                         <h:inputSecret value="#{login.password}" p:placeholder="Password"/>
@@ -59,37 +58,29 @@
                                 <h:outputLink class="element" value="/faces/register.xhtml">Register</h:outputLink>  
                             </div>     
                         </h:form>
-                        <c:if test="#{login.haveMsg()}">
+                        <h:panelGroup rendered="#{login.haveMsg()}">
                             <div class="element place-right">
                                 <div class="notice marker-on-right">
                                     #{login.msg}
                                 </div>
                             </div>
-                        </c:if>
-                    </c:if>
+                        </h:panelGroup>
+                    </h:panelGroup>
 
-                    <c:if test="${login.userInfo != null}">  
+                    <h:panelGroup rendered="${login.account != null}">  
                         <div class="place-right">
                             <h:form>
                                 <div class="element bg-transparent">
                                     <span class="icon-star-2"></span>
                                     Welcome, 
-                                    #{login.userInfo.userName}
+                                    #{login.account.username}
                                 </div>
                                 <h:commandLink class="element" action="#{login.logout()}" value="Logout"/> 
 
                             </h:form>      
 
                         </div>
-                    </c:if>
-
-
-                    <c:if test="${login.userInfo.isGuide == true}">
-                        <h:outputLink class="element place-left" value="/faces/guide/add_place.xhtml">
-                            <i class="icon-yelp fg-white"></i> Add New Place
-                        </h:outputLink>
-                    </c:if>   
-
+                    </h:panelGroup>
                 </div>
             </nav>
         </header>  
@@ -103,14 +94,11 @@
                                 <div class="element input-element" style="width: 215px;">
                                     <div class="input-control text">
                                         <input name="keyword" placeholder="Search" />
-                            
+
                                     </div>
                                 </div>
                             </form>
                             <li class="title">Destination</li>
-                            <ui:repeat value="" var="">
-                                <li><h:outputLink value="/faces/details.xhtml?id="></h:outputLink></li>
-                            </ui:repeat>
                         </ul>
                     </nav>
                 </div>
@@ -119,7 +107,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-pink padding10 fg-white">
+        <div class="bg-blue padding10 fg-white">
             @ChangChang Travel 2014 - Contact: Han Young Ran
         </div>
 

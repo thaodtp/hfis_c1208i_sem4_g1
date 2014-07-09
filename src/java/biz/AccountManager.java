@@ -78,20 +78,12 @@ public class AccountManager {
     public List<Account> getAllAccount(){
         return getDaController().findAccountEntities();
     }
-    public boolean login(String username, String password) {
-        Account account = getDaController().findAccount(username);
-        return account.getPassword().equals(password);
-    }
-
-
-
+    
     public boolean isAccountExist(String username) {
-        return true;
+        return getDaController().findAccount(username)!=null;
     }
 
     public Account getAccount(String username, String password) {
         return getDaController().getAccount(username, password);
     }
-
-
 }
