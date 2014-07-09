@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import da.exceptions.IllegalOrphanException;
@@ -42,6 +41,18 @@ public class AccountJpaController implements Serializable {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public Account getAccount(String username, String password) {
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.username = :username and a.password = :password", Account.class);
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        List<Account> result = query.getResultList();
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result.get(0);
+        }
     }
 
     public void create(Account account) throws PreexistingEntityException, RollbackFailureException, Exception {
@@ -415,17 +426,4 @@ public class AccountJpaController implements Serializable {
         }
     }
 
-    public Account getAccount(String username, String password) {
-        String queryString = "SELECT a FROM Account a WHERE a.username = :username AND a.password = :password";
-        TypedQuery<Account> query = getEntityManager().createQuery(queryString, Account.class);
-        query.setParameter("username", username);
-        query.setParameter("password", password);
-        List<Account> accounts = query.getResultList();
-        if (accounts.isEmpty()) {
-            return null;
-        } else {
-            return accounts.get(0);
-        }
-    }
-    
 }
