@@ -45,6 +45,8 @@
                 <label>Department Id</label>
                 <div class="input-control password" style="width: 400px;">
                     <h:inputSecret value="#{accountUI.departmentId}" />
+
+                    <h:outputText value="#{departmentUI.name}" />
                 </div>
                 <br/>
                 <h:commandButton action="#{accountUI.addAccount()}" value="Register" />
