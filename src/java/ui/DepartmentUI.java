@@ -8,6 +8,7 @@ package ui;
 
 import biz.DepartmentManager;
 import entity.Department;
+
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -27,21 +28,14 @@ public class DepartmentUI {
 
     private List<Department> departments;
     private String name;
-
-    public List<Department> getDepartments() {
-        return departments;
+    
+    public List<Department> getDepartments(){
+       return departmentManager.getAllDepartment();
     }
+    
 
     public void setDepartments(List<Department> departments) {
         this.departments = departments;
-    }
-
-   
-    
-    
-            
-    public void getAllName(){
-        name = departmentManager.getAllName();
     }
 
     public String getName() {
@@ -51,6 +45,14 @@ public class DepartmentUI {
     public void setName(String name) {
         this.name = name;
     }
+    
+    
+
+   
+    
+    
+            
+    
     
     
     
