@@ -108,7 +108,19 @@ public class Login implements Serializable{
 //        }
 //        return "";
 //    }
-
+    public boolean getRoleAdmin(){
+        return account!=null && account.getRole() == Account.ROLE_ADMIN;
+    }
+    public boolean getRoleIntructor(){
+        return account!=null && account.getRole() == Account.ROLE_INSTRUCTOR;
+    }
+    public boolean getRoleHOD(){
+        return account!=null && account.getRole() == Account.ROLE_HOD;
+    }
+    public boolean getRoleTechnical(){
+        return account!=null && account.getRole() == Account.ROLE_TECHNICAL;
+    }
+    
     public String getAutoLogin() {
         if (account == null) {
             msg = "You don't have user permission to access that resource";

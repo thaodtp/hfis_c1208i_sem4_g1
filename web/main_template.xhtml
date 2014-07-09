@@ -32,7 +32,9 @@
         <header>         
             <nav class="navigation-bar bg-blue" >
                 <div class="navigation-bar-content">
-                    <a href="/" class="element"><span class="icon-heart"></span></a>
+                    <a href="/" class="element">Home</a>
+                    <a class="element">About</a>
+                    <a class="element">Contact</a>
                     <!--                    <form action="/faces/search.xhtml">
                                             <div class="element input-element">
                                                 <div class="input-control text">
@@ -81,6 +83,9 @@
 
                         </div>
                     </h:panelGroup>
+                    <h:panelGroup rendered="#{login.account!=null}">
+                        <a class="element">Control Panel</a>
+                    </h:panelGroup>
                 </div>
             </nav>
         </header>  
@@ -98,7 +103,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <li class="title">Destination</li>
+                            <li class="title">Lab Info</li>
                         </ul>
                     </nav>
                 </div>

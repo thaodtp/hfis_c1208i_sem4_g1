@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -44,6 +43,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Account.findByEmail", query = "SELECT a FROM Account a WHERE a.email = :email"),
     @NamedQuery(name = "Account.findByPhone", query = "SELECT a FROM Account a WHERE a.phone = :phone")})
 public class Account implements Serializable {
+
+    public static final int ROLE_ADMIN = 1;
+    public static final int ROLE_INSTRUCTOR = 2;
+    public static final int ROLE_TECHNICAL = 3;
+    public static final int ROLE_HOD = 4;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Role")
+    private int role;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -56,11 +65,6 @@ public class Account implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "Password")
     private String password;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "Role")
-    private String role;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -102,7 +106,7 @@ public class Account implements Serializable {
         this.username = username;
     }
 
-    public Account(String username, String password, String role, String name, Date birthday, String email, String phone) {
+    public Account(String username, String password, int role, String name, Date birthday, String email, String phone) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -111,8 +115,8 @@ public class Account implements Serializable {
         this.email = email;
         this.phone = phone;
     }
-    
-    public Account(String username, String password, String role, String name, Date birthday, String email, String phone, Department departmentId) {
+
+    public Account(String username, String password, int role, String name, Date birthday, String email, String phone, Department departmentId) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -137,14 +141,6 @@ public class Account implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getName() {
@@ -247,5 +243,13 @@ public class Account implements Serializable {
     public String toString() {
         return "entity.Account[ username=" + username + " ]";
     }
-    
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
 }
