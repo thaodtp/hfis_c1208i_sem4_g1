@@ -50,7 +50,7 @@ public class AccountUI {
         msg = "";
     }
     
-    public String addAccount() {
+    public String create() {
 //        msg = Pattern.matches("[a-zA-Z0-9._-]{6,}", userName)+"";
 //        return "";
         try {

@@ -76,6 +76,14 @@ public class Request implements Serializable {
         this.content = content;
         this.type = type;
     }
+    
+    public Request(String content, int status, int type, Account requestAccount, Account resolveAccount) {
+        this.content = content;
+        this.status = status;
+        this.type = type;
+        this.requestAccount = requestAccount;
+        this.resolveAccount = resolveAccount;
+    }
 
     public Integer getId() {
         return id;
