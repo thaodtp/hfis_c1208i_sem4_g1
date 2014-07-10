@@ -14,8 +14,8 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entity.Account;
 import entity.Lab;
+import entity.Account;
 import entity.LabSchedule;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -44,24 +44,24 @@ public class LabScheduleJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Account requestAccount = labSchedule.getRequestAccount();
-            if (requestAccount != null) {
-                requestAccount = em.getReference(requestAccount.getClass(), requestAccount.getUsername());
-                labSchedule.setRequestAccount(requestAccount);
-            }
             Lab labId = labSchedule.getLabId();
             if (labId != null) {
                 labId = em.getReference(labId.getClass(), labId.getId());
                 labSchedule.setLabId(labId);
             }
-            em.persist(labSchedule);
+            Account requestAccount = labSchedule.getRequestAccount();
             if (requestAccount != null) {
-                requestAccount.getLabScheduleList().add(labSchedule);
-                requestAccount = em.merge(requestAccount);
+                requestAccount = em.getReference(requestAccount.getClass(), requestAccount.getUsername());
+                labSchedule.setRequestAccount(requestAccount);
             }
+            em.persist(labSchedule);
             if (labId != null) {
                 labId.getLabScheduleList().add(labSchedule);
                 labId = em.merge(labId);
+            }
+            if (requestAccount != null) {
+                requestAccount.getLabScheduleList().add(labSchedule);
+                requestAccount = em.merge(requestAccount);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -87,27 +87,19 @@ public class LabScheduleJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             LabSchedule persistentLabSchedule = em.find(LabSchedule.class, labSchedule.getId());
-            Account requestAccountOld = persistentLabSchedule.getRequestAccount();
-            Account requestAccountNew = labSchedule.getRequestAccount();
             Lab labIdOld = persistentLabSchedule.getLabId();
             Lab labIdNew = labSchedule.getLabId();
-            if (requestAccountNew != null) {
-                requestAccountNew = em.getReference(requestAccountNew.getClass(), requestAccountNew.getUsername());
-                labSchedule.setRequestAccount(requestAccountNew);
-            }
+            Account requestAccountOld = persistentLabSchedule.getRequestAccount();
+            Account requestAccountNew = labSchedule.getRequestAccount();
             if (labIdNew != null) {
                 labIdNew = em.getReference(labIdNew.getClass(), labIdNew.getId());
                 labSchedule.setLabId(labIdNew);
             }
+            if (requestAccountNew != null) {
+                requestAccountNew = em.getReference(requestAccountNew.getClass(), requestAccountNew.getUsername());
+                labSchedule.setRequestAccount(requestAccountNew);
+            }
             labSchedule = em.merge(labSchedule);
-            if (requestAccountOld != null && !requestAccountOld.equals(requestAccountNew)) {
-                requestAccountOld.getLabScheduleList().remove(labSchedule);
-                requestAccountOld = em.merge(requestAccountOld);
-            }
-            if (requestAccountNew != null && !requestAccountNew.equals(requestAccountOld)) {
-                requestAccountNew.getLabScheduleList().add(labSchedule);
-                requestAccountNew = em.merge(requestAccountNew);
-            }
             if (labIdOld != null && !labIdOld.equals(labIdNew)) {
                 labIdOld.getLabScheduleList().remove(labSchedule);
                 labIdOld = em.merge(labIdOld);
@@ -115,6 +107,14 @@ public class LabScheduleJpaController implements Serializable {
             if (labIdNew != null && !labIdNew.equals(labIdOld)) {
                 labIdNew.getLabScheduleList().add(labSchedule);
                 labIdNew = em.merge(labIdNew);
+            }
+            if (requestAccountOld != null && !requestAccountOld.equals(requestAccountNew)) {
+                requestAccountOld.getLabScheduleList().remove(labSchedule);
+                requestAccountOld = em.merge(requestAccountOld);
+            }
+            if (requestAccountNew != null && !requestAccountNew.equals(requestAccountOld)) {
+                requestAccountNew.getLabScheduleList().add(labSchedule);
+                requestAccountNew = em.merge(requestAccountNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -150,15 +150,15 @@ public class LabScheduleJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The labSchedule with id " + id + " no longer exists.", enfe);
             }
-            Account requestAccount = labSchedule.getRequestAccount();
-            if (requestAccount != null) {
-                requestAccount.getLabScheduleList().remove(labSchedule);
-                requestAccount = em.merge(requestAccount);
-            }
             Lab labId = labSchedule.getLabId();
             if (labId != null) {
                 labId.getLabScheduleList().remove(labSchedule);
                 labId = em.merge(labId);
+            }
+            Account requestAccount = labSchedule.getRequestAccount();
+            if (requestAccount != null) {
+                requestAccount.getLabScheduleList().remove(labSchedule);
+                requestAccount = em.merge(requestAccount);
             }
             em.remove(labSchedule);
             utx.commit();

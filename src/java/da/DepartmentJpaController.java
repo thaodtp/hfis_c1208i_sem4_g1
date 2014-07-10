@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package da;
 
 import da.exceptions.NonexistentEntityException;
@@ -15,8 +16,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Account;
 import entity.Department;
-import entity.Request;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -50,14 +51,9 @@ public class DepartmentJpaController implements Serializable {
         }
     }
     
-    public List<Department> getAllDepartment() {
+    public List<Department> getDepartments() {
         TypedQuery<Department> query = getEntityManager().createQuery("SELECT d FROM Department d", Department.class);
-         List<Department> deps = query.getResultList();
-        if (deps.isEmpty()) {
-            return null;
-        } else {
-            return deps;
-        }
+        return query.getResultList();
     }
 
     public void create(Department department) throws PreexistingEntityException, RollbackFailureException, Exception {
@@ -235,12 +231,5 @@ public class DepartmentJpaController implements Serializable {
             em.close();
         }
     }
-
-    public List<Department> getDepartmentById(int departmentId) {
-        String queryString = "SELECT d FROM Department d WHERE d.id = :id";
-        TypedQuery<Department> query = getEntityManager().createQuery(queryString, Department.class);
-        query.setParameter("id", departmentId);  
-        return query.getResultList();
-    }
-
+    
 }

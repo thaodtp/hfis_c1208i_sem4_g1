@@ -31,8 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Request.findAll", query = "SELECT r FROM Request r"),
     @NamedQuery(name = "Request.findById", query = "SELECT r FROM Request r WHERE r.id = :id"),
-    @NamedQuery(name = "Request.findByStatus", query = "SELECT r FROM Request r WHERE r.status = :status")})
+    @NamedQuery(name = "Request.findByStatus", query = "SELECT r FROM Request r WHERE r.status = :status"),
+    @NamedQuery(name = "Request.findByType", query = "SELECT r FROM Request r WHERE r.type = :type")})
 public class Request implements Serializable {
+    public static final int TYPE_REQUEST = 1;
+    public static final int TYPE_COMPLAINT = 2;
+    public static final int TYPE_REPORT = 3;
+    public static final int TYPE_MESSAGE = 4;
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -47,6 +53,10 @@ public class Request implements Serializable {
     private String content;
     @Column(name = "Status")
     private Integer status;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Type")
+    private int type;
     @JoinColumn(name = "ResolveAccount", referencedColumnName = "Username")
     @ManyToOne(optional = false)
     private Account resolveAccount;
@@ -61,9 +71,10 @@ public class Request implements Serializable {
         this.id = id;
     }
 
-    public Request(Integer id, String content) {
+    public Request(Integer id, String content, int type) {
         this.id = id;
         this.content = content;
+        this.type = type;
     }
 
     public Integer getId() {
@@ -88,6 +99,14 @@ public class Request implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public Account getResolveAccount() {
