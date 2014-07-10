@@ -43,7 +43,7 @@ public class AccountJpaController implements Serializable {
     }
 
     public Account getAccount(String username, String password) {
-        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.username = :username and a.password = :password", Account.class);
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.name like :name or a.username like :username", Account.class);
         query.setParameter("username", username);
         query.setParameter("password", password);
         List<Account> result = query.getResultList();
@@ -53,7 +53,13 @@ public class AccountJpaController implements Serializable {
             return result.get(0);
         }
     }
-
+    public List<Account> searchAccByName(String keyword){
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.name like :name or a.username like :username", Account.class);
+        query.setParameter("name", "%" + keyword +"%");
+        query.setParameter("username", "%" + keyword + "%");
+        return query.getResultList();      
+    }
+    
     public void create(Account account) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (account.getLabScheduleList() == null) {
             account.setLabScheduleList(new ArrayList<LabSchedule>());

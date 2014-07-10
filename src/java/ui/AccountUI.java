@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ui;
 
 import biz.AccountManager;
@@ -11,6 +10,8 @@ import biz.DepartmentManager;
 import entity.Account;
 import entity.Department;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -26,9 +27,10 @@ import javax.faces.view.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class AccountUI {
+
     @EJB
     private AccountManager accountManager;
-    
+
     @EJB
     private DepartmentManager departmentManager;
 
@@ -42,6 +44,7 @@ public class AccountUI {
     private String phone;
     private Department department;
     private String msg;
+    private String keyword;
 
     public AccountUI() {
         username = "";
@@ -49,7 +52,7 @@ public class AccountUI {
         confirmPassword = "";
         msg = "";
     }
-    
+
     public String create() {
 //        msg = Pattern.matches("[a-zA-Z0-9._-]{6,}", userName)+"";
 //        return "";
@@ -77,22 +80,25 @@ public class AccountUI {
         }
         return "";
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public String deleteAccount() {
+        try {
+            accountManager.delete(username);
+            return "/success.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
+            msg = "Can't delete account";
+            Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+    public List<Account> Search() {
+        try {
+            return accountManager.searchAccByName(keyword);
+        } catch (Exception ex) {
+            msg = "Can't search account";
+            Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new LinkedList<Account>();
+    }
     public String getUsername() {
         return username;
     }
@@ -172,9 +178,12 @@ public class AccountUI {
     public void setDepartmentId(Department department) {
         this.department = department;
     }
-    
-    
-    
-    
-    
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 }
