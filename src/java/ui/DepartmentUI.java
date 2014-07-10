@@ -30,12 +30,16 @@ public class DepartmentUI {
     private String name;
     
     public List<Department> getDepartments(){
-       return departmentManager.getAllDepartment();
+       return departmentManager.getDepartments();
     }
     
 
     public void setDepartments(List<Department> departments) {
         this.departments = departments;
+    }
+    
+    public List<String> getDepNames(){
+        return departmentManager.getDepNames();
     }
 
     public String getName() {

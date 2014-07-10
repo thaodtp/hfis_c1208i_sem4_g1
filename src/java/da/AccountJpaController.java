@@ -19,7 +19,6 @@ import entity.Department;
 import entity.LabSchedule;
 import java.util.ArrayList;
 import java.util.List;
-import entity.Report;
 import entity.Request;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -59,9 +58,6 @@ public class AccountJpaController implements Serializable {
         if (account.getLabScheduleList() == null) {
             account.setLabScheduleList(new ArrayList<LabSchedule>());
         }
-        if (account.getReportList() == null) {
-            account.setReportList(new ArrayList<Report>());
-        }
         if (account.getRequestList() == null) {
             account.setRequestList(new ArrayList<Request>());
         }
@@ -83,12 +79,6 @@ public class AccountJpaController implements Serializable {
                 attachedLabScheduleList.add(labScheduleListLabScheduleToAttach);
             }
             account.setLabScheduleList(attachedLabScheduleList);
-            List<Report> attachedReportList = new ArrayList<Report>();
-            for (Report reportListReportToAttach : account.getReportList()) {
-                reportListReportToAttach = em.getReference(reportListReportToAttach.getClass(), reportListReportToAttach.getId());
-                attachedReportList.add(reportListReportToAttach);
-            }
-            account.setReportList(attachedReportList);
             List<Request> attachedRequestList = new ArrayList<Request>();
             for (Request requestListRequestToAttach : account.getRequestList()) {
                 requestListRequestToAttach = em.getReference(requestListRequestToAttach.getClass(), requestListRequestToAttach.getId());
@@ -113,15 +103,6 @@ public class AccountJpaController implements Serializable {
                 if (oldRequestAccountOfLabScheduleListLabSchedule != null) {
                     oldRequestAccountOfLabScheduleListLabSchedule.getLabScheduleList().remove(labScheduleListLabSchedule);
                     oldRequestAccountOfLabScheduleListLabSchedule = em.merge(oldRequestAccountOfLabScheduleListLabSchedule);
-                }
-            }
-            for (Report reportListReport : account.getReportList()) {
-                Account oldRequestAccountOfReportListReport = reportListReport.getRequestAccount();
-                reportListReport.setRequestAccount(account);
-                reportListReport = em.merge(reportListReport);
-                if (oldRequestAccountOfReportListReport != null) {
-                    oldRequestAccountOfReportListReport.getReportList().remove(reportListReport);
-                    oldRequestAccountOfReportListReport = em.merge(oldRequestAccountOfReportListReport);
                 }
             }
             for (Request requestListRequest : account.getRequestList()) {
@@ -170,21 +151,11 @@ public class AccountJpaController implements Serializable {
             Department departmentIdNew = account.getDepartmentId();
             List<LabSchedule> labScheduleListOld = persistentAccount.getLabScheduleList();
             List<LabSchedule> labScheduleListNew = account.getLabScheduleList();
-            List<Report> reportListOld = persistentAccount.getReportList();
-            List<Report> reportListNew = account.getReportList();
             List<Request> requestListOld = persistentAccount.getRequestList();
             List<Request> requestListNew = account.getRequestList();
             List<Request> requestList1Old = persistentAccount.getRequestList1();
             List<Request> requestList1New = account.getRequestList1();
             List<String> illegalOrphanMessages = null;
-            for (Report reportListOldReport : reportListOld) {
-                if (!reportListNew.contains(reportListOldReport)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Report " + reportListOldReport + " since its requestAccount field is not nullable.");
-                }
-            }
             for (Request requestListOldRequest : requestListOld) {
                 if (!requestListNew.contains(requestListOldRequest)) {
                     if (illegalOrphanMessages == null) {
@@ -215,13 +186,6 @@ public class AccountJpaController implements Serializable {
             }
             labScheduleListNew = attachedLabScheduleListNew;
             account.setLabScheduleList(labScheduleListNew);
-            List<Report> attachedReportListNew = new ArrayList<Report>();
-            for (Report reportListNewReportToAttach : reportListNew) {
-                reportListNewReportToAttach = em.getReference(reportListNewReportToAttach.getClass(), reportListNewReportToAttach.getId());
-                attachedReportListNew.add(reportListNewReportToAttach);
-            }
-            reportListNew = attachedReportListNew;
-            account.setReportList(reportListNew);
             List<Request> attachedRequestListNew = new ArrayList<Request>();
             for (Request requestListNewRequestToAttach : requestListNew) {
                 requestListNewRequestToAttach = em.getReference(requestListNewRequestToAttach.getClass(), requestListNewRequestToAttach.getId());
@@ -259,17 +223,6 @@ public class AccountJpaController implements Serializable {
                     if (oldRequestAccountOfLabScheduleListNewLabSchedule != null && !oldRequestAccountOfLabScheduleListNewLabSchedule.equals(account)) {
                         oldRequestAccountOfLabScheduleListNewLabSchedule.getLabScheduleList().remove(labScheduleListNewLabSchedule);
                         oldRequestAccountOfLabScheduleListNewLabSchedule = em.merge(oldRequestAccountOfLabScheduleListNewLabSchedule);
-                    }
-                }
-            }
-            for (Report reportListNewReport : reportListNew) {
-                if (!reportListOld.contains(reportListNewReport)) {
-                    Account oldRequestAccountOfReportListNewReport = reportListNewReport.getRequestAccount();
-                    reportListNewReport.setRequestAccount(account);
-                    reportListNewReport = em.merge(reportListNewReport);
-                    if (oldRequestAccountOfReportListNewReport != null && !oldRequestAccountOfReportListNewReport.equals(account)) {
-                        oldRequestAccountOfReportListNewReport.getReportList().remove(reportListNewReport);
-                        oldRequestAccountOfReportListNewReport = em.merge(oldRequestAccountOfReportListNewReport);
                     }
                 }
             }
@@ -330,13 +283,6 @@ public class AccountJpaController implements Serializable {
                 throw new NonexistentEntityException("The account with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Report> reportListOrphanCheck = account.getReportList();
-            for (Report reportListOrphanCheckReport : reportListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Report " + reportListOrphanCheckReport + " in its reportList field has a non-nullable requestAccount field.");
-            }
             List<Request> requestListOrphanCheck = account.getRequestList();
             for (Request requestListOrphanCheckRequest : requestListOrphanCheck) {
                 if (illegalOrphanMessages == null) {

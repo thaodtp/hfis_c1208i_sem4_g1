@@ -9,6 +9,7 @@ package ui;
 import biz.AccountManager;
 import biz.DepartmentManager;
 import entity.Account;
+import entity.Department;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +40,7 @@ public class AccountUI {
     private Date birthday;
     private String email;
     private String phone;
-    private int departmentId;
+    private Department department;
     private String msg;
 
     public AccountUI() {
@@ -49,7 +50,7 @@ public class AccountUI {
         msg = "";
     }
     
-    public String addAccount() {
+    public String create() {
 //        msg = Pattern.matches("[a-zA-Z0-9._-]{6,}", userName)+"";
 //        return "";
         try {
@@ -68,8 +69,8 @@ public class AccountUI {
             if (accountManager.isAccountExist(username)) {
                 msg = "This username has already existed";
             }
-            accountManager.create(new Account(username, password, role, name, birthday, email, phone, departmentManager.getDepartmentById(departmentId).get(0)));
-            return "/faces/success.xhtml";
+            accountManager.create(new Account(username, password, role, name, birthday, email, phone, department));
+            return "/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't register at the moment.";
             Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -164,12 +165,12 @@ public class AccountUI {
         this.phone = phone;
     }
 
-    public int getDepartmentId() {
-        return departmentId;
+    public Department getDepartmentId() {
+        return department;
     }
 
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartmentId(Department department) {
+        this.department = department;
     }
     
     

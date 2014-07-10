@@ -10,6 +10,7 @@ import da.DepartmentJpaController;
 import da.RequestJpaController;
 import da.exceptions.RollbackFailureException;
 import entity.Department;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,13 +73,24 @@ public class DepartmentManager {
         }
     }
     
-    public void getDepartment(String name){}
+    public Department getDepartmentByName(String name){
+        return getDaController().getDepartment(name);
+    }
 
-    public List<Department> getDepartmentById(int departmentId) {      
-        return getDaController().getDepartmentById(departmentId);       
+    public Department getDepartmentById(int departmentId) {      
+        return getDaController().findDepartment(departmentId);       
     }
     
-    public List<Department> getAllDepartment() {
-        return getDaController().getAllDepartment();
+    public List<String> getDepNames() {
+        List<String> result = new LinkedList<>();
+        List<Department> deps = getDaController().getDepartments();
+        for(Department dep : deps){
+            result.add(dep.getName());
+        }
+        return result;
+    }
+    
+    public List<Department> getDepartments(){
+        return getDaController().getDepartments();
     }
 }
