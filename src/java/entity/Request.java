@@ -58,10 +58,10 @@ public class Request implements Serializable {
     @Column(name = "Type")
     private int type;
     @JoinColumn(name = "ResolveAccount", referencedColumnName = "Username")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Account resolveAccount;
     @JoinColumn(name = "RequestAccount", referencedColumnName = "Username")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Account requestAccount;
 
     public Request() {

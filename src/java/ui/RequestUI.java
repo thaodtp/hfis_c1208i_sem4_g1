@@ -10,6 +10,7 @@ import biz.AccountManager;
 import biz.RequestManager;
 import entity.Account;
 import entity.Request;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -37,7 +38,13 @@ public class RequestUI {
     private Account requestAccount;
     private Account resolveAccount;
     
+    public List<Request> getAllRequest(){
+        return requestManager.getRequests(Request.TYPE_REQUEST);
+    }
     
+    public List<Request> getAllComplaint(){
+        return requestManager.getRequests(Request.TYPE_COMPLAINT);
+    }
     
     public String create() {
         try {
@@ -53,13 +60,6 @@ public class RequestUI {
         }
         return "";
     }
-    
-    
-    
-    
-    
-    
-    
     
     public String getContent() {
         return content;
@@ -77,8 +77,6 @@ public class RequestUI {
         this.status = status;
     }
     
-    
-
     public int getType() {
         return type;
     }
@@ -87,8 +85,6 @@ public class RequestUI {
         this.type = type;
     }
     
-    
-
     public String getMsg() {
         return msg;
     }

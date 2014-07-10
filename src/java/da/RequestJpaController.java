@@ -39,12 +39,16 @@ public class RequestJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List<Request> getRequests(String username){
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username", Request.class);
+    public List<Request> getRequests(String username,int type){
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username AND r.type=:type", Request.class);
+        query.setParameter("username", username);
+        query.setParameter("type", type);
         return query.getResultList();
     }
-    public List<Request> getRequests(){
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r", Request.class);
+    public List<Request> getRequests(int type){
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.type=:type", Request.class);
+        query.setParameter("type", type);
+        System.out.println(type+"aa");
         return query.getResultList();
     }
     public void create(Request request) throws PreexistingEntityException, RollbackFailureException, Exception {

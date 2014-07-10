@@ -43,12 +43,12 @@ public class RequestManager {
         return daController;
     }
 
-    public List<Request> getRequests(String username) {
-        return getDaController().getRequests(username);
+    public List<Request> getRequests(String username, int type) {
+        return getDaController().getRequests(username,type);
     }
 
-    public List<Request> getRequests() {
-        return getDaController().getRequests();
+    public List<Request> getRequests(int type) {
+        return getDaController().getRequests(type);
     }
 
     public void create(Request request) {
