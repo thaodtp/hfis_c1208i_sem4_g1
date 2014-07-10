@@ -33,7 +33,7 @@ public class AccountUI {
 
     @EJB
     private DepartmentManager departmentManager;
-
+    private Account account;
     private String username;
     private String password;
     private String confirmPassword;
@@ -45,6 +45,7 @@ public class AccountUI {
     private Department department;
     private String msg;
     private String keyword;
+    private int departmentId;
 
     public AccountUI() {
         username = "";
@@ -80,6 +81,7 @@ public class AccountUI {
         }
         return "";
     }
+
     public String deleteAccount() {
         try {
             accountManager.delete(username);
@@ -90,6 +92,7 @@ public class AccountUI {
         }
         return "";
     }
+
     public List<Account> Search() {
         try {
             return accountManager.searchAccByName(keyword);
@@ -99,6 +102,45 @@ public class AccountUI {
         }
         return new LinkedList<Account>();
     }
+
+    public String editAccount() {
+        if (!Pattern.matches("[a-zA-Z0-9._-]{6,}", username)) {
+            msg = "Username not valid";
+            return "";
+        }
+        if (!Pattern.matches(".{6,}", password)) {
+            msg = "Password not valid";
+            return "";
+        }
+        if (getName().isEmpty()) {
+            msg = "Name not valid";
+            return "";
+        }
+        if (!Pattern.matches("^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", getPhone())) {
+            msg = "Phone number not valid";
+            return "";
+        }
+        if (!Pattern.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", getEmail())) {
+            msg = "Email not valid";
+            return "";
+        }
+        try {
+            account.setPassword(password);
+            account.setName(name);
+            account.setPhone(phone);
+            account.setEmail(email);
+            account.setBirthday(birthday);
+            account.setRole(role);
+            account.setDepartmentId(departmentManager.getDepartmentById(departmentId));
+            accountManager.edit(account);
+            return "/success.xhtml";
+        } catch (Exception ex) {
+            msg = "Can't update account";
+            Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
     public String getUsername() {
         return username;
     }
