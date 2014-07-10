@@ -42,9 +42,9 @@ public class RequestUI implements Serializable {
     private Account requestAccount;
     private Account resolveAccount;
 
-    public Map<String, Integer> getComplaintStatisticByDay() {
+    public Map<String, Integer> createStatistic(int type) {
         Map<String, Integer> result = new HashMap<>();
-        List<Request> source = getAllComplaint();
+        List<Request> source = requestManager.getRequests(type);
         SimpleDateFormat sdf = new SimpleDateFormat("\"dd/MM/yyyy\"");
         for (Request req : source) {
             String date = sdf.format(req.getTime());
@@ -62,9 +62,22 @@ public class RequestUI implements Serializable {
         return result;
     }
 
-    public List<Request> getUnresolvedComplaint(){
+    public Map<String, Integer> getComplaintStatisticByDay() {
+        return createStatistic(Request.TYPE_COMPLAINT);
+    }
+
+    public Map<String, Integer> getRequestStatisticByDay() {
+        return createStatistic(Request.TYPE_REQUEST);
+    }
+
+    public List<Request> getUnresolvedComplaint() {
         return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
     }
+
+    public List<Request> getUnresolvedRequest() {
+        return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_REQUEST);
+    }
+    
     public List<Request> getAllRequest() {
         return requestManager.getRequests(Request.TYPE_REQUEST);
     }

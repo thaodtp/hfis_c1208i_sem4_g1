@@ -7,9 +7,21 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
+        <legend>Complaints</legend>
         <p>
             Number of complaints in the last 5 days
-            <canvas id="myChart" width="800" height="400" class="span12"></canvas>
+            <canvas id="complaintStatistic" width="800" height="400" class="span12"></canvas>
+        </p>
+        <p>
+            Number of unresolved complaints: #{requestUI.unresolvedComplaint.size()}
+        </p>
+        <legend>Requests</legend>
+        <p>
+            Number of requests in the last 5 days
+            <canvas id="requestStatistic" width="800" height="400" class="span12"></canvas>
+        </p>        
+        <p>
+            Number of unresolved requests: #{requestUI.unresolvedRequest.size()}
         </p>
         <script>
             var data = {
@@ -27,16 +39,26 @@
                     }
                 ]
             };
-            var ctx = document.getElementById("myChart").getContext("2d");
-            var myLineChart = new Chart(ctx).Line(data, {bezierCurve: false});
+            var ctx = document.getElementById("complaintStatistic").getContext("2d");
+            var myLineChart = new Chart(ctx).Line(data, {});
+            var data1 = {
+                labels: #{requestUI.requestStatisticByDay.keySet()},
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: #{requestUI.requestStatisticByDay.values()}
+                    }
+                ]
+            };
+            var ctx1 = document.getElementById("requestStatistic").getContext("2d");
+            var myLineChart1 = new Chart(ctx1).Line(data1, {});
         </script>
-        <p>
-            Number of unresolved complaints: #{requestUI.unresolvedComplaint.size()}
-        </p>
-        <!--        <ui:repeat value="{requestUI.complaintStatisticByDay.keySet().toArray()}" var="integer">
-                    <h:outputText value="{integer}" />
-                    <h:outputText value="{requestUI.complaintStatisticByDay.get(integer)}" />
-                </ui:repeat>-->
     </ui:define>
 
 </ui:composition>
