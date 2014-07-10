@@ -43,7 +43,7 @@ public class AccountJpaController implements Serializable {
     }
 
     public Account getAccount(String username, String password) {
-        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.name like :name or a.username like :username", Account.class);
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.username = :username and a.password = :password", Account.class);
         query.setParameter("username", username);
         query.setParameter("password", password);
         List<Account> result = query.getResultList();
