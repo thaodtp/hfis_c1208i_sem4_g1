@@ -7,6 +7,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -34,10 +37,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Request.findByStatus", query = "SELECT r FROM Request r WHERE r.status = :status"),
     @NamedQuery(name = "Request.findByType", query = "SELECT r FROM Request r WHERE r.type = :type")})
 public class Request implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
     public static final int TYPE_REQUEST = 1;
     public static final int TYPE_COMPLAINT = 2;
     public static final int TYPE_REPORT = 3;
     public static final int TYPE_MESSAGE = 4;
+    
+    public static final int STATUS_PENDING = 0;
+    public static final int STATUS_COMPLETE = 1;
     
     private static final long serialVersionUID = 1L;
     @Id
@@ -156,6 +167,14 @@ public class Request implements Serializable {
     @Override
     public String toString() {
         return "entity.Request[ id=" + id + " ]";
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
     
 }

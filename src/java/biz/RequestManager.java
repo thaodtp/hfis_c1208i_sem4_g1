@@ -44,11 +44,15 @@ public class RequestManager {
     }
 
     public List<Request> getRequests(String username, int type) {
-        return getDaController().getRequests(username,type);
+        return getDaController().getRequests(username, type);
     }
 
     public List<Request> getRequests(int type) {
         return getDaController().getRequests(type);
+    }
+
+    public List<Request> getRequestsByStatus(int status, int type){
+        return getDaController().getRequestsByStatus(status, type);
     }
 
     public void create(Request request) {
@@ -60,7 +64,8 @@ public class RequestManager {
             Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void edit(Request request){
+
+    public void edit(Request request) {
         try {
             getDaController().edit(request);
         } catch (RollbackFailureException ex) {
@@ -69,7 +74,8 @@ public class RequestManager {
             Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void delete(int id){
+
+    public void delete(int id) {
         try {
             getDaController().destroy(id);
         } catch (RollbackFailureException ex) {

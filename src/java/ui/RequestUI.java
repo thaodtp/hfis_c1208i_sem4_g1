@@ -3,14 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ui;
 
 import biz.AccountManager;
 import biz.RequestManager;
 import entity.Account;
 import entity.Request;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -23,13 +28,12 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class RequestUI {
+public class RequestUI implements Serializable {
+
     @EJB
     private AccountManager accountManager;
     @EJB
     private RequestManager requestManager;
-    
-    
 
     private String content;
     private int status;
@@ -37,15 +41,38 @@ public class RequestUI {
     private String msg;
     private Account requestAccount;
     private Account resolveAccount;
-    
-    public List<Request> getAllRequest(){
+
+    public Map<String, Integer> getComplaintStatisticByDay() {
+        Map<String, Integer> result = new HashMap<>();
+        List<Request> source = getAllComplaint();
+        SimpleDateFormat sdf = new SimpleDateFormat("\"dd/MM/yyyy\"");
+        for (Request req : source) {
+            String date = sdf.format(req.getTime());
+            if (result.containsKey(date)) {
+                result.put(date, result.get(date) + 1);
+            } else {
+                if (result.size() > 5) {
+                    break;
+                } else {
+                    result.put(date, 1);
+                }
+            }
+            System.out.println(date + "  " + result.get(date));
+        }
+        return result;
+    }
+
+    public List<Request> getUnresolvedComplaint(){
+        return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
+    }
+    public List<Request> getAllRequest() {
         return requestManager.getRequests(Request.TYPE_REQUEST);
     }
-    
-    public List<Request> getAllComplaint(){
+
+    public List<Request> getAllComplaint() {
         return requestManager.getRequests(Request.TYPE_COMPLAINT);
     }
-    
+
     public String create() {
         try {
             if (content == null || content.isEmpty()) {
@@ -60,7 +87,7 @@ public class RequestUI {
         }
         return "";
     }
-    
+
     public String getContent() {
         return content;
     }
@@ -76,7 +103,7 @@ public class RequestUI {
     public void setStatus(int status) {
         this.status = status;
     }
-    
+
     public int getType() {
         return type;
     }
@@ -84,7 +111,7 @@ public class RequestUI {
     public void setType(int type) {
         this.type = type;
     }
-    
+
     public String getMsg() {
         return msg;
     }
@@ -108,7 +135,5 @@ public class RequestUI {
     public void setResolveAccount(Account resolveAccount) {
         this.resolveAccount = resolveAccount;
     }
-    
-    
-    
+
 }
