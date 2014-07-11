@@ -89,5 +89,7 @@ public class AccountManager {
     public Account getAccount(String username, String password) {
         return getDaController().getAccount(username, password);
     }
-    
+    public List<Account> searchAccByName(String keyword){
+        return  getDaController().searchAccByName(keyword);
+    }
 }
