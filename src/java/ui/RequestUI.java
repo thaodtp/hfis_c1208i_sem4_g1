@@ -34,7 +34,7 @@ public class RequestUI implements Serializable {
     private AccountManager accountManager;
     @EJB
     private RequestManager requestManager;
-
+    private Request currrentReq;
     private String content;
     private int status;
     private int type;
@@ -42,6 +42,11 @@ public class RequestUI implements Serializable {
     private Account requestAccount;
     private Account resolveAccount;
 
+    public void assignResolver(){
+        System.out.println("áđâsdá");
+        currrentReq.setResolveAccount(resolveAccount);
+        requestManager.edit(currrentReq);
+    }
     public Map<String, Integer> createStatistic(int type) {
         Map<String, Integer> result = new HashMap<>();
         List<Request> source = requestManager.getRequests(type);
@@ -60,6 +65,14 @@ public class RequestUI implements Serializable {
             System.out.println(date + "  " + result.get(date));
         }
         return result;
+    }
+
+    public Request getCurrrentReq() {
+        return currrentReq;
+    }
+
+    public void setCurrrentReq(Request currrentReq) {
+        this.currrentReq = currrentReq;
     }
 
     public Map<String, Integer> getComplaintStatisticByDay() {
