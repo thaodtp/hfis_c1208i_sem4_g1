@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -38,7 +39,14 @@ public class LabJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+    public List<Lab> getAllLabs(){
+        TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l", Lab.class);
+        return query.getResultList();  
+    }
+    public List<Lab> displayLabs(){
+        TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l WHERE l.status = :1", Lab.class);
+        return  query.getResultList();  
+    }
     public void create(Lab lab) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (lab.getLabScheduleList() == null) {
             lab.setLabScheduleList(new ArrayList<LabSchedule>());

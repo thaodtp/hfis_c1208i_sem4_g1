@@ -35,6 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Lab.findByType", query = "SELECT l FROM Lab l WHERE l.type = :type"),
     @NamedQuery(name = "Lab.findByStatus", query = "SELECT l FROM Lab l WHERE l.status = :status")})
 public class Lab implements Serializable {
+    public static final int ROOM_LAB = 1;
+    public static final int ROOM_SERVER = 2;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
