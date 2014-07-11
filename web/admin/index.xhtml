@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../controlpanel_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <legend>Complaints</legend>
+        <p>
+            Number of complaints in the last 5 days
+            <canvas id="complaintStatistic" width="800" height="400" class="span12"></canvas>
+        </p>
+        <p>
+            Number of unresolved complaints: #{requestUI.unresolvedComplaint.size()}
+        </p>
+        <legend>Requests</legend>
+        <p>
+            Number of requests in the last 5 days
+            <canvas id="requestStatistic" width="800" height="400" class="span12"></canvas>
+        </p>        
+        <p>
+            Number of unresolved requests: #{requestUI.unresolvedRequest.size()}
+        </p>
+        <script>
+            var data = {
+                labels: #{requestUI.complaintStatisticByDay.keySet()},
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: #{requestUI.complaintStatisticByDay.values()}
+                    }
+                ]
+            };
+            var ctx = document.getElementById("complaintStatistic").getContext("2d");
+            var myLineChart = new Chart(ctx).Line(data, {});
+            var data1 = {
+                labels: #{requestUI.requestStatisticByDay.keySet()},
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: #{requestUI.requestStatisticByDay.values()}
+                    }
+                ]
+            };
+            var ctx1 = document.getElementById("requestStatistic").getContext("2d");
+            var myLineChart1 = new Chart(ctx1).Line(data1, {});
+        </script>
+    </ui:define>
+
+</ui:composition>

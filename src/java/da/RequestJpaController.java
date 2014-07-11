@@ -6,6 +6,7 @@
 
 package da;
 
+import com.google.common.collect.Lists;
 import da.exceptions.NonexistentEntityException;
 import da.exceptions.PreexistingEntityException;
 import da.exceptions.RollbackFailureException;
@@ -39,12 +40,22 @@ public class RequestJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List<Request> getRequests(String username){
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username", Request.class);
-        return query.getResultList();
+    public List<Request> getRequests(String username,int type){
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username AND r.type=:type", Request.class);
+        query.setParameter("username", username);
+        query.setParameter("type", type);
+        return Lists.reverse(query.getResultList());
     }
-    public List<Request> getRequests(){
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r", Request.class);
+    public List<Request> getRequests(int type){
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.type=:type", Request.class);
+        query.setParameter("type", type);
+        return Lists.reverse(query.getResultList());
+    }
+    
+    public List<Request> getRequestsByStatus(int status,int type){
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.status=:status AND r.type=:type", Request.class);
+        query.setParameter("type", type);
+        query.setParameter("status", status);
         return query.getResultList();
     }
     public void create(Request request) throws PreexistingEntityException, RollbackFailureException, Exception {
