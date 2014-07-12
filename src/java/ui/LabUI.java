@@ -39,6 +39,12 @@ public class LabUI {
     public List<Lab> getAllLabs(){
        return labManager.getAllLabs();
     }
+    public List<Lab> getLabs(){
+        return labManager.displayLabs();
+    }
+    public List<Lab> getServerRoom(){
+        return labManager.displayServerRoom();
+    }
     public String deleteLab(){
         try {
             labManager.delete(id);
@@ -79,6 +85,5 @@ public class LabUI {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-    
+    }  
 }

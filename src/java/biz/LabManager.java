@@ -71,5 +71,10 @@ public class LabManager {
      public List<Lab> getAllLabs(){
          return getDaController().getAllLabs();
      }
-     
+     public List<Lab> displayLabs(){
+         return  getDaController().displayLabs();
+     }
+     public List<Lab> displayServerRoom(){
+         return getDaController().displayServerRoom();
+     }
 }
