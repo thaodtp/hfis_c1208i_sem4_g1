@@ -11,6 +11,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,16 +39,20 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "LabSchedule.findByDate", query = "SELECT l FROM LabSchedule l WHERE l.date = :date"),
     @NamedQuery(name = "LabSchedule.findByDetail", query = "SELECT l FROM LabSchedule l WHERE l.detail = :detail")})
 public class LabSchedule implements Serializable {
+    public static final int STATUS_PENDING = 0;
+    public static final int STATUS_ACCEPTED = 1; 
+    @Column(name = "Status")
+    private Integer status;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Integer id;
     @Column(name = "Slot")
     private Integer slot;
     @Column(name = "Date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date date;
     @Size(max = 50)
     @Column(name = "Detail")
@@ -88,7 +94,13 @@ public class LabSchedule implements Serializable {
     public void setDate(Date date) {
         this.date = date;
     }
-
+    public String getSummary(){
+        try {
+            return this.detail.substring(0, 11) + "...";
+        } catch (IndexOutOfBoundsException ex) {
+            return this.detail;
+        }
+    }
     public String getDetail() {
         return detail;
     }
@@ -136,6 +148,14 @@ public class LabSchedule implements Serializable {
     @Override
     public String toString() {
         return "entity.LabSchedule[ id=" + id + " ]";
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
     
 }

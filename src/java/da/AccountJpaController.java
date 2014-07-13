@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package da;
 
 import da.exceptions.IllegalOrphanException;
@@ -42,15 +43,25 @@ public class AccountJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public Account getAccount(String username, String password) {
-        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.username = :username and a.password = :password", Account.class);
+    public Account getAccount(String username) {
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class);
         query.setParameter("username", username);
-        query.setParameter("password", password);
         List<Account> result = query.getResultList();
         if (result.isEmpty()) {
             return null;
         } else {
             return result.get(0);
+        }
+    }
+    
+    public List<Account> getAccountByRole(int role){
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.role = :role", Account.class);
+        query.setParameter("role", role);
+        List<Account> result = query.getResultList();
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
         }
     }
     public List<Account> searchAccByName(String keyword){
@@ -161,26 +172,6 @@ public class AccountJpaController implements Serializable {
             List<Request> requestListNew = account.getRequestList();
             List<Request> requestList1Old = persistentAccount.getRequestList1();
             List<Request> requestList1New = account.getRequestList1();
-            List<String> illegalOrphanMessages = null;
-            for (Request requestListOldRequest : requestListOld) {
-                if (!requestListNew.contains(requestListOldRequest)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Request " + requestListOldRequest + " since its resolveAccount field is not nullable.");
-                }
-            }
-            for (Request requestList1OldRequest : requestList1Old) {
-                if (!requestList1New.contains(requestList1OldRequest)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Request " + requestList1OldRequest + " since its requestAccount field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             if (departmentIdNew != null) {
                 departmentIdNew = em.getReference(departmentIdNew.getClass(), departmentIdNew.getId());
                 account.setDepartmentId(departmentIdNew);
@@ -232,6 +223,12 @@ public class AccountJpaController implements Serializable {
                     }
                 }
             }
+            for (Request requestListOldRequest : requestListOld) {
+                if (!requestListNew.contains(requestListOldRequest)) {
+                    requestListOldRequest.setResolveAccount(null);
+                    requestListOldRequest = em.merge(requestListOldRequest);
+                }
+            }
             for (Request requestListNewRequest : requestListNew) {
                 if (!requestListOld.contains(requestListNewRequest)) {
                     Account oldResolveAccountOfRequestListNewRequest = requestListNewRequest.getResolveAccount();
@@ -241,6 +238,12 @@ public class AccountJpaController implements Serializable {
                         oldResolveAccountOfRequestListNewRequest.getRequestList().remove(requestListNewRequest);
                         oldResolveAccountOfRequestListNewRequest = em.merge(oldResolveAccountOfRequestListNewRequest);
                     }
+                }
+            }
+            for (Request requestList1OldRequest : requestList1Old) {
+                if (!requestList1New.contains(requestList1OldRequest)) {
+                    requestList1OldRequest.setRequestAccount(null);
+                    requestList1OldRequest = em.merge(requestList1OldRequest);
                 }
             }
             for (Request requestList1NewRequest : requestList1New) {
@@ -276,7 +279,7 @@ public class AccountJpaController implements Serializable {
         }
     }
 
-    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(String id) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -288,24 +291,6 @@ public class AccountJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The account with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            List<Request> requestListOrphanCheck = account.getRequestList();
-            for (Request requestListOrphanCheckRequest : requestListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Request " + requestListOrphanCheckRequest + " in its requestList field has a non-nullable resolveAccount field.");
-            }
-            List<Request> requestList1OrphanCheck = account.getRequestList1();
-            for (Request requestList1OrphanCheckRequest : requestList1OrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Request " + requestList1OrphanCheckRequest + " in its requestList1 field has a non-nullable requestAccount field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             Department departmentId = account.getDepartmentId();
             if (departmentId != null) {
                 departmentId.getAccountList().remove(account);
@@ -315,6 +300,16 @@ public class AccountJpaController implements Serializable {
             for (LabSchedule labScheduleListLabSchedule : labScheduleList) {
                 labScheduleListLabSchedule.setRequestAccount(null);
                 labScheduleListLabSchedule = em.merge(labScheduleListLabSchedule);
+            }
+            List<Request> requestList = account.getRequestList();
+            for (Request requestListRequest : requestList) {
+                requestListRequest.setResolveAccount(null);
+                requestListRequest = em.merge(requestListRequest);
+            }
+            List<Request> requestList1 = account.getRequestList1();
+            for (Request requestList1Request : requestList1) {
+                requestList1Request.setRequestAccount(null);
+                requestList1Request = em.merge(requestList1Request);
             }
             em.remove(account);
             utx.commit();

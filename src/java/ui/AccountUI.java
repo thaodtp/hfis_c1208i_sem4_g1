@@ -54,6 +54,12 @@ public class AccountUI {
         msg = "";
     }
 
+    public List<Account> getStaffs() {
+        List<Account> result = accountManager.getAccountByRole(Account.ROLE_INSTRUCTOR);
+        result.addAll(accountManager.getAccountByRole(Account.ROLE_TECHNICAL));
+        return result;
+    }
+
     public String create() {
 //        msg = Pattern.matches("[a-zA-Z0-9._-]{6,}", userName)+"";
 //        return "";

@@ -86,10 +86,22 @@ public class AccountManager {
         return getDaController().findAccount(username) != null;
     }
 
-    public Account getAccount(String username, String password) {
-        return getDaController().getAccount(username, password);
+    public List<Account> getAccountByRole(int role) {
+        return getDaController().getAccountByRole(role);
     }
-    public List<Account> searchAccByName(String keyword){
-        return  getDaController().searchAccByName(keyword);
+    public Account getAccount(String username){
+        return getDaController().getAccount(username);
+    }
+    public Account login(String username, String password) {
+        Account target = getAccount(username);
+        if (target != null && target.getPassword().equals(password)) {
+            return target;
+        } else {
+            return null;
+        }
+    }
+
+    public List<Account> searchAccByName(String keyword) {
+        return getDaController().searchAccByName(keyword);
     }
 }

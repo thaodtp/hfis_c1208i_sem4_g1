@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Request.findByStatus", query = "SELECT r FROM Request r WHERE r.status = :status"),
     @NamedQuery(name = "Request.findByType", query = "SELECT r FROM Request r WHERE r.type = :type")})
 public class Request implements Serializable {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "Time")
@@ -46,10 +47,10 @@ public class Request implements Serializable {
     public static final int TYPE_COMPLAINT = 2;
     public static final int TYPE_REPORT = 3;
     public static final int TYPE_MESSAGE = 4;
-    
+
     public static final int STATUS_PENDING = 0;
     public static final int STATUS_COMPLETE = 1;
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -87,13 +88,40 @@ public class Request implements Serializable {
         this.content = content;
         this.type = type;
     }
-    
+
     public Request(String content, int status, int type, Account requestAccount, Account resolveAccount) {
         this.content = content;
         this.status = status;
         this.type = type;
         this.requestAccount = requestAccount;
         this.resolveAccount = resolveAccount;
+    }
+
+    public String getDisplayTime() {
+        return new SimpleDateFormat("mm:hh  dd/MM/yyyy").format(time);
+    }
+
+    public String getSummary() {
+        try {
+            return this.content.substring(0, 11) + "...";
+        } catch (IndexOutOfBoundsException ex) {
+            return this.content;
+        }
+    }
+
+    public String getStatusName() {
+        switch (this.status) {
+            case STATUS_COMPLETE:
+                return "Complete";
+            case STATUS_PENDING:
+                if (resolveAccount == null) {
+                    return "Unassigned";
+                } else {
+                    return "Pending";
+                }
+            default:
+                return "Error";
+        }
     }
 
     public Integer getId() {
@@ -176,5 +204,5 @@ public class Request implements Serializable {
     public void setTime(Date time) {
         this.time = time;
     }
-    
+
 }
