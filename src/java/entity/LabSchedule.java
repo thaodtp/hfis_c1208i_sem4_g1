@@ -7,6 +7,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -86,7 +87,9 @@ public class LabSchedule implements Serializable {
     public void setSlot(Integer slot) {
         this.slot = slot;
     }
-
+    public String getDisplayDate(){
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
     public Date getDate() {
         return date;
     }

@@ -11,6 +11,7 @@ import da.exceptions.RollbackFailureException;
 import entity.Lab;
 import entity.LabSchedule;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -43,7 +44,19 @@ public class LabScheduleManager {
         }
         return daController;
     }
-    
+    public List<LabSchedule> getUnacceptedSchedule(){
+        return getDaController().getUnacceptedSchedule();
+    }
+    public void acceptLabRequest(LabSchedule schedule){
+        try {
+            schedule.setStatus(LabSchedule.STATUS_ACCEPTED);
+            getDaController().edit(schedule);
+        } catch (RollbackFailureException ex) {
+            Logger.getLogger(LabScheduleManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(LabScheduleManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public void requestLab(LabSchedule schedule){
         try {
             schedule.setStatus(0);
