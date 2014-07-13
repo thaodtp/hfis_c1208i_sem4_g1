@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import da.exceptions.NonexistentEntityException;
@@ -17,9 +16,11 @@ import javax.persistence.criteria.Root;
 import entity.Lab;
 import entity.Account;
 import entity.LabSchedule;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -37,6 +38,19 @@ public class LabScheduleJpaController implements Serializable {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public LabSchedule getSchedule(Date date, int slot, Lab lab) {
+        TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.slot = :slot AND l.date=:date AND l.labId=:lab", LabSchedule.class);
+        query.setParameter("slot", slot);
+        query.setParameter("date", date);
+        query.setParameter("lab", lab);
+        List<LabSchedule> result = query.getResultList();
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result.get(0);
+        }
     }
 
     public void create(LabSchedule labSchedule) throws PreexistingEntityException, RollbackFailureException, Exception {
@@ -221,5 +235,5 @@ public class LabScheduleJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
