@@ -39,7 +39,7 @@
                             <ui:repeat value="#{labScheduleUI.slots}" var="slot">
                                 <tr>
                                     <td>#{slot}</td>
-                                    <ui:repeat value="#{labUI.labs}" var="lab">
+                                    <ui:repeat value="#{labUI.allLabs}" var="lab">
                                         <td class="text-center">
                                             <h:commandLink value="#{labScheduleUI.curSchedule.summary}" 
                                                            rendered="#{labScheduleUI.getSchedule(lab,slot)!=null}" 

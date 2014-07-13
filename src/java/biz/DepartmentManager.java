@@ -1,4 +1,4 @@
-/*
+  /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -80,16 +80,14 @@ public class DepartmentManager {
     public Department getDepartmentById(int departmentId) {      
         return getDaController().findDepartment(departmentId);       
     }
-    
-    public List<String> getDepNames() {
+      public List<String> getDepNames() {
         List<String> result = new LinkedList<>();
         List<Department> deps = getDaController().getDepartments();
         for(Department dep : deps){
             result.add(dep.getName());
         }
         return result;
-    }
-    
+    }   
     public List<Department> getDepartments(){
         return getDaController().getDepartments();
     }
