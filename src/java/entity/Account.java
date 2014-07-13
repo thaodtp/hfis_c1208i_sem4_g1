@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -113,6 +112,21 @@ public class Account implements Serializable {
         this.email = email;
         this.phone = phone;
         this.departmentId = department;
+    }
+
+    public String getRoleName() {
+        switch (this.role) {
+            case 1:
+                return "Admin";
+            case 2:
+                return "Instructor";
+            case 3:
+                return "Technical Staff";
+            case 4:
+                return "Head of Department";
+            default:
+                return "Invalid role";
+        }
     }
 
     public String getUsername() {
@@ -230,5 +244,5 @@ public class Account implements Serializable {
     public String toString() {
         return "entity.Account[ username=" + username + " ]";
     }
-    
+
 }

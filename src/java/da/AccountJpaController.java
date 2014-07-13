@@ -42,15 +42,25 @@ public class AccountJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public Account getAccount(String username, String password) {
-        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.username = :username and a.password = :password", Account.class);
+    public Account getAccount(String username) {
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class);
         query.setParameter("username", username);
-        query.setParameter("password", password);
         List<Account> result = query.getResultList();
         if (result.isEmpty()) {
             return null;
         } else {
             return result.get(0);
+        }
+    }
+    
+    public List<Account> getAccountByRole(int role){
+        TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.role = :role", Account.class);
+        query.setParameter("role", role);
+        List<Account> result = query.getResultList();
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
         }
     }
     public List<Account> searchAccByName(String keyword){

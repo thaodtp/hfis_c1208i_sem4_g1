@@ -76,7 +76,7 @@ public class Login implements Serializable{
 
     public void login() {
         try {           
-            account = manager.getAccount(username, password);
+            account = manager.login(username, password);
             if (account != null) {
                 msg = "";
                 return;

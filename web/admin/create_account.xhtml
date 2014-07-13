@@ -45,8 +45,8 @@
                 </div>
                 <label>Department Id</label>
                 <div class="input-control select">
-                    <h:selectOneMenu>
-                        <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p}"/>
+                    <h:selectOneMenu value="#{accountUI.departmentId}" converter="">
+                        <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p.id}"/>
                     </h:selectOneMenu>
                 </div>
                 <br/>

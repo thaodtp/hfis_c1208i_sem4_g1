@@ -1,38 +1,95 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
                 template="./../controlpanel_template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:dataTable id="table" value="#{requestUI.allComplaint}" var="req">
-            <h:column>
-                <f:facet name="header">ID</f:facet>
-                    #{req.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Content</f:facet>
-                    #{req.content}
-            </h:column>
-            <h:column>
-                <f:facet name="header">From</f:facet>
-                    #{req.requestAccount.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Status</f:facet>
-                    #{req.status}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Status</f:facet>
-                    #{req.time}
-            </h:column>
-        </h:dataTable>
-        <script>
-            $(document).ready(function() {
-                $('#table').DataTable();
-            });
-        </script>
+        <h:form  id="fComplaint">
+            <h:dataTable id="table" value="#{requestUI.allComplaint}" var="req">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                        #{req.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Summary</f:facet>
+                        #{req.summary}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">From</f:facet>
+                        #{req.requestAccount.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Sent at</f:facet>
+                        #{req.displayTime}
+                </h:column> 
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                    <h:outputText class="icon-checkmark fg-green" rendered="#{req.status==1}" />
+                    <h:outputText  value="#{req.statusName}" rendered="#{req.status==0}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">&nbsp;</f:facet>
+                    <h:commandLink id="btnSend" value="Detail" onclick="window.scrollTo(0,window.scrollMaxY)">
+                        <f:setPropertyActionListener target="#{requestUI.currrentReq}" value="${req}" />
+                        <f:ajax render=":detailForm"/>
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+
+            <script>
+                $(document).ready(function() {
+                    $(document.getElementById("fComplaint:table")).DataTable();
+                });
+            </script>
+        </h:form>
+        <a id="anchorDetail"></a>
+        <h:form id="detailForm" prependId="false">
+            <h:panelGroup class="panel" rendered="#{requestUI.currrentReq!=null}">
+                <div class="panel-header bg-lightBlue fg-white">Complaint Detail</div>
+                <div class="panel-content padding10">
+                    <dl class="horizontal">
+                        <p><span class="span2">ID:</span> #{requestUI.currrentReq.id}</p>
+                        <p><span class="span2">Sent at:</span> #{requestUI.currrentReq.displayTime}</p>
+                        <p><span class="span2">By:</span> <a href="account_detail.xhtml?user=#{requestUI.currrentReq.requestAccount.username}">#{requestUI.currrentReq.requestAccount.name}</a></p>
+                        <p><span class="span2">Detail:</span> #{requestUI.currrentReq.content}</p>
+                        <p><h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount!=null}">
+                                <span class="span2">Status:</span>
+                                <h:outputText value="#{requestUI.currrentReq.statusName}"/>
+                            </h:panelGroup>
+                        </p>
+                        <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount==null}">
+                            <p><span class="span2">Status:</span> Unassigned</p>
+                            <b>Who will solve this?</b>
+                            <div class="input-control select">
+                                <h:selectOneMenu id="resolveAccount" 
+                                                 value="#{requestUI.resolveAccount}" 
+                                                 converter="#{accountConverter}">
+                                    <f:selectItems value="#{accountUI.staffs}" 
+                                                   var="acc" 
+                                                   itemValue="#{acc}" 
+                                                   itemLabel="#{acc.name}" 
+                                                   itemDescription="#{acc.roleName}" />
+                                </h:selectOneMenu>
+                            </div>
+                            <h:commandButton value="Accept" action="#{requestUI.assignResolver()}">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount!=null}">
+                            <p>
+                                <span class="span2">Assigned to:</span> 
+                                <h:outputLink value="account_detail.xhtml?user=#{requestUI.currrentReq.resolveAccount.username}">
+                                    #{requestUI.currrentReq.resolveAccount.name}
+                                </h:outputLink>
+                            </p>
+                        </h:panelGroup>
+                    </dl>
+                </div>
+            </h:panelGroup>
+        </h:form>
     </ui:define>
 
 </ui:composition>
