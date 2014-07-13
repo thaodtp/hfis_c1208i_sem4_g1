@@ -46,7 +46,6 @@ public class LabScheduleManager {
     
     public void requestLab(LabSchedule schedule){
         try {
-            System.out.println(schedule.getDetail());
             schedule.setStatus(0);
             getDaController().create(schedule);
         } catch (RollbackFailureException ex) {

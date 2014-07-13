@@ -99,6 +99,8 @@ public class LabSchedule implements Serializable {
             return this.detail.substring(0, 11) + "...";
         } catch (IndexOutOfBoundsException ex) {
             return this.detail;
+        } catch(NullPointerException ex){
+            return "No detail";
         }
     }
     public String getDetail() {

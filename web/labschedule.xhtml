@@ -21,11 +21,11 @@
                 <button class="btn-date"></button>
             </div>
             <h:commandButton id="refresh" value="Get schedule">
-                <!--<f:ajax execute="fSchedule" render="scheduleTable"/>-->
+                <f:ajax execute="fSchedule" render="scheduleTable"/>
             </h:commandButton> <br/>
-            <h:panelGroup id="scheduleTable">
-                <div id="scrollbox" data-role="scrollbox1" data-scroll="horizontal">
 
+            <div id="scrollbox" data-role="scrollbox1" data-scroll="horizontal">
+                <h:panelGroup id="scheduleTable">
                     <table class="table bordered">
                         <thead>
                             <tr>
@@ -41,16 +41,16 @@
                                     <td>#{slot}</td>
                                     <ui:repeat value="#{labUI.allLabs}" var="lab">
                                         <td class="text-center">
-                                            <h:commandLink value="#{labScheduleUI.curSchedule.summary}" 
-                                                           rendered="#{labScheduleUI.getSchedule(lab,slot)!=null}" 
-                                                           onclick="window.scroll(0,window.scrollMaxY)">
+                                            <h:commandLink rendered="#{labScheduleUI.getSchedule(lab,slot)!=null}" 
+                                                           value="#{labScheduleUI.curSchedule.summary}" 
+                                                           onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>
                                                 <f:setPropertyActionListener target="#{labScheduleUI.slot}" value="#{slot}"/>
                                                 <f:ajax execute="@this" render=":fSchedule:requestLab" />
                                             </h:commandLink>
                                             <h:commandLink value="Make request" 
                                                            rendered="#{labScheduleUI.curSchedule==null}"
-                                                           onclick="window.scroll(0,window.scrollMaxY)">
+                                                           onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>
                                                 <f:setPropertyActionListener target="#{labScheduleUI.slot}" value="#{slot}"/>
                                                 <f:ajax execute="@this" render=":fSchedule:requestLab" />
@@ -62,8 +62,9 @@
                         </tbody>
                         <tfoot></tfoot>
                     </table>
-                </div>
-            </h:panelGroup>
+                </h:panelGroup>
+            </div>
+
             <h:panelGroup id="requestLab" class="height400">
                 <h:panelGroup rendered="#{labScheduleUI.lab!=null}">
                     <legend>Schedule Detail</legend>
@@ -76,13 +77,13 @@
                     </h:panelGroup>
                     <h:panelGroup rendered="#{labScheduleUI.curSchedule==null}">
                         <div class="input-control textarea">
-                        <label>Detail: </label>
-                        <h:inputTextarea value="#{labScheduleUI.detail}" />
+                            <label>Detail: </label>
+                            <h:inputTextarea id="inpDetail" value="#{labScheduleUI.detail}" required="true" requiredMessage="You must provide some infomation about this lab request (purpose)" />
                         </div>
-                        <h:commandButton action="#{labScheduleUI.requestLab()}" value="Make Request">
-                            <!--<f:ajax execute="@form" render=":fSchedule:requestLab" />-->
-                        </h:commandButton>
                     </h:panelGroup>
+                    <h:commandButton id="makeRequest" action="#{labScheduleUI.requestLab()}" value="Make Request" onclick="window.scroll(0, 0)">
+                        <f:ajax execute="@form" render=":fSchedule:requestLab :fSchedule:scheduleTable" />
+                    </h:commandButton>
                 </h:panelGroup>
             </h:panelGroup>
             <script>
