@@ -41,7 +41,7 @@
                                     <td>#{slot}</td>
                                     <ui:repeat value="#{labUI.allLabs}" var="lab">
                                         <td class="text-center">
-                                            <h:commandLink rendered="#{labScheduleUI.getSchedule(lab,slot)!=null}" 
+                                            <h:commandLink rendered="#{labScheduleUI.getSchedule(lab,slot)!=null and labScheduleUI.curSchedule.status==1}" 
                                                            value="#{labScheduleUI.curSchedule.summary}" 
                                                            onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>

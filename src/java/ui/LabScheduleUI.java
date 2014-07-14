@@ -43,7 +43,6 @@ public class LabScheduleUI implements Serializable{
      */
     public LabScheduleUI() {
         this.slots = new ArrayList<>();
-        System.out.println("created bean");
         slots.add(1);
         slots.add(2);
         slots.add(3);
@@ -51,8 +50,18 @@ public class LabScheduleUI implements Serializable{
         slots.add(5);
         this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date("07/12/2014"));
     }
+    public List<LabSchedule> getUnacceptedSchedule(){
+        return scheduleManager.getUnacceptedSchedule();
+    }
+    public void denyLabRequest(){
+        scheduleManager.denyLabRequest(curSchedule);
+        curSchedule=null;
+    }
+    public void acceptLabRequest(){
+        scheduleManager.acceptLabRequest(curSchedule);
+        curSchedule=null;
+    }
     public void requestLab(){
-        System.out.println("called "+date+" "+slot+" "+lab);
         LabSchedule ls = new LabSchedule();
         ls.setLabId(lab);
         try {
@@ -79,7 +88,6 @@ public class LabScheduleUI implements Serializable{
     }
 
     public void setLab(Lab lab) {
-        System.out.println(lab);
         this.lab = lab;
     }
 
@@ -88,7 +96,6 @@ public class LabScheduleUI implements Serializable{
     }
 
     public void setSlot(int slot) {
-        System.out.println("Slot: "+slot);
         this.slot = slot;
     }
 
@@ -112,6 +119,10 @@ public class LabScheduleUI implements Serializable{
 
     public LabSchedule getCurSchedule() {
         return curSchedule;
+    }
+
+    public void setCurSchedule(LabSchedule curSchedule) {
+        this.curSchedule = curSchedule;
     }
 
 

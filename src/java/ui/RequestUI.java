@@ -43,7 +43,6 @@ public class RequestUI implements Serializable {
     private Account resolveAccount;
 
     public void assignResolver(){
-        System.out.println("áđâsdá");
         currrentReq.setResolveAccount(resolveAccount);
         requestManager.edit(currrentReq);
     }
@@ -62,7 +61,6 @@ public class RequestUI implements Serializable {
                     result.put(date, 1);
                 }
             }
-            System.out.println(date + "  " + result.get(date));
         }
         return result;
     }
