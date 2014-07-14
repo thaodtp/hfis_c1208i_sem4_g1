@@ -9,6 +9,7 @@ import biz.LabManager;
 import biz.LabScheduleManager;
 import entity.Lab;
 import entity.LabSchedule;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,8 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -28,7 +28,7 @@ import javax.faces.view.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class LabScheduleUI {
+public class LabScheduleUI implements Serializable{
 
     @EJB
     private LabScheduleManager scheduleManager;
@@ -50,12 +50,22 @@ public class LabScheduleUI {
         slots.add(5);
         this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date("07/12/2014"));
     }
+    public List<LabSchedule> getUnacceptedSchedule(){
+        return scheduleManager.getUnacceptedSchedule();
+    }
+    public void denyLabRequest(){
+        scheduleManager.denyLabRequest(curSchedule);
+        curSchedule=null;
+    }
+    public void acceptLabRequest(){
+        scheduleManager.acceptLabRequest(curSchedule);
+        curSchedule=null;
+    }
     public void requestLab(){
-        System.out.println("called");
         LabSchedule ls = new LabSchedule();
         ls.setLabId(lab);
         try {
-            ls.setDate(new SimpleDateFormat().parse(date));
+            ls.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(date));
         } catch (ParseException ex) {
             Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
             ls.setDate(new Date());
@@ -63,7 +73,7 @@ public class LabScheduleUI {
         ls.setSlot(slot);
         ls.setDetail(detail);
         scheduleManager.requestLab(ls);
-       // lab = null;
+        lab = null;
     }
     public String getDetail() {
         return detail;
@@ -109,6 +119,10 @@ public class LabScheduleUI {
 
     public LabSchedule getCurSchedule() {
         return curSchedule;
+    }
+
+    public void setCurSchedule(LabSchedule curSchedule) {
+        this.curSchedule = curSchedule;
     }
 
 

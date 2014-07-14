@@ -1051,9 +1051,9 @@
 		{
 			if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 			{
-				_fnLog( oSettings, 0, "Requested unknown parameter "+
-					(typeof oCol.mData=='function' ? '{function}' : "'"+oCol.mData+"'")+
-					" for row "+iRow, 4 );
+//				_fnLog( oSettings, 0, "Requested unknown parameter "+
+//					(typeof oCol.mData=='function' ? '{function}' : "'"+oCol.mData+"'")+
+//					" for row "+iRow, 4 );
 				oSettings.iDrawError = oSettings.iDraw;
 			}
 			return oCol.sDefaultContent;
