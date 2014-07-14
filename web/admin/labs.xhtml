@@ -1,11 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../controlpanel_template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
-        <h:dataTable value="#{labUI.allLabs}" var="lab">
+        <h:dataTable  id="table" value="#{labUI.allLabs}" var="lab">
+
             <h:column>
                 <f:facet name="header">ID</f:facet>
                     #{lab.id}
@@ -16,13 +18,24 @@
             </h:column>
             <h:column>
                 <f:facet name="header">Type</f:facet>
-                    <h:outputText rendered="#{lab.type==1}" value="Lab Room"/>
-                    <h:outputText rendered="#{lab.type==2}" value="Server Room"/>
+                <h:outputText rendered="#{lab.type==1}" value="Lab Room"/>
+                <h:outputText rendered="#{lab.type==2}" value="Server Room"/>
             </h:column>
             <h:column>
-                <f:facet name="header">Status</f:facet>
-                    #{lab.status}
-            </h:column>               
-        </h:dataTable>       
+                <f:facet name="header">Status</f:facet>  
+                <h:form>
+                    <h:selectBooleanCheckbox value="#{labUI.checkedValue}"/>                   
+                </h:form>
+            </h:column> 
+        </h:dataTable> 
+        <h:form>
+            <h:commandButton actionListener="#{labUI.editLab()}" value="Edit"/>
+            <h:outputText value="#{labUI.msg}"/>
+        </h:form>
+        <script>
+            $(document).ready(function() {
+                $('#table').DataTable();
+            });
+        </script>
     </ui:define>
 </ui:composition>
