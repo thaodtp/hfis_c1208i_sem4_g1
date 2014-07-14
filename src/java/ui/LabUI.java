@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ui;
 
 import biz.LabManager;
@@ -25,28 +24,63 @@ import javax.faces.bean.ViewScoped;
 public class LabUI implements Serializable{
     @EJB
     private LabManager labManager;
+    private Lab lab;
+    private int id;
+    private String name;
+    private int type;
+    private int status;
+    private String msg;
 
-     private int id;
-     private String name;
-     private int type;
-     private int status;
-     private String msg;
     /**
      * Creates a new instance of LabUI
      */
     public LabUI() {
     }
 
-    public List<Lab> getAllLabs(){
-       return labManager.getAllLabs();
+    public List<Lab> getAllLabs() {
+        return labManager.getAllLabs();
     }
-    public List<Lab> getLabs(){
+
+    public List<Lab> getLabs() {
         return labManager.displayLabs();
     }
-    public List<Lab> getServerRoom(){
+
+    public List<Lab> getServerRoom() {
         return labManager.displayServerRoom();
     }
-    public String deleteLab(){
+    public boolean getCheckedValue() {
+        if (labManager.displayStt() == 0) {
+            return false;
+        } else {
+            return false;
+        }
+    }
+
+    public String editLab() {
+        try {
+            lab.setId(id);
+            lab.setName(name);
+            lab.setType(type);
+            lab.setStatus(status);
+            labManager.edit(lab);
+            return "/success.xhtml";
+        } catch (Exception ex) {
+            lab.setStatus(status);
+            msg = "Can't update Lab";
+            Logger.getLogger(LabUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String deleteLab() {
         try {
             labManager.delete(id);
             return "/success.xhtml?faces-redirect=true";
@@ -56,6 +90,7 @@ public class LabUI implements Serializable{
         }
         return "";
     }
+
     public int getId() {
         return id;
     }
@@ -86,5 +121,5 @@ public class LabUI implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
-    }  
+    }
 }
