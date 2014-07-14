@@ -7,6 +7,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -41,6 +42,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class LabSchedule implements Serializable {
     public static final int STATUS_PENDING = 0;
     public static final int STATUS_ACCEPTED = 1; 
+    public static final int STATUS_DENIED = 2;
+    
     @Column(name = "Status")
     private Integer status;
     private static final long serialVersionUID = 1L;
@@ -86,7 +89,9 @@ public class LabSchedule implements Serializable {
     public void setSlot(Integer slot) {
         this.slot = slot;
     }
-
+    public String getDisplayDate(){
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
     public Date getDate() {
         return date;
     }
@@ -99,6 +104,8 @@ public class LabSchedule implements Serializable {
             return this.detail.substring(0, 11) + "...";
         } catch (IndexOutOfBoundsException ex) {
             return this.detail;
+        } catch(NullPointerException ex){
+            return "No detail";
         }
     }
     public String getDetail() {

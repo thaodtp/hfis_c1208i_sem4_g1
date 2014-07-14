@@ -7,6 +7,7 @@ package ui;
 
 import biz.LabManager;
 import entity.Lab;
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,8 +21,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class LabUI {
-
+public class LabUI implements Serializable{
     @EJB
     private LabManager labManager;
     private Lab lab;
