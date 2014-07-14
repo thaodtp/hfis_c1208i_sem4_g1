@@ -4,32 +4,56 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 template="./main_template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="head">
+        <h:outputScript name="/js/metro/metro-calendar.js" />
         <h:outputScript name="/js/metro/metro-datepicker.js" />
         <h:outputScript name="/js/metro/metro-scroll.js" />
         <h:outputScript name="/js/metro/metro-hint.js" />
     </ui:define>
     <ui:define name="content">
-        <h:form id="fSchedule">
-            <div class="input-control text" data-role="datepicker"
-                 data-format="dd/mm/yyyy"
-                 data-position="bottom"
-                 data-effect="fade">
-                <h:inputText value="#{labScheduleUI.date}" onchange="submit()">
-                </h:inputText>
-                <button class="btn-date"></button>
-            </div>
-            <h:commandButton id="refresh" value="Get schedule">
-                <f:ajax execute="fSchedule" render="scheduleTable"/>
-            </h:commandButton> <br/>
+        <h:form prependId="false">
+            <h:inputText id="txtDate" value="#{labScheduleUI.date}">
 
+            </h:inputText>
+            <h:commandButton id="btnSend" value="Get time table">
+                <f:ajax execute="@form" render=":fSchedule:scheduleTable"/>
+            </h:commandButton>
+        </h:form>
+        <h:form id="fSchedule">
+            <!--            <div class="input-control text size3" data-role="datepicker"
+                             data-format="dd/mm/yyyy"
+                             data-position="bottom"
+                             data-effect="fade">
+                            <h:inputText id="txtDate" value="{labScheduleUI.date}"></h:inputText>
+                            <a class="btn-date"></a>
+                        </div>-->
+            <div class="calendar"></div>
+            <script>
+                $(".calendar").calendar({
+                    format: 'dd/mm/yyyy', //default 'yyyy-mm-dd'
+                    multiSelect: false, //default true (multi select date)
+                    startMode: 'day', //year, month, day
+                    otherDays: false, // show days for previous and next months,
+                    weekStart: 1, //start week from sunday - 0 or monday - 1
+                    click: function(d) {
+                        $("#txtDate").val(d);
+                        $("#btnSend").click();
+                    }
+                });
+            </script>
+
+
+            <!--            <h:commandButton id="send" value="Get time table">
+                            <f:ajax execute="@form" render=":fSchedule:scheduleTable"/>
+                        </h:commandButton>-->
             <div id="scrollbox" data-role="scrollbox1" data-scroll="horizontal">
                 <h:panelGroup id="scheduleTable">
                     <table class="table bordered">
                         <thead>
                             <tr>
-                                <td>Slot</td>
+                                <td style="width:150px;">Slot</td>
                                 <ui:repeat value="#{labUI.labs}" var="lab">
                                     <th>#{lab.name}</th>
                                 </ui:repeat>
@@ -49,7 +73,7 @@
                                                 <f:ajax execute="@this" render=":fSchedule:requestLab" />
                                             </h:commandLink>
                                             <h:commandLink value="Make request" 
-                                                           rendered="#{labScheduleUI.curSchedule==null}"
+                                                           rendered="#{labScheduleUI.curSchedule==null and labScheduleUI.validDay}"
                                                            onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>
                                                 <f:setPropertyActionListener target="#{labScheduleUI.slot}" value="#{slot}"/>
@@ -87,7 +111,7 @@
                 </h:panelGroup>
             </h:panelGroup>
             <script>
-                $("#scrollbox").css("width", "#{labUI.labs.size()*260}px");
+                $("#scrollbox").css("width", "#{labUI.labs.size()*260+150}px");
                 $("#scrollbox").scrollbar({
                     axis: 'x',
                     height: 255
