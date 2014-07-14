@@ -43,7 +43,6 @@ public class AccountManager {
         }
         return daController;
     }
-
     public void create(Account account) {
         try {
             getDaController().create(account);
@@ -53,7 +52,6 @@ public class AccountManager {
             Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     public void edit(Account account) {
         try {
             getDaController().edit(account);
@@ -100,7 +98,6 @@ public class AccountManager {
             return null;
         }
     }
-
     public List<Account> searchAccByName(String keyword) {
         return getDaController().searchAccByName(keyword);
     }
