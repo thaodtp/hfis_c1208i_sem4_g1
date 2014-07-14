@@ -13,7 +13,7 @@
         <h:outputScript name="/js/metro/metro-hint.js" />
     </ui:define>
     <ui:define name="content">
-        <h:form prependId="false">
+        <h:form prependId="false" style="display:none;">
             <h:inputText id="txtDate" value="#{labScheduleUI.date}">
 
             </h:inputText>
@@ -53,7 +53,7 @@
                     <table class="table bordered">
                         <thead>
                             <tr>
-                                <td style="width:150px;">Slot</td>
+                                <th style="width:150px;">Slot</th>
                                 <ui:repeat value="#{labUI.labs}" var="lab">
                                     <th>#{lab.name}</th>
                                 </ui:repeat>
