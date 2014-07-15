@@ -49,8 +49,8 @@ public class LabUI implements Serializable{
         return labManager.displayServerRoom();
     }
     public boolean getCheckedValue() {
-        if (labManager.displayStt() == 0) {
-            return false;
+        if (labManager.getAllLabs().get(0).getStatus()==1){
+            return true;
         } else {
             return false;
         }
@@ -116,7 +116,7 @@ public class LabUI implements Serializable{
     }
 
     public int getStatus() {
-        return status;
+        return labManager.getAllLabs().get(0).getStatus();
     }
 
     public void setStatus(int status) {
