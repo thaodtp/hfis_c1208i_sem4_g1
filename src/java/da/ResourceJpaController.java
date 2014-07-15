@@ -48,6 +48,11 @@ public class ResourceJpaController implements Serializable {
         query.setParameter("content", "%"+ keyword + "%");
         return query.getResultList();
     }
+    public List<Resource> getResourceByType(int type){
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE r.type = :type", Resource.class);
+        query.setParameter("type", type);
+        return query.getResultList();
+    }
     public void create(Resource resource) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
