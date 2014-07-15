@@ -40,7 +40,8 @@ public class LabScheduleJpaController implements Serializable {
         return emf.createEntityManager();
     }
     public List<LabSchedule> getUnacceptedSchedule(){
-        TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.status=0", LabSchedule.class);
+        TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.status=0 AND l.date>:date", LabSchedule.class);
+        query.setParameter("date", new Date());
         return query.getResultList();        
     }
     public LabSchedule getSchedule(Date date, int slot, Lab lab) {
