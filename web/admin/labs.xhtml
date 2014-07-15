@@ -6,29 +6,30 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
-        <h:dataTable  id="table" value="#{labUI.allLabs}" var="lab">
-
-            <h:column>
-                <f:facet name="header">ID</f:facet>
-                    #{lab.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Name</f:facet>
-                    #{lab.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Type</f:facet>
-                <h:outputText rendered="#{lab.type==1}" value="Lab Room"/>
-                <h:outputText rendered="#{lab.type==2}" value="Server Room"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">Status</f:facet>  
-                <h:form>
-                    <h:selectBooleanCheckbox value="#{labUI.checkedValue}"/>                   
-                </h:form>
-            </h:column> 
-        </h:dataTable> 
         <h:form>
+            <h:dataTable  id="table" value="#{labUI.allLabs}" var="lab">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                        #{lab.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                        #{lab.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Type</f:facet>
+                    <h:outputText value="#{lab.type}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>                   
+                    <h:outputText value="#{lab.status}"/>         
+                </h:column> 
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:commandLink value="Delete" 
+                                   action="#{labUI.deleteLab()}" />
+                </h:column>
+            </h:dataTable> 
             <h:commandButton actionListener="#{labUI.editLab()}" value="Edit"/>
             <h:outputText value="#{labUI.msg}"/>
         </h:form>

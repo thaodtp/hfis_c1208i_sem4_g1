@@ -48,10 +48,6 @@ public class LabJpaController implements Serializable {
         query.setParameter("type",1);
         return  query.getResultList();  
     }
-    public int displayStt(){
-       TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l", Lab.class);
-       return query.getResultList().get(0).getStatus();
-    }
     public List<Lab> displayServerRoom(){
         TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l WHERE l.type = :type", Lab.class);
         query.setParameter("type", 2);

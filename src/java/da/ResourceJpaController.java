@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -36,7 +37,22 @@ public class ResourceJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+    
+    public List<Resource> getAllResources(){
+         TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r", Resource.class);
+        return query.getResultList();
+    }
+    public List<Resource> searchResource(String keyword){
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE  r.title like :title or r.content like :content", Resource.class);     
+        query.setParameter("title", "%"+ keyword + "%");     
+        query.setParameter("content", "%"+ keyword + "%");
+        return query.getResultList();
+    }
+    public List<Resource> getResourceByType(int type){
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE r.type = :type", Resource.class);
+        query.setParameter("type", type);
+        return query.getResultList();
+    }
     public void create(Resource resource) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
