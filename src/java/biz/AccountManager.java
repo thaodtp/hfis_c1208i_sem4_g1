@@ -101,4 +101,8 @@ public class AccountManager {
     public List<Account> searchAccByName(String keyword) {
         return getDaController().searchAccByName(keyword);
     }
+
+    public List<Account> getAccountByUsername(String username) {
+        return getDaController().getAccountByUsername(username);
+    }
 }

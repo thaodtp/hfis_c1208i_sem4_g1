@@ -373,4 +373,10 @@ public class AccountJpaController implements Serializable {
         }
     }
 
+    public List<Account> getAccountByUsername(String username){                          
+        String queryString = "SELECT a FROM Account a WHERE a.username = :username";
+        TypedQuery<Account> query = getEntityManager().createQuery(queryString, Account.class);
+        query.setParameter("username", username);
+        return query.getResultList();
+    }
 }
