@@ -54,6 +54,21 @@ public class AccountUI {
         msg = "";
     }
 
+    public List<Account> getAllAccounts() {
+        return accountManager.getAllAccount();
+    }
+    
+    public List<Account> getAccountByUsername() {
+        List<Account> accounts;
+        try {
+            accounts = accountManager.getAccountByUsername(username);
+            return accounts;
+        } catch (Exception ex) {
+            Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new LinkedList<Account>();
+    }
+    
     public List<Account> getStaffs() {
         List<Account> result = accountManager.getAccountByRole(Account.ROLE_TECHNICAL);
         return result;
@@ -152,6 +167,11 @@ public class AccountUI {
 
     public void setUsername(String username) {
         this.username = username;
+        List<Account> accounts = accountManager.getAccountByUsername(username);
+        if (accounts.size() > 0) {
+            Account target = accounts.get(0);
+            password = target.getPassword();
+        }
     }
 
     public String getPassword() {
