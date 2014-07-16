@@ -55,8 +55,7 @@ public class AccountUI {
     }
 
     public List<Account> getStaffs() {
-        List<Account> result = accountManager.getAccountByRole(Account.ROLE_INSTRUCTOR);
-        result.addAll(accountManager.getAccountByRole(Account.ROLE_TECHNICAL));
+        List<Account> result = accountManager.getAccountByRole(Account.ROLE_TECHNICAL);
         return result;
     }
 
