@@ -49,7 +49,7 @@ public class Lab implements Serializable {
     @Column(name = "Id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
+    //@NotNull
     @Size(min = 1, max = 50)
     @Column(name = "Name")
     private String name;
@@ -78,6 +78,12 @@ public class Lab implements Serializable {
         this.status = status;
     }
 
+    public Lab(String name, int type, int status) {
+        this.name = name;
+        this.type = type;
+        this.status = status;
+    }
+    
     public Integer getId() {
         return id;
     }
