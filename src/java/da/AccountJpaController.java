@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import da.exceptions.IllegalOrphanException;
@@ -53,8 +52,8 @@ public class AccountJpaController implements Serializable {
             return result.get(0);
         }
     }
-    
-    public List<Account> getAccountByRole(int role){
+
+    public List<Account> getAccountByRole(int role) {
         TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.role = :role", Account.class);
         query.setParameter("role", role);
         List<Account> result = query.getResultList();
@@ -64,13 +63,14 @@ public class AccountJpaController implements Serializable {
             return result;
         }
     }
-    public List<Account> searchAccByName(String keyword){
+
+    public List<Account> searchAccByName(String keyword) {
         TypedQuery<Account> query = getEntityManager().createQuery("SELECT a FROM Account a WHERE a.name like :name or a.username like :username", Account.class);
-        query.setParameter("name", "%" + keyword +"%");
+        query.setParameter("name", "%" + keyword + "%");
         query.setParameter("username", "%" + keyword + "%");
-        return query.getResultList();      
+        return query.getResultList();
     }
-    
+
     public void create(Account account) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (account.getLabScheduleList() == null) {
             account.setLabScheduleList(new ArrayList<LabSchedule>());
@@ -373,10 +373,15 @@ public class AccountJpaController implements Serializable {
         }
     }
 
-    public List<Account> getAccountByUsername(String username){                          
+    public Account getAccountByUsername(String username) {
         String queryString = "SELECT a FROM Account a WHERE a.username = :username";
         TypedQuery<Account> query = getEntityManager().createQuery(queryString, Account.class);
         query.setParameter("username", username);
-        return query.getResultList();
+        List<Account> results = query.getResultList();
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return query.getResultList().get(0);
+        }
     }
 }
