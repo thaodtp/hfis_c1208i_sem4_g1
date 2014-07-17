@@ -6,7 +6,7 @@
     <body>
 
         <ui:composition template="./../main_template.xhtml"
-                        xmlns:h="http://xmlns.jcp.org/jsf/html"
+                        xmlns:h="http://java.sun.com/jsf/html"
                         xmlns:f="http://java.sun.com/jsf/core">
 
             <ui:define name="content">
@@ -28,39 +28,37 @@
                         </div>
                         <label>Role</label>
                         <div class="input-control select">
-                            <h:selectOneMenu value="#{accountUI.role}">
-                                <f:selectItems value="#{accountUI.allAccounts}" var="r" itemLabel="#{r.roleName}" itemValue="#{r.role}"/>
+                            <h:selectOneMenu value="#{accountUI.role}" >
+                                <f:selectItems value="#{accountUI.allAccounts}"  var="r" itemLabel="#{r.roleName}" itemValue="#{r.role}"/>
                             </h:selectOneMenu>
                         </div>
                         <label>Name</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.name}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.name}" />
                         </div>
                         <label>Birthday</label>
-                        <div class="input-control password">
-                            <h:inputText value="#{accountUI.birthday}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.birthday}" converter="dateTimeConverter"/>
                         </div>
                         <label>Email</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.email}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.email}" />
                         </div>
                         <label>Phone</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.phone}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.phone}" />
                         </div>
-                        <label>Department Id</label>
+                        <label>Department</label>
                         <div class="input-control select">
                             <h:selectOneMenu value="#{accountUI.departmentId}">
                                 <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p.id}"/>
-                            </h:selectOneMenu>
+                            </h:selectOneMenu>                           
                         </div>
                         <br/>
                         <h:commandButton action="#{accountUI.create()}" value="Create" />
                         <p class="fg-red margin20"><h:outputText value="#{accountUI.msg}" /></p>
                     </fieldset>
                 </h:form>
-
-
             </ui:define>
 
         </ui:composition>

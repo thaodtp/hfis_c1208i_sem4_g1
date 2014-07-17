@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ui;
 
 import biz.DepartmentManager;
@@ -24,7 +23,7 @@ import javax.faces.view.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class DepartmentUI {
-    
+
     @EJB
     private DepartmentManager departmentManager;
 
@@ -32,10 +31,11 @@ public class DepartmentUI {
     private String name;
     private int id;
     private String msg;
-    public List<Department> getDepartments(){
-       return departmentManager.getDepartments();
+
+    public List<Department> getDepartments() {
+        return departmentManager.getDepartments();
     }
-      
+
     public String delete() {
         try {
             departmentManager.delete(id);
@@ -46,13 +46,27 @@ public class DepartmentUI {
         }
         return "";
     }
-    
+
+    public String edit() {
+        try {     
+            Department dpt= new Department();
+            dpt.setId(id);
+            dpt.setName(name);
+            departmentManager.edit(dpt);
+            return "/success.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
+            msg = "Can't edit this department";
+            Logger.getLogger(DepartmentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
     public String create() {
         try {
             if (name == null || name.isEmpty()) {
                 msg = "Department name is not valid";
                 return "";
-            }        
+            }
             if (departmentManager.getDepartmentByName(name).isEmpty() == false) {
                 msg = "Department name has already existed";
                 return "";
@@ -65,12 +79,12 @@ public class DepartmentUI {
         }
         return "";
     }
-    
+
     public void setDepartments(List<Department> departments) {
         this.departments = departments;
     }
-    
-    public List<String> getDepNames(){
+
+    public List<String> getDepNames() {
         return departmentManager.getDepNames();
     }
 
@@ -102,15 +116,4 @@ public class DepartmentUI {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-    
-    
-
-   
-    
-    
-            
-    
-    
-    
-    
 }
