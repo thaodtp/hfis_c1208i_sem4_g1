@@ -11,6 +11,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,8 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Department implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
+  //  @NotNull
     @Column(name = "Id")
     private Integer id;
     @Basic(optional = false)
@@ -107,6 +110,10 @@ public class Department implements Serializable {
     @Override
     public String toString() {
         return "entity.Department[ id=" + id + " ]";
+    }
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -151,7 +151,7 @@ public class AccountUI {
             account.setEmail(email);
             account.setBirthday(birthday);
             account.setRole(role);
-            account.setDepartmentId(departmentManager.getDepartmentById(departmentId));
+    //        account.setDepartmentId(departmentManager.getDepartmentById(departmentId));
             accountManager.edit(account);
             return "/success.xhtml";
         } catch (Exception ex) {

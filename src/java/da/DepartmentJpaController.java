@@ -51,6 +51,20 @@ public class DepartmentJpaController implements Serializable {
         }
     }
     
+    public List<Department> getDepartmentById(int id) {                          
+        String queryString = "SELECT d FROM Department d WHERE d.id = :id";
+        TypedQuery<Department> query = getEntityManager().createQuery(queryString, Department.class);
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+    
+    public List<Department> getDepartmentByName(String name) {                          
+        String queryString = "SELECT d FROM Department d WHERE d.name = :name";
+        TypedQuery<Department> query = getEntityManager().createQuery(queryString, Department.class);
+        query.setParameter("name", name);
+        return query.getResultList();
+    }
+    
     public List<Department> getDepartments() {
         TypedQuery<Department> query = getEntityManager().createQuery("SELECT d FROM Department d", Department.class);
         return query.getResultList();

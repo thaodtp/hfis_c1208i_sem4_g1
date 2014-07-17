@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../controlpanel_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:outputLink style="margin-left: 605px; color: black;"  value="/admin/create_department.xhtml">Add New Department</h:outputLink>
+
+        <h:dataTable id="table" value="#{departmentUI.departments}" var="d">
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                    #{d.name}
+            </h:column>          
+            <h:column>
+                 <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/admin/delete_department.xhtml?id=#{d.id}">
+                    <small class="icon-cancel-2"></small>
+                </h:outputLink>
+                <h:outputLink class="fg-blue place-right" value="/admin/edit_department.xhtml?id=#{d.id}">
+                    <small class="icon-pencil"></small>
+                </h:outputLink>              
+            </h:column>
+
+        </h:dataTable>
+        <script>
+            $(document).ready(function() {
+                $('#table').DataTable();
+            });
+        </script>
+    </ui:define>
+
+</ui:composition>
