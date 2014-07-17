@@ -31,13 +31,14 @@
                     </h:outputText>                        
                 </h:column> 
                 <h:column>
-                    <f:facet name="header">Action</f:facet>
-                    <h:commandLink value="Delete" 
-                                   action="#{labUI.deleteLab()}" />
+                    <f:facet name="header">Action</f:facet>  
+                    <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/admin/delete_lab.xhtml?id=#{lab.id}">
+                        <small class="icon-cancel-2"></small>
+                    </h:outputLink>
                 </h:column>
             </h:dataTable> 
         </h:form>
-         <script>
+        <script>
             $(document).ready(function() {
                 $('#table').DataTable();
             });

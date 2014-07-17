@@ -7,7 +7,6 @@
    
     <body>
         <ui:composition template="./main_template.xhtml">
-
             <ui:define name="content">
                 <legend><h1>Lab Room Details</h1></legend>
                 <h:dataTable value="#{labUI.labs}" var="lab">
@@ -22,7 +21,6 @@
                     <h:column>
                         <f:facet name="header">Type</f:facet>
                         <h:outputText rendered="#{lab.type==1}" value="Lab Room"/>
-
                     </h:column>                
                     <h:column>
                         <f:facet name="header">Status</f:facet>
@@ -32,6 +30,5 @@
                 </h:dataTable>
             </ui:define>
         </ui:composition>
-
     </body>
 </html>
