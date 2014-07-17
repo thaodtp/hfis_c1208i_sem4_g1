@@ -8,7 +8,9 @@ package ui;
 import biz.LabManager;
 import entity.Lab;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -31,13 +33,18 @@ public class LabUI implements Serializable{
     private int type;
     private int status;
     private String msg;
-
+    private Map<String, Integer> typeS = new LinkedHashMap<String,Integer>();
     /**
      * Creates a new instance of LabUI
      */
     public LabUI() {
-    }
+      typeS.put("Lab Room", 1);
+      typeS.put("Server Room", 2);
+    } 
 
+    public Map<String, Integer> getTypeS() {
+        return typeS;
+    }    
     public List<Lab> getAllLabs() {
         return labManager.getAllLabs();
     }
@@ -65,7 +72,7 @@ public class LabUI implements Serializable{
                 }
             }
             labManager.create(new Lab(name, type, 0));
-            return "/success.xhtml";
+            return "/admin/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't add this room";
             Logger.getLogger(LabUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,7 +105,7 @@ public class LabUI implements Serializable{
     public String deleteLab() {
         try {
             labManager.delete(id);
-            return "/success.xhtml?faces-redirect=true";
+            return "/admin/success.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             msg = "Can't delete lab";
             Logger.getLogger(LabUI.class.getName()).log(Level.SEVERE, null, ex);
