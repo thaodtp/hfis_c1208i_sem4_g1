@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../main_template.xhtml">
+
+            <f:metadata>
+                <f:viewParam name="username" value="#{departmentUI.name}"/>
+            </f:metadata>
+            
+            <ui:define name="content">
+                <h:form style="margin-left: 30px;">Are you sure?</h:form>
+                <h:form style="margin-left: 30px;">
+                    <h:commandLink action="#{departmentUI.delete()}" value="Yes"/><span>&nbsp;</span>
+                    <h:outputLink value="/admin/departments.xhtml">Back</h:outputLink>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
