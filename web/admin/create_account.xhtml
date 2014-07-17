@@ -28,27 +28,27 @@
                         </div>
                         <label>Role</label>
                         <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.role}" />
+                            <h:inputText value="#{accountUI.role}" />
                         </div>
                         <label>Name</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.name}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.name}" />
                         </div>
                         <label>Birthday</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.birthday}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.birthday}" />
                         </div>
                         <label>Email</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.email}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.email}" />
                         </div>
                         <label>Phone</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.phone}" />
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.phone}" />
                         </div>
                         <label>Department Id</label>
                         <div class="input-control select">
-                            <h:selectOneMenu value="#{accountUI.departmentId}" converter="">
+                            <h:selectOneMenu value="#{accountUI.departmentId}" >
                                 <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p.id}"/>
                             </h:selectOneMenu>
                         </div>
