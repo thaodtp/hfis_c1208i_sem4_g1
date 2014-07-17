@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import da.exceptions.NonexistentEntityException;
@@ -50,21 +49,26 @@ public class DepartmentJpaController implements Serializable {
             return deps.get(0);
         }
     }
-    
-    public List<Department> getDepartmentById(int id) {                          
+
+    public Department getDepartmentById(int id) {
         String queryString = "SELECT d FROM Department d WHERE d.id = :id";
         TypedQuery<Department> query = getEntityManager().createQuery(queryString, Department.class);
         query.setParameter("id", id);
-        return query.getResultList();
+        List<Department> result = query.getResultList();
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return query.getResultList().get(0);
+        }
     }
-    
-    public List<Department> getDepartmentByName(String name) {                          
+
+    public List<Department> getDepartmentByName(String name) {
         String queryString = "SELECT d FROM Department d WHERE d.name = :name";
         TypedQuery<Department> query = getEntityManager().createQuery(queryString, Department.class);
         query.setParameter("name", name);
         return query.getResultList();
     }
-    
+
     public List<Department> getDepartments() {
         TypedQuery<Department> query = getEntityManager().createQuery("SELECT d FROM Department d", Department.class);
         return query.getResultList();
@@ -100,9 +104,6 @@ public class DepartmentJpaController implements Serializable {
                 utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findDepartment(department.getId()) != null) {
-                throw new PreexistingEntityException("Department " + department + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -245,5 +246,5 @@ public class DepartmentJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

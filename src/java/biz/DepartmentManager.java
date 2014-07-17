@@ -45,7 +45,7 @@ public class DepartmentManager {
     }
     
     public void create(Department department){
-        try {
+        try {            
             getDaController().create(department);
         } catch (RollbackFailureException ex) {
             Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,9 +63,11 @@ public class DepartmentManager {
         }
     }
     
-    public void edit(Department department){
+    public void edit(int id, String name){
         try {
-            getDaController().edit(department);
+            Department target = getDepartmentById(id);
+            target.setName(name);
+            getDaController().edit(target);
         } catch (RollbackFailureException ex) {
             Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -77,7 +79,7 @@ public class DepartmentManager {
         return getDaController().getDepartmentByName(name);
     }
 
-    public List<Department> getDepartmentById(int id) {      
+    public Department getDepartmentById(int id) {      
         return getDaController().getDepartmentById(id);       
     }
       public List<String> getDepNames() {
@@ -90,5 +92,5 @@ public class DepartmentManager {
     }   
     public List<Department> getDepartments(){
         return getDaController().getDepartments();
-    }
+    }    
 }
