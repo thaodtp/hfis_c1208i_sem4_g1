@@ -4,34 +4,33 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-   
+
     <body>
         <ui:composition template="./main_template.xhtml">
-
             <ui:define name="content">
-                <legend><h1>Lab Room Details</h1></legend>
-                <h:dataTable value="#{labUI.labs}" var="lab">
+                <legend><h2>Lab Room Details</h2></legend>
+                <h:dataTable value="#{labUI.labs}" var="lab" class="table hovered bordered">
                     <h:column>
                         <f:facet name="header">ID</f:facet>
-                            #{lab.id}
-                    </h:column>
+                        <p>    #{lab.id} </p>
+                    </h:column >
                     <h:column>
                         <f:facet name="header">Name</f:facet>
-                            #{lab.name}
+                        <p> #{lab.name}</p>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Type</f:facet>
-                        <h:outputText rendered="#{lab.type==1}" value="Lab Room"/>
-
+                        <p> <h:outputText rendered="#{lab.type==1}" value="Lab Room"/> </p>
                     </h:column>                
                     <h:column>
                         <f:facet name="header">Status</f:facet>
-                        <h:outputText rendered="#{lab.status==1}" value="Unavailable"/> 
-                        <h:outputText rendered="#{lab.status==0}" value="Available"/> 
+                        <p>
+                            <h:outputText rendered="#{lab.status==1}" value="Unavailable"/> 
+                            <h:outputText rendered="#{lab.status==0}" value="Available"/> 
+                        </p>
                     </h:column>               
                 </h:dataTable>
             </ui:define>
         </ui:composition>
-
     </body>
 </html>

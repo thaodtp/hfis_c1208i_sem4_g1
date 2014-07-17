@@ -8,7 +8,9 @@ package ui;
 import biz.LabManager;
 import entity.Lab;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -25,18 +27,24 @@ public class LabUI implements Serializable{
     @EJB
     private LabManager labManager;
     private Lab lab;
+    private List<Lab> labs;
     private int id;
     private String name;
     private int type;
     private int status;
     private String msg;
-
+    private Map<String, Integer> typeS = new LinkedHashMap<String,Integer>();
     /**
      * Creates a new instance of LabUI
      */
     public LabUI() {
-    }
+      typeS.put("Lab Room", 1);
+      typeS.put("Server Room", 2);
+    } 
 
+    public Map<String, Integer> getTypeS() {
+        return typeS;
+    }    
     public List<Lab> getAllLabs() {
         return labManager.getAllLabs();
     }
@@ -44,18 +52,33 @@ public class LabUI implements Serializable{
     public List<Lab> getLabs() {
         return labManager.displayLabs();
     }
-
+    public List<Lab> getRoomByType(){
+        return labManager.getRoomByType(type);
+    }
     public List<Lab> getServerRoom() {
         return labManager.displayServerRoom();
     }
-    public boolean getCheckedValue() {
-        if (labManager.getAllLabs().get(0).getStatus()==1){
-            return true;
-        } else {
-            return false;
+     public String create() {     
+        try {
+            labs = labManager.getAllLabs();
+            if (name.equals("")) {
+                msg = " Please enter lab's name!!!";
+                return null;
+            }
+            for (Lab lab : labs) {
+                if (lab.getName().toLowerCase().equals(name.toLowerCase())) {
+                    msg = " Lab is exist";
+                    return "";
+                }
+            }
+            labManager.create(new Lab(name, type, 0));
+            return "/admin/success.xhtml";
+        } catch (Exception ex) {
+            msg = "Can't add this room";
+            Logger.getLogger(LabUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "";
     }
-
     public String editLab() {
         try {
             lab.setId(id);
@@ -71,7 +94,6 @@ public class LabUI implements Serializable{
         }
         return "";
     }
-
     public String getMsg() {
         return msg;
     }
@@ -83,7 +105,7 @@ public class LabUI implements Serializable{
     public String deleteLab() {
         try {
             labManager.delete(id);
-            return "/success.xhtml?faces-redirect=true";
+            return "/admin/success.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             msg = "Can't delete lab";
             Logger.getLogger(LabUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,7 +132,6 @@ public class LabUI implements Serializable{
     public int getType() {
         return type;
     }
-
     public void setType(int type) {
         this.type = type;
     }

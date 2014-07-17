@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ui;
 
 import biz.DepartmentManager;
@@ -24,7 +23,7 @@ import javax.faces.view.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class DepartmentUI {
-    
+
     @EJB
     private DepartmentManager departmentManager;
 
@@ -32,11 +31,12 @@ public class DepartmentUI {
     private String name;
     private int id;
     private String msg;
-    public List<Department> getDepartments(){
-       return departmentManager.getDepartments();
+
+    public List<Department> getDepartments() {
+        return departmentManager.getDepartments();
     }
-    
-    public String deleteDepartment(){
+
+    public String delete() {
         try {
             departmentManager.delete(id);
             return "/success.xhtml?faces-redirect=true";
@@ -46,11 +46,42 @@ public class DepartmentUI {
         }
         return "";
     }
+
+    public String edit() {
+        try {
+            departmentManager.edit(new Department(id, name));
+            return "/success.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
+            msg = "Can't edit this department";
+            Logger.getLogger(DepartmentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    public String create() {
+        try {
+            if (name == null || name.isEmpty()) {
+                msg = "Department name is not valid";
+                return "";
+            }
+            if (departmentManager.getDepartmentByName(name).isEmpty() == false) {
+                msg = "Department name has already existed";
+                return "";
+            }
+            departmentManager.create(new Department(0, name));
+            return "/success.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
+            msg = "Can't add this department";
+            Logger.getLogger(Department.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
     public void setDepartments(List<Department> departments) {
         this.departments = departments;
     }
-    
-    public List<String> getDepNames(){
+
+    public List<String> getDepNames() {
         return departmentManager.getDepNames();
     }
 
@@ -68,6 +99,11 @@ public class DepartmentUI {
 
     public void setId(int id) {
         this.id = id;
+        List<Department> departmentsById = departmentManager.getDepartmentById(id);
+        if (departmentsById.size() > 0) {
+            Department target = departmentsById.get(0);
+            name = target.getName();
+        }
     }
 
     public String getMsg() {
@@ -77,15 +113,5 @@ public class DepartmentUI {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-    
-    
 
-   
-    
-    
-            
-    
-    
-    
-    
 }

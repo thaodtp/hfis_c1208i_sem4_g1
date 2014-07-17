@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+        <ui:composition template="./../controlpanel_template.xhtml">
+            <ui:define name="content">
+                 <h:form style="margin-left: 30px;" enctype="multipart/form-data">
+                    <fieldset>
+                        <legend><h2>Create Lab</h2></legend>
+                        <label>Name</label>
+                        <div class="input-control text">
+                            <h:inputText value="#{labUI.name}" />
+                        </div>
+                        <label>Type</label>
+                        <div class="input-control select">
+                            <h:selectOneMenu value="#{labUI.type}" >
+                                <f:selectItems value="#{labUI.typeS}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <br/>
+                        <h:commandButton action="#{labUI.create()}" value="Create" />
+                        <p class="fg-red margin20"><h:outputText value="#{labUI.msg}" /></p>
+                    </fieldset>
+                 </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

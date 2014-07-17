@@ -73,12 +73,12 @@ public class DepartmentManager {
         }
     }
     
-    public Department getDepartmentByName(String name){
-        return getDaController().getDepartment(name);
+    public List<Department> getDepartmentByName(String name){
+        return getDaController().getDepartmentByName(name);
     }
 
-    public Department getDepartmentById(int departmentId) {      
-        return getDaController().findDepartment(departmentId);       
+    public List<Department> getDepartmentById(int id) {      
+        return getDaController().getDepartmentById(id);       
     }
       public List<String> getDepNames() {
         List<String> result = new LinkedList<>();
