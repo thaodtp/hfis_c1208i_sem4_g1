@@ -27,8 +27,10 @@
                             <h:inputSecret value="#{accountUI.confirmPassword}" />
                         </div>
                         <label>Role</label>
-                        <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.role}" />
+                        <div class="input-control select">
+                            <h:selectOneMenu value="#{accountUI.role}">
+                                <f:selectItems value="#{accountUI.allAccounts}" var="r" itemLabel="#{r.roleName}" itemValue="#{r.role}"/>
+                            </h:selectOneMenu>
                         </div>
                         <label>Name</label>
                         <div class="input-control password">
@@ -36,7 +38,7 @@
                         </div>
                         <label>Birthday</label>
                         <div class="input-control password">
-                            <h:inputSecret value="#{accountUI.birthday}" />
+                            <h:inputText value="#{accountUI.birthday}" />
                         </div>
                         <label>Email</label>
                         <div class="input-control password">
@@ -48,7 +50,7 @@
                         </div>
                         <label>Department Id</label>
                         <div class="input-control select">
-                            <h:selectOneMenu value="#{accountUI.departmentId}" converter="">
+                            <h:selectOneMenu value="#{accountUI.departmentId}">
                                 <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p.id}"/>
                             </h:selectOneMenu>
                         </div>
