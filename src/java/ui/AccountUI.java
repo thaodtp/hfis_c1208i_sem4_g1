@@ -9,6 +9,7 @@ import biz.AccountManager;
 import biz.DepartmentManager;
 import entity.Account;
 import entity.Department;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class AccountUI {
     private String confirmPassword;
     private int role;
     private String name;
-    private Date birthday;
+    private String birthday;
     private String email;
     private String phone;
     private Department department;
@@ -93,7 +94,13 @@ public class AccountUI {
             if (accountManager.isAccountExist(username)) {
                 msg = "This username has already existed";
             }
-            accountManager.create(new Account(username, password, role, name, birthday, email, phone, department));
+            accountManager.create(
+                    new Account(username, 
+                            password, 
+                            role, 
+                            name, 
+                            new SimpleDateFormat("dd/MM/yyyy").parse(birthday), 
+                            email, phone, department));
             return "/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't register at the moment.";
@@ -216,11 +223,11 @@ public class AccountUI {
         this.name = name;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
