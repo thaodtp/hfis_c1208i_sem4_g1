@@ -25,6 +25,7 @@ public class LabUI implements Serializable{
     @EJB
     private LabManager labManager;
     private Lab lab;
+    private List<Lab> labs;
     private int id;
     private String name;
     private int type;
@@ -44,18 +45,33 @@ public class LabUI implements Serializable{
     public List<Lab> getLabs() {
         return labManager.displayLabs();
     }
-
+    public List<Lab> getRoomByType(){
+        return labManager.getRoomByType(type);
+    }
     public List<Lab> getServerRoom() {
         return labManager.displayServerRoom();
     }
-    public boolean getCheckedValue() {
-        if (labManager.getAllLabs().get(0).getStatus()==1){
-            return true;
-        } else {
-            return false;
+     public String create() {     
+        try {
+            labs = labManager.getAllLabs();
+            if (name.equals("")) {
+                msg = " Please enter lab's name!!!";
+                return null;
+            }
+            for (Lab lab : labs) {
+                if (lab.getName().toLowerCase().equals(name.toLowerCase())) {
+                    msg = " Lab is exist";
+                    return "";
+                }
+            }
+            labManager.create(new Lab(name, type, 0));
+            return "/success.xhtml";
+        } catch (Exception ex) {
+            msg = "Can't add this room";
+            Logger.getLogger(LabUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "";
     }
-
     public String editLab() {
         try {
             lab.setId(id);
@@ -71,7 +87,6 @@ public class LabUI implements Serializable{
         }
         return "";
     }
-
     public String getMsg() {
         return msg;
     }
@@ -110,7 +125,6 @@ public class LabUI implements Serializable{
     public int getType() {
         return type;
     }
-
     public void setType(int type) {
         this.type = type;
     }

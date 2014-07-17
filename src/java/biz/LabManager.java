@@ -77,4 +77,7 @@ public class LabManager {
      public List<Lab> displayServerRoom(){
          return getDaController().displayServerRoom();
      }
+     public List<Lab> getRoomByType(int type){
+         return getDaController().getRoomByType(type);
+     }
 }
