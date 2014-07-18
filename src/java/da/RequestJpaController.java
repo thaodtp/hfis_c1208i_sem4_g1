@@ -41,19 +41,19 @@ public class RequestJpaController implements Serializable {
     }
 
     public List<Request> getRequests(String username,int type){
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username AND r.type=:type", Request.class);
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username AND r.type=:type  ORDER BY r.time DESC", Request.class);
         query.setParameter("username", username);
         query.setParameter("type", type);
         return Lists.reverse(query.getResultList());
     }
     public List<Request> getRequests(int type){
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.type=:type", Request.class);
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.type=:type ORDER BY r.time DESC", Request.class);
         query.setParameter("type", type);
         return Lists.reverse(query.getResultList());
     }
     
     public List<Request> getRequestsByStatus(int status,int type){
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.status=:status AND r.type=:type", Request.class);
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.status=:status AND r.type=:type  ORDER BY r.time DESC", Request.class);
         query.setParameter("type", type);
         query.setParameter("status", status);
         return query.getResultList();
