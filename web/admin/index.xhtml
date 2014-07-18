@@ -12,22 +12,15 @@
     </ui:define>
     <ui:define name="content">
         <legend>Complaints</legend>
-        <p>
-            Number of complaints
             <div id="complaintStatistic" width="800" height="400" class="span12"></div>
-        </p>
         <p>
             Total unresolved complaints: #{requestUI.unresolvedComplaint.size()}
         </p>
-        <legend>Requests</legend>
-        <p>
-            Number of requests
-            <div id="requestStatistic" width="800" height="400" class="span12"></div>
-        </p>        
-        <p>
-            Total unresolved requests: #{requestUI.unresolvedRequest.size()}
-        </p>
+        <legend>Lab Usage</legend>      
         <div id="labUsageStatistic" width="800" height="400" class="span12"></div>
+        <p>
+            Total unresolved lab requests: #{requestUI.unresolvedRequest.size()}
+        </p>
         <script>
             $('#complaintStatistic').highcharts({
                 chart: {
