@@ -52,7 +52,9 @@ public class RequestUI implements Serializable {
         requestManager.edit(currrentReq);
 //        sendMessage(resolveAccount, "You have 1 new request");
     }
-
+    public List<Request> getMessages(){
+        return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_MESSAGE);
+    }
     public void completeRequest() {
         currrentReq.setStatus(Request.STATUS_COMPLETE);
         requestManager.edit(currrentReq);
