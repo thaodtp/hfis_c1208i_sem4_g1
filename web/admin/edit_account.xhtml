@@ -14,50 +14,49 @@
             </f:metadata>
 
             <ui:define name="content">
-
-<!--                <ui:repeat value="#{accountUI.accountByUsername}" var="a">-->
-                    <h:form style="margin-left: 30px;" enctype="multipart/form-data">
-                        <fieldset>
-                            <legend>Edit Account</legend>
-                            <label>Username</label>
-                            <div class="input-control text">
-                                <h:inputText value="#{accountUI.username}" disabled="true" />
-                            </div>
-                            <label>Password</label>
-                            <div class="input-control text">
-                                <h:inputSecret value="#{accountUI.password}" />
-                            </div>
-<!--                            <label>Role</label>
-                            <div class="input-control password">
-                                <h:inputSecret value="#{a.role}" />
-                            </div>
-                            <label>Name</label>
-                            <div class="input-control password">
-                                <h:inputSecret value="#{a.name}" />
-                            </div>
-                            <label>Birthday</label>
-                            <div class="input-control password">
-                                <h:inputSecret value="#{a.birthday}" />
-                            </div>
-                            <label>Email</label>
-                            <div class="input-control password">
-                                <h:inputSecret value="#{a.email}" />
-                            </div>
-                            <label>Phone</label>
-                            <div class="input-control password">
-                                <h:inputSecret value="#{a.phone}" />
-                            </div>
-                            <label>Department Id</label>
-                            <div class="input-control select">
-                                <h:selectOneMenu>
-                                    <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p}"/>
-                                </h:selectOneMenu>
-                            </div>
-                            <br/>-->
-                            <h:commandButton action="#{accountUI.editAccount()}" value="Edit" />
-                            <p class="fg-red margin20"><h:outputText value="#{accountUI.msg}" /></p>
-                        </fieldset>
-                    </h:form>
+                <h:form style="margin-left: 30px;" enctype="multipart/form-data">
+                    <fieldset>
+                        <legend>Edit Account</legend>
+                        <label>Username</label>
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.username}" disabled="true" />
+                        </div>
+                        <label>Password</label>
+                        <div class="input-control text">
+                            <h:inputSecret value="#{accountUI.password}" />
+                        </div>
+                        <!--                            <label>Role</label>
+                                                    <div class="input-control password">
+                                                        <h:inputSecret value="#{accountUI.role}" />
+                                                    </div>
+-->                                                    <label>Name</label>
+                                                    
+                        <div class="input-control text">
+                            <h:inputText value="#{accountUI.name}" />
+                        </div>
+<!--                        <label>Birthday</label>
+                        <div class="input-control password">
+                            <h:inputSecret value="#{accountUI.birthday}" />
+                        </div>-->
+                        <label>Email</label>
+                        <div class="input-control password">
+                            <h:inputText value="#{accountUI.email}" />
+                        </div>
+                        <label>Phone</label>
+                        <div class="input-control password">
+                            <h:inputText value="#{accountUI.phone}" />
+                        </div><!--
+                        <label>Department Id</label>
+                        <div class="input-control select">
+                            <h:selectOneMenu>
+                                <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p}"/>
+                            </h:selectOneMenu>
+                        </div>
+                        <br/>-->
+                        <h:commandButton action="#{accountUI.editAccount()}" value="Edit" />
+                        <p class="fg-red margin20"><h:outputText value="#{accountUI.msg}" /></p>
+                    </fieldset>
+                </h:form>
                 <!--</ui:repeat>-->
 
             </ui:define>

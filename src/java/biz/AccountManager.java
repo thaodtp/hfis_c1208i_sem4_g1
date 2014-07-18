@@ -102,7 +102,7 @@ public class AccountManager {
         return getDaController().searchAccByName(keyword);
     }
 
-    public List<Account> getAccountByUsername(String username) {
+    public Account getAccountByUsername(String username) {
         return getDaController().getAccountByUsername(username);
     }
 }

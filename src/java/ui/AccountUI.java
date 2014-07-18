@@ -9,6 +9,7 @@ import biz.AccountManager;
 import biz.DepartmentManager;
 import entity.Account;
 import entity.Department;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class AccountUI {
     private String confirmPassword;
     private int role;
     private String name;
-    private Date birthday;
+    private String birthday;
     private String email;
     private String phone;
     private Department department;
@@ -57,18 +58,18 @@ public class AccountUI {
     public List<Account> getAllAccounts() {
         return accountManager.getAllAccount();
     }
-    
-    public List<Account> getAccountByUsername() {
-        List<Account> accounts;
+
+    public Account getAccountByUsername() {
+        Account account;
         try {
-            accounts = accountManager.getAccountByUsername(username);
-            return accounts;
+            account = accountManager.getAccountByUsername(username);
+            return account;
         } catch (Exception ex) {
             Logger.getLogger(AccountUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new LinkedList<Account>();
+        return new Account();
     }
-    
+
     public List<Account> getStaffs() {
         List<Account> result = accountManager.getAccountByRole(Account.ROLE_TECHNICAL);
         return result;
@@ -93,7 +94,13 @@ public class AccountUI {
             if (accountManager.isAccountExist(username)) {
                 msg = "This username has already existed";
             }
-            accountManager.create(new Account(username, password, role, name, birthday, email, phone, department));
+            accountManager.create(
+                    new Account(username, 
+                            password, 
+                            role, 
+                            name, 
+                            new SimpleDateFormat("dd/MM/yyyy").parse(birthday), 
+                            email, phone, department));
             return "/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't register at the moment.";
@@ -136,22 +143,22 @@ public class AccountUI {
             msg = "Name not valid";
             return "";
         }
-        if (!Pattern.matches("^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", getPhone())) {
+        if (!Pattern.matches("^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", phone)) {
             msg = "Phone number not valid";
             return "";
         }
-        if (!Pattern.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", getEmail())) {
-            msg = "Email not valid";
-            return "";
-        }
-        try {
+//        if (!Pattern.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", getEmail())) {
+//            msg = "Email not valid"+ getEmail();
+//            return "";
+//        }
+        try { 
             account.setPassword(password);
             account.setName(name);
             account.setPhone(phone);
             account.setEmail(email);
-            account.setBirthday(birthday);
-            account.setRole(role);
-    //        account.setDepartmentId(departmentManager.getDepartmentById(departmentId));
+//            account.setBirthday(birthday);
+//            account.setRole(role);
+            //        account.setDepartmentId(departmentManager.getDepartmentById(departmentId));
             accountManager.edit(account);
             return "/success.xhtml";
         } catch (Exception ex) {
@@ -167,10 +174,12 @@ public class AccountUI {
 
     public void setUsername(String username) {
         this.username = username;
-        List<Account> accounts = accountManager.getAccountByUsername(username);
-        if (accounts.size() > 0) {
-            Account target = accounts.get(0);
-            password = target.getPassword();
+        account = accountManager.getAccountByUsername(username);
+        if (account!=null) {
+            password = account.getPassword();
+            name = account.getName();
+            email = account.getEmail();
+            phone = account.getPhone();
         }
     }
 
@@ -214,11 +223,11 @@ public class AccountUI {
         this.name = name;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
