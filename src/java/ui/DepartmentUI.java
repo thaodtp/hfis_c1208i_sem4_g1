@@ -48,11 +48,8 @@ public class DepartmentUI {
     }
 
     public String edit() {
-        try {     
-            Department dpt= new Department();
-            dpt.setId(id);
-            dpt.setName(name);
-            departmentManager.edit(dpt);
+        try {
+            departmentManager.edit(id, name);
             return "/success.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             msg = "Can't edit this department";
@@ -102,9 +99,8 @@ public class DepartmentUI {
 
     public void setId(int id) {
         this.id = id;
-        List<Department> departmentsById = departmentManager.getDepartmentById(id);
-        if (departmentsById.size() > 0) {
-            Department target = departmentsById.get(0);
+        Department target = departmentManager.getDepartmentById(id);
+        if (target != null) {
             name = target.getName();
         }
     }
@@ -116,4 +112,5 @@ public class DepartmentUI {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
 }
