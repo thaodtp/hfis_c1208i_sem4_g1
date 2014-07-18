@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.PhaseId;
@@ -36,6 +37,8 @@ public class LabScheduleUI implements Serializable {
 
     @EJB
     private LabScheduleManager scheduleManager;
+    @ManagedProperty(value="#{login}")
+    private Login loginBean;
     private String date;
     private List<Integer> slots;
     private LabSchedule curSchedule;
@@ -92,6 +95,7 @@ public class LabScheduleUI implements Serializable {
         }
         ls.setSlot(slot);
         ls.setDetail(detail);
+        ls.setRequestAccount(loginBean.getAccount());
         scheduleManager.requestLab(ls);
         lab = null;
     }
@@ -151,4 +155,12 @@ public class LabScheduleUI implements Serializable {
         return slots;
     }
 
+    public Login getLoginBean() {
+        return loginBean;
+    }
+
+    public void setLoginBean(Login loginBean) {
+        this.loginBean = loginBean;
+    }
+    
 }
