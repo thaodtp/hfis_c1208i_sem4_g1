@@ -62,7 +62,7 @@
                         <tbody>
                             <ui:repeat value="#{labScheduleUI.slots}" var="slot">
                                 <tr>
-                                    <td>#{slot} (#{slotUI.getDisplaySlot(slot)})</td>
+                                    <td>#{slot}</td>
                                     <ui:repeat value="#{labUI.allLabs}" var="lab">
                                         <td class="text-center">
                                             <h:commandLink rendered="#{labScheduleUI.getSchedule(lab,slot)!=null and labScheduleUI.curSchedule.status==1}" 
@@ -94,7 +94,7 @@
                     <legend>Schedule Detail</legend>
                     <p>Date: #{labScheduleUI.date}</p>
                     <p>Lab: #{labScheduleUI.lab.name}</p>
-                    <p>Slot: #{labScheduleUI.slot} (#{slotUI.getDisplaySlot(labScheduleUI.slot)})</p>
+                    <p>Slot: #{labScheduleUI.slot}</p>
                     <h:panelGroup class="input-control text" rendered="#{labScheduleUI.curSchedule!=null}">
                         <label>Detail:</label>
                         <p>#{labScheduleUI.curSchedule.detail}</p>

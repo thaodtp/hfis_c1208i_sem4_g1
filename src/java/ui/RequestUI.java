@@ -106,6 +106,10 @@ public class RequestUI implements Serializable {
         return createStatistic(Request.TYPE_COMPLAINT);
     }
 
+    public Map<String, Integer> getRequestStatisticByDay() {
+        return createStatistic(Request.TYPE_REQUEST);
+    }
+
     public List<Request> getUnresolvedComplaint() {
         return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
     }
