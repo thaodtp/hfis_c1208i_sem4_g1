@@ -27,8 +27,13 @@
                             <h:inputSecret value="#{accountUI.confirmPassword}" />
                         </div>
                         <label>Role</label>
-                        <div class="input-control password">
-                            <h:inputText value="#{accountUI.role}" />
+                        <div class="input-control select">
+                            <h:selectOneMenu value="#{accountUI.role}" >
+                                <f:selectItem itemLabel="Admin" itemValue="1" />
+                                <f:selectItem itemLabel="Instructor" itemValue="2" />
+                                <f:selectItem itemLabel="Technical Staff" itemValue="3" />
+                                <f:selectItem itemLabel="Head of Department" itemValue="4" />
+                            </h:selectOneMenu>
                         </div>
                         <label>Name</label>
                         <div class="input-control text">
@@ -46,10 +51,10 @@
                         <div class="input-control text">
                             <h:inputText value="#{accountUI.phone}" />
                         </div>
-                        <label>Department Id</label>
+                        <label>Department</label>
                         <div class="input-control select">
-                            <h:selectOneMenu value="#{accountUI.departmentId}" >
-                                <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p.id}"/>
+                            <h:selectOneMenu value="#{accountUI.departmentId}" converter="#{departmentConverter}" >
+                                <f:selectItems value="#{departmentUI.departments}"  var="p" itemLabel="#{p.name}" itemValue="#{p}"/>
                             </h:selectOneMenu>
                         </div>
                         <br/>
