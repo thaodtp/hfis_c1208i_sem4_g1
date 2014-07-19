@@ -38,6 +38,7 @@ public class RequestUI implements Serializable {
     private String content;
     private int status;
     private int type;
+    private int id;
     private String msg;
     private Account requestAccount;
     private Account resolveAccount;
@@ -100,13 +101,14 @@ public class RequestUI implements Serializable {
     public String create() {
         try {
             if (content == null || content.isEmpty()) {
-                msg = "Place name is not valid";
+                msg = "content is not valid";
                 return "";
             }
-            requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
-            return "/faces/guide/success.xhtml";
+           // requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
+            requestManager.create(new Request(content, type));
+            return "/success.xhtml";
         } catch (Exception ex) {
-            msg = "Can't add this place";
+            msg = "Can't send complaint";
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";

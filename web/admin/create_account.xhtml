@@ -40,9 +40,18 @@
                             <h:inputText value="#{accountUI.name}" />
                         </div>
                         <label>Birthday</label>
-                        <div class="input-control text">
+                        <div class="input-control text" data-role="datepicker">
                             <h:inputText value="#{accountUI.birthday}" />
+                            <button class="btn-date"></button>
                         </div>
+                        <script>
+                            $("#datepicker").datepicker({
+                                date: "11-11-1991", // set init date
+                                format: "dd/MM/yyyy", // set output format
+                                effect: "none", // none, slide, fade
+                                position: "bottom" // top or bottom,
+                            });
+                        </script>
                         <label>Email</label>
                         <div class="input-control text">
                             <h:inputText value="#{accountUI.email}" />

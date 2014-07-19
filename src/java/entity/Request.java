@@ -11,6 +11,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -53,8 +55,9 @@ public class Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
+    //@NotNull
     @Column(name = "Id")
     private Integer id;
     @Basic(optional = false)
@@ -97,6 +100,13 @@ public class Request implements Serializable {
         this.resolveAccount = resolveAccount;
     }
 
+    public Request(String content, int type) {
+        this.content = content;
+        this.type = type;
+    }
+
+ 
+    
     public String getDisplayTime() {
         return new SimpleDateFormat("mm:hh  dd/MM/yyyy").format(time);
     }
