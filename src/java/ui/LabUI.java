@@ -41,50 +41,36 @@ public class LabUI implements Serializable {
     private int type;
     private int status;
     private String msg;
-    private Map<String, Integer> typeS = new LinkedHashMap<String,Integer>();
-    private Map<String, Integer> statusS = new LinkedHashMap<String,Integer>();
+    private Map<String, Integer> typeS = new LinkedHashMap<String, Integer>();
+    private Map<String, Integer> statusS = new LinkedHashMap<String, Integer>();
+    private static LabStatistic labUsage;
+
     /**
      * Creates a new instance of LabUI
      */
     public LabUI() {
-      typeS.put("Lab Room", 1);
-      typeS.put("Server Room", 2);
-      statusS.put("Available", 0);
-      statusS.put("Busy", 1);
-      statusS.put("Closed", -1);
-    } 
-
-    public Map<String, Integer> getLabUsageStatistic() {
-        Map<String, Integer> result = new TreeMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("\"dd/MM/yyyy\"");
-        List<LabSchedule> schedules = new LinkedList<>();
-        for(Lab l:labManager.displayLabs()){
-            schedules.addAll(l.getLabScheduleList());
-        }
-        for (Iterator<LabSchedule> it = schedules.iterator(); it.hasNext();) {
-            LabSchedule req = it.next();
-            String date = sdf.format(req.getDate());
-            if (result.containsKey(date)) {
-                result.put(date, result.get(date) + 1);
-            } else {
-                if (result.size() > 10) {
-                    break;
-                } else {
-                    result.put(date, 1);
-                }
-            }
-        }
-        return result;
+        typeS.put("Lab Room", 1);
+        typeS.put("Server Room", 2);
+        statusS.put("Available", 0);
+        statusS.put("Busy", 1);
+        statusS.put("Closed", -1);
     }
-    
+
+    public LabStatistic getLabUsageStatistic() {
+        if (labUsage == null) {
+            labUsage = new LabStatistic(labManager.displayLabs());
+        }
+        return labUsage;
+    }
+
     public Map<String, Integer> getTypeS() {
         return typeS;
-    }    
+    }
 
     public Map<String, Integer> getStatusS() {
         return statusS;
     }
-    
+
     public List<Lab> getAllLabs() {
         return labManager.getAllLabs();
     }
@@ -125,7 +111,7 @@ public class LabUI implements Serializable {
 
     public String editLab() {
         try {
-         labManager.edit(id, name, type, status);
+            labManager.edit(id, name, type, status);
             return "/success.xhtml";
         } catch (Exception ex) {
             lab.setStatus(status);
@@ -159,7 +145,7 @@ public class LabUI implements Serializable {
     }
 
     public void setId(int id) {
-          this.id = id;
+        this.id = id;
         Lab target = labManager.getLabById(id);
         if (target != null) {
             name = target.getName();
@@ -183,10 +169,10 @@ public class LabUI implements Serializable {
     }
 
     public int getStatus() {
-       // return labManager.getAllLabs().get(0).getStatus();
+        // return labManager.getAllLabs().get(0).getStatus();
         return status;
     }
-    
+
     public void setStatus(int status) {
         this.status = status;
     }
