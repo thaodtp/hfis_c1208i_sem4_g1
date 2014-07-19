@@ -83,6 +83,10 @@ public class Lab implements Serializable {
         this.type = type;
         this.status = status;
     }
+
+    public Lab(int status) {
+        this.status = status;
+    }
     
     public Integer getId() {
         return id;

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ui;
 
 import javax.faces.bean.ManagedBean;
@@ -18,25 +17,29 @@ import javax.faces.convert.FacesConverter;
  */
 @ManagedBean
 @FacesConverter(value = "labConverter")
-public class LabConverter  implements Converter{
+public class LabConverter implements Converter {
 
     /**
      * Creates a new instance of LabConverter
      */
-    public LabConverter()  {
+    public LabConverter() {
     }
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-         return value;
+        return value;
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if(value.equals(1))return "Unavailable";
-        else {
+        if (value.equals(1)) {
+            return "Busy";
+        } else if (value.equals(0)) {
             return "Available";
+        } else {
+            return "Closed";
         }
-    }  
+
+    }
 
 }

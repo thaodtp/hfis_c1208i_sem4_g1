@@ -34,17 +34,26 @@ public class LabUI implements Serializable{
     private int status;
     private String msg;
     private Map<String, Integer> typeS = new LinkedHashMap<String,Integer>();
+    private Map<String, Integer> statusS = new LinkedHashMap<String,Integer>();
     /**
      * Creates a new instance of LabUI
      */
     public LabUI() {
       typeS.put("Lab Room", 1);
       typeS.put("Server Room", 2);
+      statusS.put("Available", 0);
+      statusS.put("Busy", 1);
+      statusS.put("Closed", -1);
     } 
 
     public Map<String, Integer> getTypeS() {
         return typeS;
     }    
+
+    public Map<String, Integer> getStatusS() {
+        return statusS;
+    }
+    
     public List<Lab> getAllLabs() {
         return labManager.getAllLabs();
     }
@@ -81,11 +90,7 @@ public class LabUI implements Serializable{
     }
     public String editLab() {
         try {
-            lab.setId(id);
-            lab.setName(name);
-            lab.setType(type);
-            lab.setStatus(status);
-            labManager.edit(lab);
+         labManager.edit(id, name, type, status);
             return "/success.xhtml";
         } catch (Exception ex) {
             lab.setStatus(status);
@@ -118,7 +123,11 @@ public class LabUI implements Serializable{
     }
 
     public void setId(int id) {
-        this.id = id;
+          this.id = id;
+        Lab target = labManager.getLabById(id);
+        if (target != null) {
+            name = target.getName();
+        }
     }
 
     public String getName() {
@@ -137,9 +146,10 @@ public class LabUI implements Serializable{
     }
 
     public int getStatus() {
-        return labManager.getAllLabs().get(0).getStatus();
+       // return labManager.getAllLabs().get(0).getStatus();
+        return status;
     }
-
+    
     public void setStatus(int status) {
         this.status = status;
     }
