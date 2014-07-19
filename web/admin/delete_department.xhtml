@@ -12,8 +12,11 @@
             <f:metadata>
                 <f:viewParam name="id" value="#{departmentUI.id}"/>
             </f:metadata>
-            
+
             <ui:define name="content">
+                <h:form rendered="#{!login.roleAdmin}">
+                    <h:inputHidden value="#{login.autoLogin}"/>
+                </h:form>
                 <h:form style="margin-left: 30px;">Are you sure?</h:form>
                 <h:form style="margin-left: 30px;">
                     <h:commandLink action="#{departmentUI.delete()}" value="Yes"/><span>&nbsp;</span>

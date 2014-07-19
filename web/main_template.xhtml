@@ -54,7 +54,7 @@
 
                                 </div>  
                                 <h:commandLink class="element" action="#{login.login()}" value="Login" /> 
-                                <h:outputLink class="element" value="/admin/create_account.xhtml">Register</h:outputLink>  
+                               
                             </div>     
                         </h:form>
                         <h:panelGroup rendered="#{login.haveMsg()}">
@@ -81,7 +81,7 @@
                         </div>
                     </h:panelGroup>
                     <h:panelGroup rendered="#{login.account!=null}">      
-                        <a href="/admin/complaints.xhtml" class="element">Control Panel</a>
+                        <a href="/admin/index.xhtml" class="element">Control Panel</a>
                     </h:panelGroup>
                 </div>
             </nav>

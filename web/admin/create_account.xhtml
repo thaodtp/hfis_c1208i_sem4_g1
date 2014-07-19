@@ -5,11 +5,15 @@
 
     <body>
 
-        <ui:composition template="./../main_template.xhtml"
+        <ui:composition template="./../controlpanel_template.xhtml"
                         xmlns:h="http://java.sun.com/jsf/html"
                         xmlns:f="http://java.sun.com/jsf/core">
 
             <ui:define name="content">
+
+                <h:form rendered="#{!login.roleAdmin}">
+                    <h:inputHidden value="#{login.autoLogin}"/>
+                </h:form>
 
                 <h:form style="margin-left: 30px;" enctype="multipart/form-data">
                     <fieldset>

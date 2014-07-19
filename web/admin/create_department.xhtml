@@ -10,6 +10,9 @@
                         xmlns:f="http://java.sun.com/jsf/core">
 
             <ui:define name="content">
+                <h:form rendered="#{!login.roleAdmin}">
+                    <h:inputHidden value="#{login.autoLogin}"/>
+                </h:form>
 
                 <h:form style="margin-left: 30px;" enctype="multipart/form-data">
                     <fieldset>

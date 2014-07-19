@@ -6,6 +6,9 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
+        <h:form rendered="#{!login.roleAdmin}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
         <h:outputLink style="margin-left: 605px; color: black;"  value="/admin/create_account.xhtml">Add New Account</h:outputLink>
 
         <h:dataTable id="table" value="#{accountUI.allAccounts}" var="a">

@@ -97,16 +97,16 @@ public class Login implements Serializable{
         }
     }
 
-//    public String getGuidePerm() {
-//        if (account == null ||account.getIsGuide()==false) {
+    public boolean getRoleAdmin(){
+        return account!=null && account.getRole() == Account.ROLE_ADMIN;
+    }
+//    public String getRoleAdmin() {
+//        if (account == null ||account.getRole() != Account.ROLE_ADMIN) {
 //            msg = "You don't have guide permission to access that resource";
 //            returnHome();
 //        }
 //        return "";
 //    }
-    public boolean getRoleAdmin(){
-        return account!=null && account.getRole() == Account.ROLE_ADMIN;
-    }
     public boolean getRoleIntructor(){
         return account!=null && account.getRole() == Account.ROLE_INSTRUCTOR;
     }
@@ -117,12 +117,17 @@ public class Login implements Serializable{
         return account!=null && account.getRole() == Account.ROLE_TECHNICAL;
     }
     
+//    public String getAutoLogin() {
+//        if (account == null) {
+//            msg = "You don't have user permission to access that resource";
+//            returnHome();
+//        }
+//        return "";
+//    }
     public String getAutoLogin() {
-        if (account == null) {
             msg = "You don't have user permission to access that resource";
             returnHome();
-        }
-        return "";
+            return "";
     }
 
     public void logout() {
