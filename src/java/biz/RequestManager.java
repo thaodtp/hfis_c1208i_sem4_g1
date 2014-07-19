@@ -8,6 +8,7 @@ package biz;
 import da.AccountJpaController;
 import da.RequestJpaController;
 import da.exceptions.RollbackFailureException;
+import entity.Account;
 import entity.Request;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,6 +43,15 @@ public class RequestManager {
         }
         return daController;
     }
+//    public void sendMessage(Account toUser, String content) {
+//        try {
+//            getDaController().create(new Request(content, Request.STATUS_PENDING, Request.TYPE_MESSAGE, null, toUser));
+//        } catch (RollbackFailureException ex) {
+//            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (Exception ex) {
+//            Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public List<Request> getRequests(String username, int type) {
         return getDaController().getRequests(username, type);
@@ -51,7 +61,7 @@ public class RequestManager {
         return getDaController().getRequests(type);
     }
 
-    public List<Request> getRequestsByStatus(int status, int type){
+    public List<Request> getRequestsByStatus(int status, int type) {
         return getDaController().getRequestsByStatus(status, type);
     }
 
