@@ -53,6 +53,7 @@ public class AccountUI {
         password = "";
         confirmPassword = "";
         msg = "";
+    //    this.birthday = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
     public List<Account> getAllAccounts() {
@@ -225,6 +226,7 @@ public class AccountUI {
 
     public String getBirthday() {
         return birthday;
+      //  return new SimpleDateFormat("dd/MM/yyyy").parse(birthday);
     }
 
     public void setBirthday(String birthday) {
