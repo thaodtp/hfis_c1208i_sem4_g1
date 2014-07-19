@@ -81,7 +81,7 @@
                         </div>
                     </h:panelGroup>
                     <h:panelGroup rendered="#{login.account!=null}">
-                        <a class="element">Control Panel</a>
+                        <a href="/admin/index.xhtml" class="element">Control Panel</a>
                     </h:panelGroup>
                 </div>
             </nav>
@@ -95,26 +95,34 @@
                     <nav class="sidebar light">
                         <ul>
                             <li class="title">Control Panel</li>
+                            <li class="stick bg-orange"><h:outputLink value="/admin/index.xhtml">Statistic</h:outputLink></li>
                             <li class="stick bg-pink"><h:outputLink value="/admin/accounts.xhtml">Account</h:outputLink></li>
                             <li class="stick bg-blue"><h:outputLink value="/admin/departments.xhtml">Department</h:outputLink></li>
-                            <li class="stick bg-orange"><h:outputLink value="/admin/index.xhtml">Summary</h:outputLink></li>
-                            <li class="stick bg-red">
-                                <a class="dropdown-toggle" href="#"><i class="icon-tree-view"></i>Details</a>
+                            <li class="stick bg-green"><h:outputLink value="/admin/labs.xhtml">Lab</h:outputLink></li>
+                            <li class="stick bg-yellow">
+                                <a class="dropdown-toggle" href="#"><i class="icon-tree-view"></i>Time-Table</a>
                                 <ul class="dropdown-menu" data-role="dropdown">
-                                    <li><h:outputLink value="/admin/requests.xhtml">Requests</h:outputLink></li>
-                                    <li><h:outputLink value="/admin/complaints.xhtml">Complaint</h:outputLink></li>
+                                    <li><h:outputLink value="/labschedule.xhtml">Time-Table (Make Request)</h:outputLink></li>                       
+                                    <li><h:outputLink value="/admin/all_requests.xhtml">All Requests</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/my_requests.xhtml">My Requests</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/requests.xhtml">Unresolved Requests</h:outputLink></li>
                                 </ul>
                             </li>
-                            <li><h:outputLink value="/staff/requests.xhtml">Pending work</h:outputLink></li>
-                            <li class="stick bg-darkGreen">
-                                <a class="dropdown-toggle" href="#"><i class="icon-tree-view"></i>Lab</a>
+                            <li class="stick bg-black">
+                                <a class="dropdown-toggle" href="#"><i class="icon-tree-view"></i>Complaint</a>
                                 <ul class="dropdown-menu" data-role="dropdown">
-                                    <li><h:outputLink value="/admin/labs.xhtml">Labs</h:outputLink></li>
-                                    <li><h:outputLink value="/admin/create_lab.xhtml">Create Labs</h:outputLink></li>
-                               </ul>
+                                    <li><h:outputLink value="/admin/create_complaint.xhtml">Make Complaint</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/complaints.xhtml">All Complaints</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/my_complaints.xhtml">My Complaints</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/unassigned_complaints.xhtml">Unassigned Complaints</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/pending_complaints.xhtml">Pending Complaints</h:outputLink></li>
+                                    <li><h:outputLink value="/admin/completed_complaints.xhtml">Completed Complaints</h:outputLink></li>
+                                </ul>
                             </li>
-                            <li class="title">Portal Resource</li>
-                            <li><h:outputLink value="/admin/resource.xhtml">Resource</h:outputLink></li>
+                            <li class="title">Resource</li>
+                            <li><h:outputLink value="/admin/software.xhtml">Software</h:outputLink></li>
+                            <li><h:outputLink value="/admin/hardware.xhtml">Hardware</h:outputLink></li>
+                            <li><h:outputLink value="/admin/syllabus.xhtml">Syllabus</h:outputLink></li>
                         </ul>
                     </nav>
                 </div>

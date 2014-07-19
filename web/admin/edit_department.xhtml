@@ -14,18 +14,20 @@
             </f:metadata>
 
             <ui:define name="content">
-
-                    <h:form style="margin-left: 30px;" enctype="multipart/form-data">
-                        <fieldset>
-                            <legend>Edit Department</legend>
-                            <label>Name</label>
-                            <div class="input-control text">
-                                <h:inputText value="#{departmentUI.name}"/>
-                            </div>
-                            <h:commandButton action="#{departmentUI.edit()}" value="Edit" />
-                            <p class="fg-red margin20"><h:outputText value="#{departmentUI.msg}" /></p>
-                        </fieldset>
-                    </h:form>
+                <h:form rendered="#{!login.roleAdmin}">
+                    <h:inputHidden value="#{login.autoLogin}"/>
+                </h:form>
+                <h:form style="margin-left: 30px;" enctype="multipart/form-data">
+                    <fieldset>
+                        <legend>Edit Department</legend>
+                        <label>Name</label>
+                        <div class="input-control text">
+                            <h:inputText value="#{departmentUI.name}"/>
+                        </div>
+                        <h:commandButton action="#{departmentUI.edit()}" value="Edit" />
+                        <p class="fg-red margin20"><h:outputText value="#{departmentUI.msg}" /></p>
+                    </fieldset>
+                </h:form>
 
 
             </ui:define>

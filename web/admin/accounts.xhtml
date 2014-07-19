@@ -4,8 +4,16 @@
                 template="./../controlpanel_template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-
+    <ui:define name="head">
+        <h:outputScript name="/js/jquery.dataTables.js" />
+    </ui:define>
+    
     <ui:define name="content">
+        
+        <h:form rendered="#{!login.roleAdmin}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
+        
         <h:outputLink style="margin-left: 605px; color: black;"  value="/admin/create_account.xhtml">Add New Account</h:outputLink>
 
         <h:dataTable id="table" value="#{accountUI.allAccounts}" var="a">
@@ -19,7 +27,7 @@
             </h:column>
             <h:column>
                 <f:facet name="header">Role</f:facet>
-                    #{a.role}
+                    #{a.roleName}
             </h:column>
             <h:column>
                 <f:facet name="header">Name</f:facet>
@@ -27,7 +35,7 @@
             </h:column>
             <h:column>
                 <f:facet name="header">Birthday</f:facet>
-                    #{a.birthday}
+                    #{a.displayBirthday}
             </h:column>
             <h:column>
                 <f:facet name="header">Email</f:facet>
@@ -45,9 +53,9 @@
                 <h:outputLink class="fg-blue place-right" value="/admin/edit_account.xhtml?username=#{a.username}">
                     <small class="icon-pencil"></small>
                 </h:outputLink>
-                <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/admin/delete_account.xhtml?username=#{a.username}">
+<!--                <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/admin/delete_account.xhtml?username=#{a.username}">
                     <small class="icon-cancel-2"></small>
-                </h:outputLink>
+                </h:outputLink>-->
             </h:column>
 
         </h:dataTable>
