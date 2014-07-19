@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 /**
@@ -34,6 +35,10 @@ public class RequestUI implements Serializable {
     private AccountManager accountManager;
     @EJB
     private RequestManager requestManager;
+
+    @ManagedProperty(value = "#{login}")
+    private Login loginBean;
+
     private Request currrentReq;
     private String content;
     private int status;
@@ -43,10 +48,36 @@ public class RequestUI implements Serializable {
     private Account requestAccount;
     private Account resolveAccount;
 
-    public void assignResolver(){
+    public void assignResolver() {
         currrentReq.setResolveAccount(resolveAccount);
         requestManager.edit(currrentReq);
+//        sendMessage(resolveAccount, "You have 1 new request");
     }
+    public List<Request> getMessages(){
+        return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_MESSAGE);
+    }
+    public void completeRequest() {
+        currrentReq.setStatus(Request.STATUS_COMPLETE);
+        requestManager.edit(currrentReq);
+//        List<Account> admins = accountManager.getAccountByRole(Account.ROLE_ADMIN);
+//        if (!admins.isEmpty()) {
+//            for (Account a : admins) {
+//                try {
+//                    sendMessage(a, currrentReq.getRequestAccount().getName() + " has completed a request");
+//                } catch (Exception ex) {
+//                }
+//            }
+//        }
+    }
+
+    public List<Request> getUserUnresolvedComplaint() {
+        return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_COMPLAINT);
+    }
+
+//    public void sendMessage(Account toUser, String content) {
+//        requestManager.sendMessage(toUser, content);
+//    }
+
     public Map<String, Integer> createStatistic(int type) {
         Map<String, Integer> result = new HashMap<>();
         List<Request> source = requestManager.getRequests(type);
@@ -78,10 +109,6 @@ public class RequestUI implements Serializable {
         return createStatistic(Request.TYPE_COMPLAINT);
     }
 
-    public Map<String, Integer> getRequestStatisticByDay() {
-        return createStatistic(Request.TYPE_REQUEST);
-    }
-
     public List<Request> getUnresolvedComplaint() {
         return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
     }
@@ -89,7 +116,7 @@ public class RequestUI implements Serializable {
     public List<Request> getUnresolvedRequest() {
         return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_REQUEST);
     }
-    
+
     public List<Request> getAllRequest() {
         return requestManager.getRequests(Request.TYPE_REQUEST);
     }
@@ -101,7 +128,7 @@ public class RequestUI implements Serializable {
     public String create() {
         try {
             if (content == null || content.isEmpty()) {
-                msg = "content is not valid";
+                msg = "Content too short";
                 return "";
             }
            // requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
@@ -162,4 +189,12 @@ public class RequestUI implements Serializable {
         this.resolveAccount = resolveAccount;
     }
 
+    public Login getLoginBean() {
+        return loginBean;
+    }
+
+    public void setLoginBean(Login loginBean) {
+        this.loginBean = loginBean;
+    }
+    
 }

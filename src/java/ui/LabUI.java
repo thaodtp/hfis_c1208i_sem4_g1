@@ -7,10 +7,17 @@ package ui;
 
 import biz.LabManager;
 import entity.Lab;
+import entity.LabSchedule;
+import entity.Request;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -23,7 +30,8 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class LabUI implements Serializable{
+public class LabUI implements Serializable {
+
     @EJB
     private LabManager labManager;
     private Lab lab;
@@ -46,6 +54,29 @@ public class LabUI implements Serializable{
       statusS.put("Closed", -1);
     } 
 
+    public Map<String, Integer> getLabUsageStatistic() {
+        Map<String, Integer> result = new TreeMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("\"dd/MM/yyyy\"");
+        List<LabSchedule> schedules = new LinkedList<>();
+        for(Lab l:labManager.displayLabs()){
+            schedules.addAll(l.getLabScheduleList());
+        }
+        for (Iterator<LabSchedule> it = schedules.iterator(); it.hasNext();) {
+            LabSchedule req = it.next();
+            String date = sdf.format(req.getDate());
+            if (result.containsKey(date)) {
+                result.put(date, result.get(date) + 1);
+            } else {
+                if (result.size() > 10) {
+                    break;
+                } else {
+                    result.put(date, 1);
+                }
+            }
+        }
+        return result;
+    }
+    
     public Map<String, Integer> getTypeS() {
         return typeS;
     }    
@@ -61,13 +92,16 @@ public class LabUI implements Serializable{
     public List<Lab> getLabs() {
         return labManager.displayLabs();
     }
-    public List<Lab> getRoomByType(){
+
+    public List<Lab> getRoomByType() {
         return labManager.getRoomByType(type);
     }
+
     public List<Lab> getServerRoom() {
         return labManager.displayServerRoom();
     }
-     public String create() {     
+
+    public String create() {
         try {
             labs = labManager.getAllLabs();
             if (name.equals("")) {
@@ -88,6 +122,7 @@ public class LabUI implements Serializable{
         }
         return "";
     }
+
     public String editLab() {
         try {
          labManager.edit(id, name, type, status);
@@ -99,6 +134,7 @@ public class LabUI implements Serializable{
         }
         return "";
     }
+
     public String getMsg() {
         return msg;
     }
@@ -141,6 +177,7 @@ public class LabUI implements Serializable{
     public int getType() {
         return type;
     }
+
     public void setType(int type) {
         this.type = type;
     }

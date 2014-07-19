@@ -7,59 +7,61 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="head">
         <h:outputScript name="/js/Chart.js" />
+        <script src="http://code.highcharts.com/highcharts.js" />
+        <!--<h:outputScript name="/js/highcharts.js" />-->
     </ui:define>
     <ui:define name="content">
         <legend>Complaints</legend>
+            <div id="complaintStatistic" width="800" height="400" class="span12"></div>
         <p>
-            Number of complaints in the last 5 days
-            <canvas id="complaintStatistic" width="800" height="400" class="span12"></canvas>
+            Total unresolved complaints: #{requestUI.unresolvedComplaint.size()}
         </p>
+        <legend>Lab Usage</legend>      
+        <div id="labUsageStatistic" width="800" height="400" class="span12"></div>
         <p>
-            Number of unresolved complaints: #{requestUI.unresolvedComplaint.size()}
-        </p>
-        <legend>Requests</legend>
-        <p>
-            Number of requests in the last 5 days
-            <canvas id="requestStatistic" width="800" height="400" class="span12"></canvas>
-        </p>        
-        <p>
-            Number of unresolved requests: #{requestUI.unresolvedRequest.size()}
+            Total unresolved lab requests: #{requestUI.unresolvedRequest.size()}
         </p>
         <script>
-            var data = {
-                labels: #{requestUI.complaintStatisticByDay.keySet()},
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fillColor: "rgba(220,220,220,0.2)",
-                        strokeColor: "rgba(220,220,220,1)",
-                        pointColor: "rgba(220,220,220,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(220,220,220,1)",
-                        data: #{requestUI.complaintStatisticByDay.values()}
-                    }
-                ]
-            };
-            var ctx = document.getElementById("complaintStatistic").getContext("2d");
-            var myLineChart = new Chart(ctx).Line(data, {});
-            var data1 = {
-                labels: #{requestUI.requestStatisticByDay.keySet()},
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fillColor: "rgba(220,220,220,0.2)",
-                        strokeColor: "rgba(220,220,220,1)",
-                        pointColor: "rgba(220,220,220,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(220,220,220,1)",
-                        data: #{requestUI.requestStatisticByDay.values()}
-                    }
-                ]
-            };
-            var ctx1 = document.getElementById("requestStatistic").getContext("2d");
-            var myLineChart1 = new Chart(ctx1).Line(data1, {});
+            $('#complaintStatistic').highcharts({
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'Complaint Statistic'
+                },
+                subtitle: {
+                    text: 'Base on how many complaint sent on that day'
+                },
+                xAxis: {
+                    title: {text: 'Date'},
+                    categories: #{requestUI.complaintStatisticByDay.keySet()}
+                },
+                yAxis: {title: {text: 'Requests'}},
+                series: [{
+                        data: #{requestUI.complaintStatisticByDay.values()},
+                        name: 'All users'
+                    }]
+            });
+            $('#labUsageStatistic').highcharts({
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'Lab Usage'
+                },
+                subtitle: {
+                    text: 'Base on how many time the lab used on that day'
+                },
+                xAxis: {
+                    title: {text: 'Date'},
+                    categories: #{labUI.labUsageStatistic.keySet()}
+                },
+                yAxis: {title: {text: 'Using Time'}},
+                series: [{
+                        data: #{labUI.labUsageStatistic.values()},
+                        name: 'All labs'
+                    }]
+            });
         </script>
     </ui:define>
 
