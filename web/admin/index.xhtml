@@ -11,6 +11,9 @@
         <!--<h:outputScript name="/js/highcharts.js" />-->
     </ui:define>
     <ui:define name="content">
+        <h:form rendered="#{!login.roleAdmin}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
         <legend>Complaints</legend>
         <div id="complaintStatistic" width="800" height="400" class="span12"></div>
         <p>

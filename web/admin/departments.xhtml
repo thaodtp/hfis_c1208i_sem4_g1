@@ -6,6 +6,9 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
+        <h:form rendered="#{!login.roleAdmin}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
         <h:outputLink style="margin-left: 605px; color: black;"  value="/admin/create_department.xhtml">Add New Department</h:outputLink>
 
         <h:dataTable id="table" value="#{departmentUI.departments}" var="d">
@@ -14,7 +17,7 @@
                     #{d.name}
             </h:column>          
             <h:column>
-                 <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/admin/delete_department.xhtml?id=#{d.id}">
+                <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/admin/delete_department.xhtml?id=#{d.id}">
                     <small class="icon-cancel-2"></small>
                 </h:outputLink>
                 <h:outputLink class="fg-blue place-right" value="/admin/edit_department.xhtml?id=#{d.id}">

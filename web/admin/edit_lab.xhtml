@@ -7,15 +7,17 @@
 
     <body>
         <ui:composition template="./../controlpanel_template.xhtml">
-                <f:metadata>
-                    <f:viewParam name="id" value="#{labUI.id}"/>
-                </f:metadata>
+            <f:metadata>
+                <f:viewParam name="id" value="#{labUI.id}"/>
+            </f:metadata>
             <ui:define name="content">
-                
+                <h:form rendered="#{!login.roleAdmin}">
+                    <h:inputHidden value="#{login.autoLogin}"/>
+                </h:form>
                 <h:form style="margin-left: 30px;">  
                     <fieldset>
                         <legend>Edit Lab</legend>
-                         <label>Name</label>
+                        <label>Name</label>
                         <div class="input-control text">
                             <h:inputText value="#{labUI.name}"/>
                         </div>
@@ -31,8 +33,8 @@
                                 <f:selectItems value="#{labUI.statusS}"  />
                             </h:selectOneMenu>
                         </div>
-                    <h:commandButton action="#{labUI.editLab()}" value="Edit"/>                  
-                    <h:outputText value="#{labUI.msg}"/>
+                        <h:commandButton action="#{labUI.editLab()}" value="Edit"/>                  
+                        <h:outputText value="#{labUI.msg}"/>
                     </fieldset>
                 </h:form>
             </ui:define>

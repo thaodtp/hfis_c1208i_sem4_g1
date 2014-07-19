@@ -7,7 +7,10 @@
     <body>
         <ui:composition template="./../controlpanel_template.xhtml">
             <ui:define name="content">
-                 <h:form style="margin-left: 30px;" enctype="multipart/form-data">
+                <h:form rendered="#{!login.roleAdmin}">
+                    <h:inputHidden value="#{login.autoLogin}"/>
+                </h:form>
+                <h:form style="margin-left: 30px;" enctype="multipart/form-data">
                     <fieldset>
                         <legend><h2>Create Lab</h2></legend>
                         <label>Name</label>
@@ -24,7 +27,7 @@
                         <h:commandButton action="#{labUI.create()}" value="Create" />
                         <p class="fg-red margin20"><h:outputText value="#{labUI.msg}" /></p>
                     </fieldset>
-                 </h:form>
+                </h:form>
             </ui:define>
         </ui:composition>
     </body>
