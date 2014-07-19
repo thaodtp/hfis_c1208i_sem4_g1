@@ -38,7 +38,6 @@ public class DepartmentConverter implements Converter{
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return ((Department)value).getId()+"";
-    }
-    
+       return ((Department)value).getId()+"";   
+    }   
 }
