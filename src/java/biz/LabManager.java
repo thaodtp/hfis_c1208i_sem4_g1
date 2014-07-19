@@ -68,6 +68,23 @@ public class LabManager {
             Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+       public void edit(int id, String name,int type, int status){
+       try {
+           Lab lab = getLabById(id);
+           lab.setName(name);
+           lab.setType(type);
+           lab.setStatus(status);
+           getDaController().edit(lab);
+       } catch (RollbackFailureException ex) {
+           Logger.getLogger(LabManager.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (Exception ex) {
+           Logger.getLogger(LabManager.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        
+    }
+       public Lab getLabById(int id){
+           return  getDaController().getLabById(id);
+       }
      public List<Lab> getAllLabs(){
          return getDaController().getAllLabs();
      }

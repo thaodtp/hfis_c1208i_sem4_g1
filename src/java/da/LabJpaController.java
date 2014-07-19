@@ -58,6 +58,11 @@ public class LabJpaController implements Serializable {
         query.setParameter("type", type);
         return  query.getResultList();
     }
+    public Lab getLabById(int id){
+        TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l WHERE l.id = :id", Lab.class);
+        query.setParameter("id", id);
+        return query.getResultList().get(0);
+    }
     public void create(Lab lab) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (lab.getLabScheduleList() == null) {
             lab.setLabScheduleList(new ArrayList<LabSchedule>());
