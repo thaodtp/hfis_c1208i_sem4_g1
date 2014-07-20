@@ -80,4 +80,7 @@ public class LabScheduleManager {
     public LabSchedule getSchedule(Date date, int slot, Lab lab) {
         return getDaController().getSchedule(date, slot, lab);
     }
+    public List<LabSchedule> getAllSchedule(){
+        return getDaController().getAllSchedule();
+    }
 }
