@@ -42,7 +42,6 @@ public class LabScheduleUI implements Serializable {
     private LabScheduleManager scheduleManager;
     @ManagedProperty(value="#{login}")
     private Login loginBean;
-    private Account acc;
     private String date;
     private List<Integer> slots;
     private LabSchedule curSchedule;
@@ -167,14 +166,6 @@ public class LabScheduleUI implements Serializable {
 
     public void setLoginBean(Login loginBean) {
         this.loginBean = loginBean;
-    }
-
-    public Account getAcc() {
-        return acc;
-    }
-
-    public void setAcc(Account acc) {
-        this.acc = acc;
     }
     
 }

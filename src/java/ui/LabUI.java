@@ -56,6 +56,13 @@ public class LabUI implements Serializable {
         statusS.put("Closed", -1);
     }
 
+    public LabStatistic getLabUsageStatistic() {
+        if (labUsage == null) {
+            labUsage = new LabStatistic(labManager.displayLabs());
+        }
+        return labUsage;
+    }
+
 //    public LabStatistic getLabUsageStatistic() {
 //        if (labUsage == null) {
 //            labUsage = new LabStatistic(labManager.displayLabs());
