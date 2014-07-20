@@ -9,6 +9,9 @@
         <h:outputScript name="/js/jquery.dataTables.js" />
     </ui:define>
     <ui:define name="content">
+        <h:form rendered="#{!login.roleAdmin}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
         <h:form  id="fComplaint">
             <h:dataTable id="table" value="#{requestUI.completedComplaints}" var="req">
                 <h:column>

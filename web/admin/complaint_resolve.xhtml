@@ -8,12 +8,16 @@
     <ui:define name="head">
         <h:outputScript name="/js/jquery.dataTables.js" />
     </ui:define>
+    <f:metadata>
+        <f:viewParam value="#{login.account.username}" name="username"/>
+    </f:metadata>
     <ui:define name="content">
-        <h:form rendered="#{!login.roleAdmin and !login.roleHOD}">
+        <h:form rendered="#{!login.roleTechnical}">
             <h:inputHidden value="#{login.autoLogin}"/>
         </h:form>
         <h:form  id="fComplaint">
-            <h:dataTable id="table" value="#{requestUI.allComplaint}" var="req">
+            <legend>My complaints</legend>
+            <h:dataTable id="table" value="#{requestUI.loginBean.account.requestList}" var="req">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                         #{req.id}

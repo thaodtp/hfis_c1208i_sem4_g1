@@ -9,6 +9,9 @@
         <h:outputScript name="/js/jquery.dataTables.js" />
     </ui:define>
     <ui:define name="content">
+        <h:form rendered="#{!login.roleAdmin}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
         <h:form id="fSchedule">
             <legend>Pending lab request</legend>
             <h:dataTable id="table" value="#{labScheduleUI.unacceptedSchedule}" var="schedule">
