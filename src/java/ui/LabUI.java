@@ -62,37 +62,7 @@ public class LabUI implements Serializable {
         }
         return labUsage;
     }
-
-//    public LabStatistic getLabUsageStatistic() {
-//        if (labUsage == null) {
-//            labUsage = new LabStatistic(labManager.displayLabs());
-//        }
-//        return labUsage;
-//    }
-
-    public Map<String, Integer> getLabUsageStatistic() {
-        Map<String, Integer> result = new TreeMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("\"dd/MM/yyyy\"");
-        List<LabSchedule> schedules = new LinkedList<>();
-        for(Lab l:labManager.displayLabs()){
-            schedules.addAll(l.getLabScheduleList());
-        }
-        for (Iterator<LabSchedule> it = schedules.iterator(); it.hasNext();) {
-            LabSchedule req = it.next();
-            String date = sdf.format(req.getDate());
-            if (result.containsKey(date)) {
-                result.put(date, result.get(date) + 1);
-            } else {
-                if (result.size() > 10) {
-                    break;
-                } else {
-                    result.put(date, 1);
-                }
-            }
-        }
-        return result;
-    }
-    
+ 
     public Map<String, Integer> getTypeS() {
         return typeS;
     }
