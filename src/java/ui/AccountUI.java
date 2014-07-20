@@ -9,6 +9,7 @@ import biz.AccountManager;
 import biz.DepartmentManager;
 import entity.Account;
 import entity.Department;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -39,6 +40,7 @@ public class AccountUI {
     private String password;
     private String confirmPassword;
     private int role;
+    private String roleName;
     private String name;
     private String birthday;
     private String email;
@@ -131,7 +133,7 @@ public class AccountUI {
     }
 
     public String editAccount() {
-        if (!Pattern.matches("[a-zA-Z0-9._-]{6,}", username)) {
+        if (!Pattern.matches("[a-zA-Z0-9._-]{5,}", username)) {
             msg = "Username not valid";
             return "";
         }
@@ -154,11 +156,12 @@ public class AccountUI {
         try { 
             account.setPassword(password);
             account.setName(name);
+            account.setBirthday(new SimpleDateFormat("dd/MM/yyyy").parse(birthday));
             account.setPhone(phone);
             account.setEmail(email);
-//            account.setBirthday(birthday);
 //            account.setRole(role);
-            //        account.setDepartmentId(departmentManager.getDepartmentById(departmentId));
+          //  account.setDepartmentId(departmentManager.getDepartmentById(departmentId));
+            account.setDepartmentId(department);
             accountManager.edit(account);
             return "/success.xhtml";
         } catch (Exception ex) {
@@ -177,9 +180,12 @@ public class AccountUI {
         account = accountManager.getAccountByUsername(username);
         if (account!=null) {
             password = account.getPassword();
+            roleName = account.getRoleName();
             name = account.getName();
+            birthday = account.getDisplayBirthday();
             email = account.getEmail();
             phone = account.getPhone();
+            department = account.getDepartmentId();
         }
     }
 
@@ -215,14 +221,24 @@ public class AccountUI {
         this.role = role;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+    
+    
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
+    }    
+    
     public String getBirthday() {
         return birthday;
     }

@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -161,6 +162,9 @@ public class Account implements Serializable {
         this.name = name;
     }
 
+    public String getDisplayBirthday(){
+        return new SimpleDateFormat("dd/MM/yyyy").format(birthday);
+    }
     public Date getBirthday() {
         return birthday;
     }
