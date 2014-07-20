@@ -12,7 +12,7 @@
         <f:viewParam value="#{login.account.username}" name="username"/>
     </f:metadata>
     <ui:define name="content">
-        <h:form rendered="#{!login.roleAdmin}">
+        <h:form rendered="#{!login.roleAdmin and !login.roleHOD and login.roleIntructor}">
             <h:inputHidden value="#{login.autoLogin}"/>
         </h:form>
         <h:form id="fSchedule">
