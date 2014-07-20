@@ -11,87 +11,9 @@
         <!--<h:outputScript name="/js/highcharts.js" />-->
     </ui:define>
     <ui:define name="content">
-        <h:form rendered="#{!login.roleAdmin}">
-            <h:inputHidden value="#{login.autoLogin}"/>
-        </h:form>
-        <legend>Complaints</legend>
-        <div id="complaintStatistic" width="800" height="400" class="span12"></div>
-        <p>
-            Total unresolved complaints: #{requestUI.unresolvedComplaint.size()}
-        </p>
-        <legend>Lab Usage</legend>      
-        <div id="labUsageStatistic" width="800" height="400" class="span12"></div>
-        <div id="labUsageStatistic2" width="800" height="400" class="span12"></div>
-        <p>
-            Total unresolved lab requests: #{requestUI.unresolvedRequest.size()}
-        </p>
-        <script>
-            $('#complaintStatistic').highcharts({
-                chart: {
-                    type: 'area'
-                },
-                title: {
-                    text: 'Complaint Statistic'
-                },
-                subtitle: {
-                    text: 'Base on how many complaint sent on that day'
-                },
-                xAxis: {
-                    title: {text: 'Date'},
-                    categories: #{requestUI.complaintStatisticByDay.keySet()}
-                },
-                yAxis: {title: {text: 'Requests'}},
-                series: [{
-                        data: #{requestUI.complaintStatisticByDay.values()},
-                        name: 'All users'
-                    }]
-            });
-            $('#labUsageStatistic').highcharts({
-                chart: {
-                    type: 'area'
-                },
-                title: {
-                    text: 'Lab Usage'
-                },
-                subtitle: {
-                    text: 'Base on how many time the lab used on that day'
-                },
-                xAxis: {
-                    title: {text: 'Date'},
-                    categories: #{labUI.labUsageStatistic.keys}
-                },
-                yAxis: {title: {text: 'Using Time'}},
-                series: [#{labUI.labUsageStatistic.values}]
-            });
-            $('#labUsageStatistic2').highcharts({
-                chart: {
-                    type: 'area'
-                },
-                title: {
-                    text: 'Labs Performance'
-                },
-                subtitle: {
-                    text: 'Base on how many time the labs used/unused on that day'
-                },
-                xAxis: {
-                    title: {text: 'Date'},
-                    categories: #{labUI.labUsageStatistic.keys}
-                },
-                yAxis: {title: {text: 'Percent'}},
-                plotOptions: {
-                    area: {
-                        stacking: 'percent',
-                        lineColor: '#ffffff',
-                        lineWidth: 1,
-                        marker: {
-                            lineWidth: 1,
-                            lineColor: '#ffffff'
-                        }
-                    }
-                },
-                series: [#{labUI.labUsageStatistic.performance}]
-            });
-        </script>
+        
+        Welcome to Control Panel
+        
     </ui:define>
 
 </ui:composition>

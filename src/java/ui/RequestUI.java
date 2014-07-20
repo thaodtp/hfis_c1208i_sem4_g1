@@ -127,6 +127,10 @@ public class RequestUI implements Serializable {
         return requestManager.getRequests(Request.TYPE_COMPLAINT);
     }
     
+    public List<Request> getCompletedComplaints() {
+        return requestManager.getRequestsByStatus(Request.STATUS_COMPLETE, Request.TYPE_COMPLAINT);
+    }
+
     public String create() {
         try {
             if (content == null || content.isEmpty()) {
