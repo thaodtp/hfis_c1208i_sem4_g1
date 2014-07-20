@@ -62,7 +62,7 @@ public class LabUI implements Serializable {
         }
         return labUsage;
     }
-
+ 
     public Map<String, Integer> getTypeS() {
         return typeS;
     }

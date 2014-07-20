@@ -43,6 +43,7 @@ public class RequestUI implements Serializable {
     private String content;
     private int status;
     private int type;
+    private int id;
     private String msg;
     private Account requestAccount;
     private Account resolveAccount;
@@ -123,6 +124,10 @@ public class RequestUI implements Serializable {
     public List<Request> getAllComplaint() {
         return requestManager.getRequests(Request.TYPE_COMPLAINT);
     }
+    
+    public List<Request> getCompletedComplaints() {
+        return requestManager.getRequestsByStatus(Request.STATUS_COMPLETE, Request.TYPE_COMPLAINT);
+    }
 
     public String create() {
         try {
@@ -130,10 +135,11 @@ public class RequestUI implements Serializable {
                 msg = "Content too short";
                 return "";
             }
-            requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
-            return "/faces/guide/success.xhtml";
+           // requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
+            requestManager.create(new Request(content, type));
+            return "/success.xhtml";
         } catch (Exception ex) {
-            msg = "Can't add this place";
+            msg = "Can't send complaint";
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";

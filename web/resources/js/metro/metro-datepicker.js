@@ -6,7 +6,7 @@
         version: "1.0.0",
 
         options: {
-            format: "dd.mm.yyyy",
+            format: "dd/mm/yyyy",
             date: undefined,
             effect: 'none',
             position: 'bottom',

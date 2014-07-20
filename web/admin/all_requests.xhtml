@@ -1,20 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../controlpanel_template.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="head">
         <h:outputScript name="/js/jquery.dataTables.js" />
     </ui:define>
+
     <ui:define name="content">
-        <h:form rendered="#{!login.roleAdmin}">
+        <h:form rendered="#{!login.roleAdmin and !login.roleHOD}">
             <h:inputHidden value="#{login.autoLogin}"/>
         </h:form>
-        <h:form id="fSchedule">
-            <legend>Pending lab request</legend>
-            <h:dataTable id="table" value="#{labScheduleUI.unacceptedSchedule}" var="schedule">
+       <h:form id="fSchedule">
+            <legend>All request</legend>
+            <h:dataTable id="table" value="#{labScheduleUI.allSchedule}" var="schedule">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                         #{schedule.id}
@@ -77,9 +78,9 @@
                     <p><span class="span2">Slot:</span> #{labScheduleUI.curSchedule.slot}</p>
                     <p><p><span class="span2">By:</span> <a href="account_detail.xhtml?user=#{labScheduleUI.curSchedule.requestAccount.username}">#{labScheduleUI.curSchedule.requestAccount.name}&nbsp;</a></p></p>
                     <p><span class="span2">Detail:</span> #{labScheduleUI.curSchedule.detail}</p>
-                    <p><span class="span2">Status:</span> Pending</p>
-
-                    <div id='divConfirmDeny' style="display: none;">
+                    <p><span class="span2">Status:</span> #{labScheduleUI.curSchedule.statuss}</p>
+<!--
+-->                    <div id='divConfirmDeny' style="display: none;">
                         <h:commandLink id="btnDeny" class="button large fg-white bg-blue offset7 span2" value="Confirm" action="#{labScheduleUI.denyLabRequest()}">
                             <f:ajax execute="@form" render="@form :fSchedule" onevent="doAfterAjax" />
                         </h:commandLink>

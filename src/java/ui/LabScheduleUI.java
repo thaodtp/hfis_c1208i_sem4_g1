@@ -7,6 +7,7 @@ package ui;
 
 import biz.LabManager;
 import biz.LabScheduleManager;
+import entity.Account;
 import entity.Lab;
 import entity.LabSchedule;
 import java.io.Serializable;
@@ -16,7 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -45,7 +48,6 @@ public class LabScheduleUI implements Serializable {
     private Lab lab;
     private int slot;
     private String detail;
-
     /**
      * Creates a new instance of LabScheduleUI
      */
@@ -59,6 +61,7 @@ public class LabScheduleUI implements Serializable {
         this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
+   
     public boolean isValidDay() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, 3);
@@ -73,7 +76,9 @@ public class LabScheduleUI implements Serializable {
     public List<LabSchedule> getUnacceptedSchedule() {
         return scheduleManager.getUnacceptedSchedule();
     }
-
+    public List<LabSchedule> getAllSchedule(){
+        return scheduleManager.getAllSchedule();
+    }
     public void denyLabRequest() {
         scheduleManager.denyLabRequest(curSchedule);
         curSchedule = null;
