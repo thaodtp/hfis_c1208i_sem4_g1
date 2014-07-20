@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -40,10 +39,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "LabSchedule.findByDate", query = "SELECT l FROM LabSchedule l WHERE l.date = :date"),
     @NamedQuery(name = "LabSchedule.findByDetail", query = "SELECT l FROM LabSchedule l WHERE l.detail = :detail")})
 public class LabSchedule implements Serializable {
+
     public static final int STATUS_PENDING = 0;
-    public static final int STATUS_ACCEPTED = 1; 
+    public static final int STATUS_ACCEPTED = 1;
     public static final int STATUS_DENIED = 2;
-    
+
     @Column(name = "Status")
     private Integer status;
     private static final long serialVersionUID = 1L;
@@ -89,9 +89,11 @@ public class LabSchedule implements Serializable {
     public void setSlot(Integer slot) {
         this.slot = slot;
     }
-    public String getDisplayDate(){
+
+    public String getDisplayDate() {
         return new SimpleDateFormat("dd/MM/yyyy").format(date);
     }
+
     public Date getDate() {
         return date;
     }
@@ -99,15 +101,17 @@ public class LabSchedule implements Serializable {
     public void setDate(Date date) {
         this.date = date;
     }
-    public String getSummary(){
+
+    public String getSummary() {
         try {
             return this.detail.substring(0, 11) + "...";
         } catch (IndexOutOfBoundsException ex) {
             return this.detail;
-        } catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             return "No detail";
         }
     }
+
     public String getDetail() {
         return detail;
     }
@@ -161,8 +165,19 @@ public class LabSchedule implements Serializable {
         return status;
     }
 
+    public String getStatuss() {
+        if (status == 0) {
+            return "Pending";
+        } else if (status == 1) {
+            return "Accept";
+        } else {
+            return "Denied";
+        }
+
+    }
+
     public void setStatus(Integer status) {
         this.status = status;
     }
-    
+
 }
