@@ -30,22 +30,23 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class RequestUI implements Serializable {
-
+    
     @EJB
     private AccountManager accountManager;
     @EJB
     private RequestManager requestManager;
-
+    
     @ManagedProperty(value = "#{login}")
     private Login loginBean;
-
+    @ManagedProperty(value = "#{AccountUI}")
+    private AccountUI acc;
     private Request currrentReq;
     private String content;
     private int status;
     private int type;
     private int id;
     private String msg;
-    private Account requestAccount;
+    private String requestAccount;
     private Account resolveAccount;
 
     public void assignResolver() {
@@ -53,9 +54,11 @@ public class RequestUI implements Serializable {
         requestManager.edit(currrentReq);
 //        sendMessage(resolveAccount, "You have 1 new request");
     }
-    public List<Request> getMessages(){
+
+    public List<Request> getMessages() {
         return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_MESSAGE);
     }
+
     public void completeRequest() {
         currrentReq.setStatus(Request.STATUS_COMPLETE);
         requestManager.edit(currrentReq);
@@ -69,7 +72,7 @@ public class RequestUI implements Serializable {
 //            }
 //        }
     }
-
+    
     public List<Request> getUserUnresolvedComplaint() {
         return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_COMPLAINT);
     }
@@ -77,7 +80,6 @@ public class RequestUI implements Serializable {
 //    public void sendMessage(Account toUser, String content) {
 //        requestManager.sendMessage(toUser, content);
 //    }
-
     public Map<String, Integer> createStatistic(int type) {
         Map<String, Integer> result = new HashMap<>();
         List<Request> source = requestManager.getRequests(type);
@@ -96,43 +98,49 @@ public class RequestUI implements Serializable {
         }
         return result;
     }
-
+    
     public Request getCurrrentReq() {
         return currrentReq;
     }
-
+    
     public void setCurrrentReq(Request currrentReq) {
         this.currrentReq = currrentReq;
     }
-
+    
     public Map<String, Integer> getComplaintStatisticByDay() {
         return createStatistic(Request.TYPE_COMPLAINT);
     }
-
+    
     public List<Request> getUnresolvedComplaint() {
         return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
     }
-
+    
     public List<Request> getUnresolvedRequest() {
         return requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_REQUEST);
     }
-
+    
     public List<Request> getAllRequest() {
         return requestManager.getRequests(Request.TYPE_REQUEST);
     }
-
+    
     public List<Request> getAllComplaint() {
         return requestManager.getRequests(Request.TYPE_COMPLAINT);
     }
-
+    
     public String create() {
         try {
             if (content == null || content.isEmpty()) {
                 msg = "Content too short";
                 return "";
             }
-           // requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
-            requestManager.create(new Request(content, type));
+            // requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
+            Request req = new Request();
+            req.setId(id);
+            req.setContent(content);
+            req.setType(type);
+            req.setRequestAccount(accountManager.getAccountByUsername(requestAccount));
+            req.setTime(new Date());
+            requestManager.create(req);
             return "/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't send complaint";
@@ -140,49 +148,60 @@ public class RequestUI implements Serializable {
         }
         return "";
     }
+    
+    public String getRequestAccount() {
+        return requestAccount;
+    }
+    
+    public void setRequestAccount(String requestAccount) {
+        if (requestAccount.isEmpty()) {
+            this.requestAccount = requestAccount;
+            loginBean.getUsername();
+        }
+    }
 
     public String getContent() {
         return content;
     }
-
+    
     public void setContent(String content) {
         this.content = content;
     }
-
+    
     public int getStatus() {
         return status;
     }
-
+    
     public void setStatus(int status) {
         this.status = status;
     }
-
+    
     public int getType() {
         return type;
     }
-
+    
+    public AccountUI getAcc() {
+        return acc;
+    }
+    
+    public void setAcc(AccountUI acc) {
+        this.acc = acc;
+    }
+    
     public void setType(int type) {
         this.type = type;
     }
-
+    
     public String getMsg() {
         return msg;
     }
-
+    
     public void setMsg(String msg) {
         this.msg = msg;
     }
 
-    public Account getRequestAccount() {
-        return requestAccount;
-    }
-
-    public void setRequestAccount(Account requestAccount) {
-        this.requestAccount = requestAccount;
-    }
-
     public Account getResolveAccount() {
-        return resolveAccount;
+        return resolveAccount;        
     }
 
     public void setResolveAccount(Account resolveAccount) {
@@ -192,9 +211,17 @@ public class RequestUI implements Serializable {
     public Login getLoginBean() {
         return loginBean;
     }
-
+    
     public void setLoginBean(Login loginBean) {
         this.loginBean = loginBean;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;     
     }
     
 }

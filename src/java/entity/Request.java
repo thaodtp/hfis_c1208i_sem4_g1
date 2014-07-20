@@ -100,13 +100,11 @@ public class Request implements Serializable {
         this.resolveAccount = resolveAccount;
     }
 
-    public Request(String content, int type) {
+    public Request(String content, int type,Account requestAccount,Date time) {
+        this.time = time;
         this.content = content;
         this.type = type;
     }
-
- 
-    
     public String getDisplayTime() {
         return new SimpleDateFormat("mm:hh  dd/MM/yyyy").format(time);
     }
