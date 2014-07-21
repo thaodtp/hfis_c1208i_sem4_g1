@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package da;
 
 import da.exceptions.IllegalOrphanException;
@@ -20,6 +21,7 @@ import entity.LabSchedule;
 import java.util.ArrayList;
 import java.util.List;
 import entity.Request;
+import entity.ScheduleSequence;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -72,8 +74,8 @@ public class AccountJpaController implements Serializable {
     }
 
     public void create(Account account) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (account.getLabScheduleList() == null) {
-            account.setLabScheduleList(new ArrayList<LabSchedule>());
+        if (account.getScheduleSequenceList() == null) {
+            account.setScheduleSequenceList(new ArrayList<ScheduleSequence>());
         }
         if (account.getRequestList() == null) {
             account.setRequestList(new ArrayList<Request>());
@@ -90,12 +92,12 @@ public class AccountJpaController implements Serializable {
                 departmentId = em.getReference(departmentId.getClass(), departmentId.getId());
                 account.setDepartmentId(departmentId);
             }
-            List<LabSchedule> attachedLabScheduleList = new ArrayList<LabSchedule>();
-            for (LabSchedule labScheduleListLabScheduleToAttach : account.getLabScheduleList()) {
-                labScheduleListLabScheduleToAttach = em.getReference(labScheduleListLabScheduleToAttach.getClass(), labScheduleListLabScheduleToAttach.getId());
-                attachedLabScheduleList.add(labScheduleListLabScheduleToAttach);
+            List<ScheduleSequence> attachedScheduleSequenceList = new ArrayList<ScheduleSequence>();
+            for (ScheduleSequence scheduleSequenceListScheduleSequenceToAttach : account.getScheduleSequenceList()) {
+                scheduleSequenceListScheduleSequenceToAttach = em.getReference(scheduleSequenceListScheduleSequenceToAttach.getClass(), scheduleSequenceListScheduleSequenceToAttach.getId());
+                attachedScheduleSequenceList.add(scheduleSequenceListScheduleSequenceToAttach);
             }
-            account.setLabScheduleList(attachedLabScheduleList);
+            account.setScheduleSequenceList(attachedScheduleSequenceList);
             List<Request> attachedRequestList = new ArrayList<Request>();
             for (Request requestListRequestToAttach : account.getRequestList()) {
                 requestListRequestToAttach = em.getReference(requestListRequestToAttach.getClass(), requestListRequestToAttach.getId());
@@ -113,13 +115,13 @@ public class AccountJpaController implements Serializable {
                 departmentId.getAccountList().add(account);
                 departmentId = em.merge(departmentId);
             }
-            for (LabSchedule labScheduleListLabSchedule : account.getLabScheduleList()) {
-                Account oldRequestAccountOfLabScheduleListLabSchedule = labScheduleListLabSchedule.getRequestAccount();
-                labScheduleListLabSchedule.setRequestAccount(account);
-                labScheduleListLabSchedule = em.merge(labScheduleListLabSchedule);
-                if (oldRequestAccountOfLabScheduleListLabSchedule != null) {
-                    oldRequestAccountOfLabScheduleListLabSchedule.getLabScheduleList().remove(labScheduleListLabSchedule);
-                    oldRequestAccountOfLabScheduleListLabSchedule = em.merge(oldRequestAccountOfLabScheduleListLabSchedule);
+            for (ScheduleSequence scheduleSequenceListScheduleSequence : account.getScheduleSequenceList()) {
+                Account oldRequestAccountOfScheduleSequenceListScheduleSequence = scheduleSequenceListScheduleSequence.getRequestAccount();
+                scheduleSequenceListScheduleSequence.setRequestAccount(account);
+                scheduleSequenceListScheduleSequence = em.merge(scheduleSequenceListScheduleSequence);
+                if (oldRequestAccountOfScheduleSequenceListScheduleSequence != null) {
+                    oldRequestAccountOfScheduleSequenceListScheduleSequence.getScheduleSequenceList().remove(scheduleSequenceListScheduleSequence);
+                    oldRequestAccountOfScheduleSequenceListScheduleSequence = em.merge(oldRequestAccountOfScheduleSequenceListScheduleSequence);
                 }
             }
             for (Request requestListRequest : account.getRequestList()) {
@@ -158,7 +160,7 @@ public class AccountJpaController implements Serializable {
         }
     }
 
-    public void edit(Account account) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Account account) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -166,8 +168,8 @@ public class AccountJpaController implements Serializable {
             Account persistentAccount = em.find(Account.class, account.getUsername());
             Department departmentIdOld = persistentAccount.getDepartmentId();
             Department departmentIdNew = account.getDepartmentId();
-            List<LabSchedule> labScheduleListOld = persistentAccount.getLabScheduleList();
-            List<LabSchedule> labScheduleListNew = account.getLabScheduleList();
+            List<ScheduleSequence> scheduleSequenceListOld = persistentAccount.getScheduleSequenceList();
+            List<ScheduleSequence> scheduleSequenceListNew = account.getScheduleSequenceList();
             List<Request> requestListOld = persistentAccount.getRequestList();
             List<Request> requestListNew = account.getRequestList();
             List<Request> requestList1Old = persistentAccount.getRequestList1();
@@ -176,13 +178,13 @@ public class AccountJpaController implements Serializable {
                 departmentIdNew = em.getReference(departmentIdNew.getClass(), departmentIdNew.getId());
                 account.setDepartmentId(departmentIdNew);
             }
-            List<LabSchedule> attachedLabScheduleListNew = new ArrayList<LabSchedule>();
-            for (LabSchedule labScheduleListNewLabScheduleToAttach : labScheduleListNew) {
-                labScheduleListNewLabScheduleToAttach = em.getReference(labScheduleListNewLabScheduleToAttach.getClass(), labScheduleListNewLabScheduleToAttach.getId());
-                attachedLabScheduleListNew.add(labScheduleListNewLabScheduleToAttach);
+            List<ScheduleSequence> attachedScheduleSequenceListNew = new ArrayList<ScheduleSequence>();
+            for (ScheduleSequence scheduleSequenceListNewScheduleSequenceToAttach : scheduleSequenceListNew) {
+                scheduleSequenceListNewScheduleSequenceToAttach = em.getReference(scheduleSequenceListNewScheduleSequenceToAttach.getClass(), scheduleSequenceListNewScheduleSequenceToAttach.getId());
+                attachedScheduleSequenceListNew.add(scheduleSequenceListNewScheduleSequenceToAttach);
             }
-            labScheduleListNew = attachedLabScheduleListNew;
-            account.setLabScheduleList(labScheduleListNew);
+            scheduleSequenceListNew = attachedScheduleSequenceListNew;
+            account.setScheduleSequenceList(scheduleSequenceListNew);
             List<Request> attachedRequestListNew = new ArrayList<Request>();
             for (Request requestListNewRequestToAttach : requestListNew) {
                 requestListNewRequestToAttach = em.getReference(requestListNewRequestToAttach.getClass(), requestListNewRequestToAttach.getId());
@@ -206,20 +208,20 @@ public class AccountJpaController implements Serializable {
                 departmentIdNew.getAccountList().add(account);
                 departmentIdNew = em.merge(departmentIdNew);
             }
-            for (LabSchedule labScheduleListOldLabSchedule : labScheduleListOld) {
-                if (!labScheduleListNew.contains(labScheduleListOldLabSchedule)) {
-                    labScheduleListOldLabSchedule.setRequestAccount(null);
-                    labScheduleListOldLabSchedule = em.merge(labScheduleListOldLabSchedule);
+            for (ScheduleSequence scheduleSequenceListOldScheduleSequence : scheduleSequenceListOld) {
+                if (!scheduleSequenceListNew.contains(scheduleSequenceListOldScheduleSequence)) {
+                    scheduleSequenceListOldScheduleSequence.setRequestAccount(null);
+                    scheduleSequenceListOldScheduleSequence = em.merge(scheduleSequenceListOldScheduleSequence);
                 }
             }
-            for (LabSchedule labScheduleListNewLabSchedule : labScheduleListNew) {
-                if (!labScheduleListOld.contains(labScheduleListNewLabSchedule)) {
-                    Account oldRequestAccountOfLabScheduleListNewLabSchedule = labScheduleListNewLabSchedule.getRequestAccount();
-                    labScheduleListNewLabSchedule.setRequestAccount(account);
-                    labScheduleListNewLabSchedule = em.merge(labScheduleListNewLabSchedule);
-                    if (oldRequestAccountOfLabScheduleListNewLabSchedule != null && !oldRequestAccountOfLabScheduleListNewLabSchedule.equals(account)) {
-                        oldRequestAccountOfLabScheduleListNewLabSchedule.getLabScheduleList().remove(labScheduleListNewLabSchedule);
-                        oldRequestAccountOfLabScheduleListNewLabSchedule = em.merge(oldRequestAccountOfLabScheduleListNewLabSchedule);
+            for (ScheduleSequence scheduleSequenceListNewScheduleSequence : scheduleSequenceListNew) {
+                if (!scheduleSequenceListOld.contains(scheduleSequenceListNewScheduleSequence)) {
+                    Account oldRequestAccountOfScheduleSequenceListNewScheduleSequence = scheduleSequenceListNewScheduleSequence.getRequestAccount();
+                    scheduleSequenceListNewScheduleSequence.setRequestAccount(account);
+                    scheduleSequenceListNewScheduleSequence = em.merge(scheduleSequenceListNewScheduleSequence);
+                    if (oldRequestAccountOfScheduleSequenceListNewScheduleSequence != null && !oldRequestAccountOfScheduleSequenceListNewScheduleSequence.equals(account)) {
+                        oldRequestAccountOfScheduleSequenceListNewScheduleSequence.getScheduleSequenceList().remove(scheduleSequenceListNewScheduleSequence);
+                        oldRequestAccountOfScheduleSequenceListNewScheduleSequence = em.merge(oldRequestAccountOfScheduleSequenceListNewScheduleSequence);
                     }
                 }
             }
@@ -296,10 +298,10 @@ public class AccountJpaController implements Serializable {
                 departmentId.getAccountList().remove(account);
                 departmentId = em.merge(departmentId);
             }
-            List<LabSchedule> labScheduleList = account.getLabScheduleList();
-            for (LabSchedule labScheduleListLabSchedule : labScheduleList) {
-                labScheduleListLabSchedule.setRequestAccount(null);
-                labScheduleListLabSchedule = em.merge(labScheduleListLabSchedule);
+            List<ScheduleSequence> scheduleSequenceList = account.getScheduleSequenceList();
+            for (ScheduleSequence scheduleSequenceListScheduleSequence : scheduleSequenceList) {
+                scheduleSequenceListScheduleSequence.setRequestAccount(null);
+                scheduleSequenceListScheduleSequence = em.merge(scheduleSequenceListScheduleSequence);
             }
             List<Request> requestList = account.getRequestList();
             for (Request requestListRequest : requestList) {

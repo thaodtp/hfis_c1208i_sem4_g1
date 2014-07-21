@@ -119,7 +119,9 @@
                                     <h:outputLabel rendered="#{login.roleAdmin or login.roleHOD}">
                                     <li><h:outputLink value="/admin/complaints.xhtml">All Complaints</h:outputLink></li>
                                     </h:outputLabel>
+                                    <h:outputLabel rendered="#{login.roleIntructor or login.roleHOD}">
                                     <li><h:outputLink value="/admin/my_complaints.xhtml">My Complaints</h:outputLink></li>
+                                    </h:outputLabel>
                                     <li><h:outputLink value="/admin/unresolved_complaints.xhtml" rendered="#{login.roleAdmin}">Unresolved Complaints</h:outputLink></li>
                                     <li><h:outputLink value="/admin/completed_complaints.xhtml" rendered="#{login.roleAdmin}">Completed Complaints</h:outputLink></li>
                                     <li><h:outputLink value="/admin/complaint_resolve.xhtml" rendered="#{login.roleTechnical}">Complaint Resolve</h:outputLink></li>

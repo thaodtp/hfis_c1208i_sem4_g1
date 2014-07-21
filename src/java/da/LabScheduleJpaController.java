@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package da;
 
 import da.exceptions.NonexistentEntityException;
@@ -13,6 +14,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import entity.ScheduleSequence;
 import entity.Lab;
 import entity.Account;
 import entity.LabSchedule;
@@ -50,7 +52,7 @@ public class LabScheduleJpaController implements Serializable {
         return query.getResultList(); 
     }
     public LabSchedule getSchedule(Date date, int slot, Lab lab) {
-        TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.slot = :slot AND l.date=:date AND l.labId=:lab AND (l.status=1 OR l.status=0)", LabSchedule.class);
+        TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.slot = :slot AND l.date=:date AND l.labId=:lab AND (l.sequenceId.status=1 OR l.sequenceId.status=0)", LabSchedule.class);
         query.setParameter("slot", slot);
         query.setParameter("date", date);
         query.setParameter("lab", lab);
@@ -67,24 +69,24 @@ public class LabScheduleJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
+            ScheduleSequence sequenceId = labSchedule.getSequenceId();
+            if (sequenceId != null) {
+                sequenceId = em.getReference(sequenceId.getClass(), sequenceId.getId());
+                labSchedule.setSequenceId(sequenceId);
+            }
             Lab labId = labSchedule.getLabId();
             if (labId != null) {
                 labId = em.getReference(labId.getClass(), labId.getId());
                 labSchedule.setLabId(labId);
             }
-            Account requestAccount = labSchedule.getRequestAccount();
-            if (requestAccount != null) {
-                requestAccount = em.getReference(requestAccount.getClass(), requestAccount.getUsername());
-                labSchedule.setRequestAccount(requestAccount);
-            }
             em.persist(labSchedule);
+            if (sequenceId != null) {
+                sequenceId.getLabScheduleList().add(labSchedule);
+                sequenceId = em.merge(sequenceId);
+            }
             if (labId != null) {
                 labId.getLabScheduleList().add(labSchedule);
                 labId = em.merge(labId);
-            }
-            if (requestAccount != null) {
-                requestAccount.getLabScheduleList().add(labSchedule);
-                requestAccount = em.merge(requestAccount);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -92,9 +94,6 @@ public class LabScheduleJpaController implements Serializable {
                 utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findLabSchedule(labSchedule.getId()) != null) {
-                throw new PreexistingEntityException("LabSchedule " + labSchedule + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -110,19 +109,27 @@ public class LabScheduleJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             LabSchedule persistentLabSchedule = em.find(LabSchedule.class, labSchedule.getId());
+            ScheduleSequence sequenceIdOld = persistentLabSchedule.getSequenceId();
+            ScheduleSequence sequenceIdNew = labSchedule.getSequenceId();
             Lab labIdOld = persistentLabSchedule.getLabId();
             Lab labIdNew = labSchedule.getLabId();
-            Account requestAccountOld = persistentLabSchedule.getRequestAccount();
-            Account requestAccountNew = labSchedule.getRequestAccount();
+            if (sequenceIdNew != null) {
+                sequenceIdNew = em.getReference(sequenceIdNew.getClass(), sequenceIdNew.getId());
+                labSchedule.setSequenceId(sequenceIdNew);
+            }
             if (labIdNew != null) {
                 labIdNew = em.getReference(labIdNew.getClass(), labIdNew.getId());
                 labSchedule.setLabId(labIdNew);
             }
-            if (requestAccountNew != null) {
-                requestAccountNew = em.getReference(requestAccountNew.getClass(), requestAccountNew.getUsername());
-                labSchedule.setRequestAccount(requestAccountNew);
-            }
             labSchedule = em.merge(labSchedule);
+            if (sequenceIdOld != null && !sequenceIdOld.equals(sequenceIdNew)) {
+                sequenceIdOld.getLabScheduleList().remove(labSchedule);
+                sequenceIdOld = em.merge(sequenceIdOld);
+            }
+            if (sequenceIdNew != null && !sequenceIdNew.equals(sequenceIdOld)) {
+                sequenceIdNew.getLabScheduleList().add(labSchedule);
+                sequenceIdNew = em.merge(sequenceIdNew);
+            }
             if (labIdOld != null && !labIdOld.equals(labIdNew)) {
                 labIdOld.getLabScheduleList().remove(labSchedule);
                 labIdOld = em.merge(labIdOld);
@@ -130,14 +137,6 @@ public class LabScheduleJpaController implements Serializable {
             if (labIdNew != null && !labIdNew.equals(labIdOld)) {
                 labIdNew.getLabScheduleList().add(labSchedule);
                 labIdNew = em.merge(labIdNew);
-            }
-            if (requestAccountOld != null && !requestAccountOld.equals(requestAccountNew)) {
-                requestAccountOld.getLabScheduleList().remove(labSchedule);
-                requestAccountOld = em.merge(requestAccountOld);
-            }
-            if (requestAccountNew != null && !requestAccountNew.equals(requestAccountOld)) {
-                requestAccountNew.getLabScheduleList().add(labSchedule);
-                requestAccountNew = em.merge(requestAccountNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -173,15 +172,15 @@ public class LabScheduleJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The labSchedule with id " + id + " no longer exists.", enfe);
             }
+            ScheduleSequence sequenceId = labSchedule.getSequenceId();
+            if (sequenceId != null) {
+                sequenceId.getLabScheduleList().remove(labSchedule);
+                sequenceId = em.merge(sequenceId);
+            }
             Lab labId = labSchedule.getLabId();
             if (labId != null) {
                 labId.getLabScheduleList().remove(labSchedule);
                 labId = em.merge(labId);
-            }
-            Account requestAccount = labSchedule.getRequestAccount();
-            if (requestAccount != null) {
-                requestAccount.getLabScheduleList().remove(labSchedule);
-                requestAccount = em.merge(requestAccount);
             }
             em.remove(labSchedule);
             utx.commit();

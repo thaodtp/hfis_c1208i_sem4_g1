@@ -65,15 +65,15 @@
                                     <td>#{slot} (#{slotUI.getDisplaySlot(slot)})</td>
                                     <ui:repeat value="#{labUI.allLabs}" var="lab">
                                         <td class="text-center">
-                                            <h:commandLink rendered="#{labScheduleUI.getSchedule(lab,slot)!=null and labScheduleUI.curSchedule.status==1}" 
-                                                           value="#{labScheduleUI.curSchedule.summary}" 
+                                            <h:commandLink rendered="#{labScheduleUI.getSchedule(lab,slot)!=null and labScheduleUI.currentLabSchedule.sequenceId.status==1}" 
+                                                           value="#{labScheduleUI.currentLabSchedule.sequenceId.summary}" 
                                                            onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>
                                                 <f:setPropertyActionListener target="#{labScheduleUI.slot}" value="#{slot}"/>
                                                 <f:ajax execute="@this" render=":fSchedule:requestLab" />
                                             </h:commandLink>
                                             <h:commandLink value="Make request" 
-                                                           rendered="#{labScheduleUI.curSchedule==null and labScheduleUI.validDay}"
+                                                           rendered="#{labScheduleUI.currentLabSchedule==null and labScheduleUI.validDay}"
                                                            onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>
                                                 <f:setPropertyActionListener target="#{labScheduleUI.slot}" value="#{slot}"/>
@@ -90,16 +90,16 @@
             </div>
 
             <h:panelGroup id="requestLab" class="height400">
-                <h:panelGroup rendered="#{labScheduleUI.lab!=null}">
+                <h:panelGroup rendered="#{labScheduleUI.slot!=0}">
                     <legend>Schedule Detail</legend>
                     <p>Date: #{labScheduleUI.date}</p>
                     <p>Lab: #{labScheduleUI.lab.name}</p>
                     <p>Slot: #{labScheduleUI.slot} (#{slotUI.getDisplaySlot(labScheduleUI.slot)})</p>
-                    <h:panelGroup class="input-control text" rendered="#{labScheduleUI.curSchedule!=null}">
+                    <h:panelGroup class="input-control text" rendered="#{labScheduleUI.currentLabSchedule!=null}">
                         <label>Detail:</label>
-                        <p>#{labScheduleUI.curSchedule.detail}</p>
+                        <p>#{labScheduleUI.currentLabSchedule.sequenceId.detail}</p>
                     </h:panelGroup>
-                    <h:panelGroup rendered="#{labScheduleUI.curSchedule==null}">
+                    <h:panelGroup rendered="#{labScheduleUI.currentLabSchedule==null}">
                         <div class="input-control textarea">
                             <label>Detail: </label>
                             <h:inputTextarea id="inpDetail" value="#{labScheduleUI.detail}" required="true" requiredMessage="You must provide some infomation about this lab request (purpose)" />

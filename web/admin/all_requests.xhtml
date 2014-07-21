@@ -13,25 +13,25 @@
         <h:form rendered="#{!login.roleAdmin and !login.roleHOD}">
             <h:inputHidden value="#{login.autoLogin}"/>
         </h:form>
-       <h:form id="fSchedule">
+        <h:form id="fSchedule">
             <legend>All request</legend>
             <h:dataTable id="table" value="#{labScheduleUI.allSchedule}" var="schedule">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                         #{schedule.id}
                 </h:column>
-                <h:column>
-                    <f:facet name="header">Date</f:facet>
-                        #{schedule.displayDate}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Lab</f:facet>
-                        #{schedule.labId.name}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Slot</f:facet>
-                        #{schedule.slot}
-                </h:column>
+                <!--                <h:column>
+                                    <f:facet name="header">Date</f:facet>
+                                        {schedule.displayDate}
+                                </h:column>-->
+                <!--                <h:column>
+                                    <f:facet name="header">Lab</f:facet>
+                                        {schedule.}
+                                </h:column>-->
+                <!--                <h:column>
+                                    <f:facet name="header">Slot</f:facet>
+                                        {schedule.slot}
+                                </h:column>-->
                 <h:column>
                     <f:facet name="header">Detail</f:facet>
                         #{schedule.summary}
@@ -39,6 +39,10 @@
                 <h:column>
                     <f:facet name="header">From</f:facet>
                         #{schedule.requestAccount.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                        #{schedule.statuss}
                 </h:column>
                 <h:column>
                     <f:facet name="header">&nbsp;</f:facet>
@@ -73,14 +77,19 @@
                 <div class="panel-header bg-lightBlue fg-white">Lab request detail</div>
                 <div class="panel-content padding10">
                     <p><span class="span2">ID:</span> #{labScheduleUI.curSchedule.id}</p>
-                    <p><span class="span2">Date:</span> #{labScheduleUI.curSchedule.displayDate}</p>
-                    <p><span class="span2">Lab:</span> #{labScheduleUI.curSchedule.labId.name}</p>
-                    <p><span class="span2">Slot:</span> #{labScheduleUI.curSchedule.slot}</p>
-                    <p><p><span class="span2">By:</span> <a href="account_detail.xhtml?user=#{labScheduleUI.curSchedule.requestAccount.username}">#{labScheduleUI.curSchedule.requestAccount.name}&nbsp;</a></p></p>
+                    <!--                    <p><span class="span2">Date:</span> {labScheduleUI.curSchedule.displayDate}</p>
+                                        <p><span class="span2">Lab:</span> {labScheduleUI.curSchedule.labId.name}</p>-->
+                    <!--<p><span class="span2">Slot:</span> {labScheduleUI.curSchedule.slot}</p>-->
+                    <p><p><span class="span2">Requested by:</span> <a href="account_detail.xhtml?user=#{labScheduleUI.curSchedule.requestAccount.username}">#{labScheduleUI.curSchedule.requestAccount.name}&nbsp;</a></p></p>
                     <p><span class="span2">Detail:</span> #{labScheduleUI.curSchedule.detail}</p>
                     <p><span class="span2">Status:</span> #{labScheduleUI.curSchedule.statuss}</p>
-<!--
--->                    <div id='divConfirmDeny' style="display: none;">
+                    <p>Requested:</p>
+                    <ul>
+                        <ui:repeat value="#{labScheduleUI.curSchedule.labScheduleList}" var="sd">
+                            <li>Lab: #{sd.labId.name} on #{sd.slot} on #{sd.displayDate}</li>
+                        </ui:repeat>
+                    </ul>
+                    <div id='divConfirmDeny' style="display: none;">
                         <h:commandLink id="btnDeny" class="button large fg-white bg-blue offset7 span2" value="Confirm" action="#{labScheduleUI.denyLabRequest()}">
                             <f:ajax execute="@form" render="@form :fSchedule" onevent="doAfterAjax" />
                         </h:commandLink>

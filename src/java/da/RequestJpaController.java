@@ -89,9 +89,6 @@ public class RequestJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findRequest(request.getId()) != null) {
-                throw new PreexistingEntityException("Request " + request + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {
