@@ -97,6 +97,11 @@ public class LabScheduleUI implements Serializable {
     }
 
     public void acceptLabRequest() {
+        for(LabSchedule schedule : curSchedule.getLabScheduleList()){
+            if(schedule.getDate().before(new Date())){
+                schedule.setLabId(null);
+            }
+        }
         scheduleManager.acceptLabRequest(curSchedule);
         curSchedule = null;
     }
@@ -151,7 +156,7 @@ public class LabScheduleUI implements Serializable {
         ss.setRequestAccount(loginBean.getAccount());
         scheduleManager.requestLabSequence(ss);
         for (LabSchedule ls : addPreparation) {
-            if (ls.getLabId() != null) {
+            if (ls.getLabId() != null && ls.getSlot()!=-1) {
                 labScheduleManager.requestLab(ls);
             }
         }
