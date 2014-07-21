@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import da.exceptions.NonexistentEntityException;
@@ -41,16 +40,26 @@ public class LabScheduleJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    public List<LabSchedule> getUnacceptedSchedule(){
+
+    public List<LabSchedule> getUnacceptedSchedule() {
         TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.status=0 AND l.date>:date", LabSchedule.class);
         query.setParameter("date", new Date());
-        return query.getResultList();        
+        return query.getResultList();
     }
-    public List<LabSchedule> getAllSchedule(){
+
+    public List<LabSchedule> getAllSchedule() {
         TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l where l.date>:date", LabSchedule.class);
         query.setParameter("date", new Date());
-        return query.getResultList(); 
+        return query.getResultList();
     }
+
+    public List<LabSchedule> getScheduleByDS(Date date, int slot) {
+        TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.slot = :slot AND l.date=:date AND (l.sequenceId.status=1 OR l.sequenceId.status=0)", LabSchedule.class);
+        query.setParameter("slot", slot);
+        query.setParameter("date", date);
+        return query.getResultList();
+    }
+
     public LabSchedule getSchedule(Date date, int slot, Lab lab) {
         TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.slot = :slot AND l.date=:date AND l.labId=:lab AND (l.sequenceId.status=1 OR l.sequenceId.status=0)", LabSchedule.class);
         query.setParameter("slot", slot);

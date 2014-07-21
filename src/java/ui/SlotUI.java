@@ -25,7 +25,7 @@ import javax.faces.bean.RequestScoped;
 @RequestScoped
 public class SlotUI {
     Map<Integer,Date> slotTime;
-    SimpleDateFormat format = new SimpleDateFormat("hh:mm");
+    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
     /**
      * Creates a new instance of SlotUI
      */
