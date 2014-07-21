@@ -17,57 +17,95 @@
             </ui:define>
 
             <ui:define name="content">
-                <div id="calendar" class="calendar"></div>
-                <!--                <h:form id="hiddenForm">
-                                    
-                                </h:form>-->
-                <h:form id="mainForm">
-                    <h:inputHidden id="date" value="#{labScheduleUI.date}" />
-                    <script>
-                        $(".calendar").calendar({
-                            format: 'dd/mm/yyyy', //default 'yyyy-mm-dd'
-                            multiSelect: true, //default true (multi select date)
-                            startMode: 'day', //year, month, day
-                            otherDays: false, // show days for previous and next months,
-                            weekStart: 1, //start week from sunday - 0 or monday - 1
-                            getDates: function(data) {
-                                var r = "";
-                                $.each(data, function(i, d) {
-                                    r += d + ",";
-                                });
-                                //                            out.html(r);
-                                document.getElementById("mainForm:date").value = r;
-                                //                            $("#hiddenForm:date").val(r);
-                            },
-                            click: function(d) {
-                                //                            $("#calendar-output2").val(d);
-                                //                            $("hiddenForm:date").val(d);
-                                //                            $("#btnSend").click();
-                            }
-                        });
-                    </script>
-                    <h:selectOneMenu value="#{labScheduleUI.slot}">
-                        <f:selectItems value="#{labScheduleUI.slots}" var="slot" itemValue="#{slot}" itemLabel="Slot #{slot} (#{slotUI.getDisplaySlot(slot)})" />
-                    </h:selectOneMenu>
-                    <h:commandButton action="#{labScheduleUI.checkLab()}" value="Check Schedule">
-                        <f:ajax execute="@form" render=":mainForm:preparationDetail"/>
-                    </h:commandButton>
-                    <h:panelGroup id="preparationDetail">
-                        <h:panelGroup rendered="#{labScheduleUI.addPreparation!=null}">
-                            <ul>
-                                <ui:repeat value="#{labScheduleUI.addPreparation}" var="ls">
-                                    <h:outputLabel rendered="#{ls.labId!=null}">
-                                        <li>Date: #{ls.displayDate} Slot: #{ls.slot} Lab: #{ls.labId.name}</li>
-                                    </h:outputLabel>
-                                    <h:outputLabel rendered="#{ls.labId==null}">
-                                        <li class="fg-red">Date: #{ls.displayDate} Slot: #{ls.slot} No lab available (this entry won't be include to the request)</li>
-                                    </h:outputLabel>
-                                </ui:repeat>
-                            </ul>
-                            <h:commandButton action="#{labScheduleUI.requestLab()}" value='Confirm'></h:commandButton>
-                        </h:panelGroup>
-                    </h:panelGroup>
-                </h:form>
+                <div class="grid">
+                    <div class="row">
+                        <div class="span6">
+                            <div id="calendar" class="calendar small"></div>
+                        </div>
+                        <!--                <h:form id="hiddenForm">
+                                            
+                                        </h:form>-->
+                        <div class="span6">
+                            <h:form id="mainForm">
+                                <h:inputHidden id="date" value="#{labScheduleUI.date}" />
+                                <script>
+                                    $(".calendar").calendar({
+                                        format: 'dd/mm/yyyy', //default 'yyyy-mm-dd'
+                                        multiSelect: true, //default true (multi select date)
+                                        startMode: 'day', //year, month, day
+                                        otherDays: false, // show days for previous and next months,
+                                        weekStart: 1, //start week from sunday - 0 or monday - 1
+                                        getDates: function(data) {
+                                            var r = "";
+                                            $.each(data, function(i, d) {
+                                                r += d + ",";
+                                            });
+                                            //                            out.html(r);
+                                            document.getElementById("mainForm:date").value = r;
+                                            //                            $("#hiddenForm:date").val(r);
+                                        },
+                                        click: function(d) {
+                                            //                            $("#calendar-output2").val(d);
+                                            //                            $("hiddenForm:date").val(d);
+                                            //                            $("#btnSend").click();
+                                        }
+                                    });
+                                </script>
+                                <div class="input-control select">
+                                    <h:selectOneMenu value="#{labScheduleUI.slot}">
+                                        <f:selectItems value="#{labScheduleUI.slots}" var="slot" itemValue="#{slot}" itemLabel="Slot #{slot} (#{slotUI.getDisplaySlot(slot)})" />
+                                    </h:selectOneMenu>
+                                </div>
+                                <h:commandLink class="button large fg-white bg-blue span12" 
+                                               value="Check Schedule" 
+                                               action="#{labScheduleUI.checkLab()}">
+                                    <f:ajax execute="@form" render=":mainForm:preparationDetail"/>
+                                </h:commandLink>
+                                <h:panelGroup id="preparationDetail">
+                                    <h:outputText class="fg-red" value="#{labScheduleUI.message}"></h:outputText>
+                                    <h:panelGroup rendered="#{labScheduleUI.addPreparation!=null}">
+                                        <ul>
+                                            <ui:repeat value="#{labScheduleUI.addPreparation}" var="ls">
+                                                <li>
+                                                    <h:outputText class="fg-red" rendered="#{ls.slot==-1}" value="Date: #{ls.displayDate} Too late to request schedule" />
+                                                    <h:panelGroup rendered="#{ls.slot!=-1}">
+                                                        <h:outputText escape="false" value="Date: #{ls.displayDate} &lt;br /&gt; Slot: #{ls.slot} &lt;br /&gt;" />                                                    
+                                                        <h:outputText rendered="#{ls.labId!=null}" value="Lab: #{ls.labId.name}"/>
+                                                        <h:outputText class="fg-red" rendered="#{ls.labId==null}" value="No lab available (this entry won't be include in the request)"/>
+                                                    </h:panelGroup>
+                                                </li>
+                                            </ui:repeat>
+                                        </ul>
+                                        <script>
+                                            function displayConfirm(x, y) {
+                                                document.getElementById('divAccept').style.display = x;
+                                                document.getElementById('divConfirm').style.display = y;
+                                            }
+                                        </script>
+                                        <div id='divConfirm' style="display: none;">
+                                            <h:commandLink id="btnAccept" 
+                                                           class="button large fg-white bg-blue span6" 
+                                                           value="Confirm" 
+                                                           action="#{labScheduleUI.requestLab()}">
+                                                <f:ajax execute="@form" render=":mainForm:preparationDetail" />
+                                            </h:commandLink>
+                                            <a class="button large fg-white bg-blue span6" 
+                                               onclick="displayConfirm('inherit', 'none')">
+                                                Cancel
+                                            </a>
+                                        </div>
+                                        <div id='divAccept'>
+                                            <a class="button large fg-white bg-blue span12" 
+                                               onclick="displayConfirm('none', 'inherit')">
+                                                Accept
+                                            </a>
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
             </ui:define>
 
         </ui:composition>

@@ -57,6 +57,7 @@ public class LabScheduleUI implements Serializable {
     private int slot;
     private String detail;
     private List<LabSchedule> addPreparation;
+    private String msg;
 
     /**
      * Creates a new instance of LabScheduleUI
@@ -114,6 +115,8 @@ public class LabScheduleUI implements Serializable {
     public void checkLab() {
         addPreparation = new LinkedList();
         String[] dates = date.split(",");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, 2);
         for (String d : dates) {
             try {
                 LabSchedule ls = new LabSchedule();
@@ -124,14 +127,21 @@ public class LabScheduleUI implements Serializable {
                 } else {
                     ls.setLabId(freeLabs.get(0));
                 }
-                ls.setSlot(slot);
+                if (cal.getTime().after(dd)) {
+                    ls.setSlot(-1);
+                } else {
+                    ls.setSlot(slot);
+                }
                 ls.setDate(dd);
                 addPreparation.add(ls);
 //                ls.setSequenceId(ss);
 //                labScheduleManager.requestLab(ls);
             } catch (ParseException ex) {
-                Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        if (addPreparation.isEmpty()) {
+            msg = "You haven't choose any day to check";
+            addPreparation = null;
         }
     }
 
@@ -149,6 +159,12 @@ public class LabScheduleUI implements Serializable {
         slot = 0;
         lab = null;
         addPreparation = null;
+    }
+
+    public String getMessage() {
+        String t = msg;
+        msg = "";
+        return t;
     }
 
     public String getDetail() {

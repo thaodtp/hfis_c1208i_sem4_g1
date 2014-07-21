@@ -86,41 +86,44 @@
                 </div>
             </nav>
         </header>  
-        <div>
-            <h:graphicImage url="/resources/images/banner.png"/>
-        </div>
+
         <div class="grid fluid">
+            <div class="row">
+                <div class="span12">
+                    <h:graphicImage url="/resources/images/banner.png"/>
+                </div>
+            </div>
             <div class="row">
                 <div class="span3" style="margin-left: 15px;">
                     <nav class="sidebar light">
                         <ul>
                             <li class="title">Control Panel</li>
                             <h:outputLabel rendered="#{login.roleAdmin}">
-                            <li class="stick bg-orange"><h:outputLink value="/admin/statistic.xhtml">Statistic</h:outputLink></li>                                   
-                            <li class="stick bg-pink"><h:outputLink value="/admin/accounts.xhtml">Account</h:outputLink></li>
-                            <li class="stick bg-blue"><h:outputLink  value="/admin/departments.xhtml">Department</h:outputLink></li>
-                            <li class="stick bg-green"><h:outputLink value="/admin/labs.xhtml">Lab</h:outputLink></li>
+                                <li class="stick bg-orange"><h:outputLink value="/admin/statistic.xhtml">Statistic</h:outputLink></li>                                   
+                                <li class="stick bg-pink"><h:outputLink value="/admin/accounts.xhtml">Account</h:outputLink></li>
+                                <li class="stick bg-blue"><h:outputLink  value="/admin/departments.xhtml">Department</h:outputLink></li>
+                                <li class="stick bg-green"><h:outputLink value="/admin/labs.xhtml">Lab</h:outputLink></li>
                             </h:outputLabel>
                             <h:outputLabel rendered="#{!login.roleTechnical}">
-                            <li class="stick bg-yellow">
-                                <a class="dropdown-toggle" href="#" ><i class="icon-tree-view"></i>Time-Table</a>
-                                <ul class="dropdown-menu" data-role="dropdown">
-                                    <li><h:outputLink value="/labschedule.xhtml">Time-Table <h:outputLabel rendered="#{!login.roleAdmin}">(Make Request)</h:outputLabel></h:outputLink></li>                       
-                                    <li><h:outputLink value="/admin/all_requests.xhtml" rendered="#{!login.roleIntructor}">All Requests</h:outputLink></li>
-                                    <li><h:outputLink value="/admin/my_requests.xhtml" rendered="#{!login.roleAdmin}">My Requests</h:outputLink></li>
-                                    <li><h:outputLink value="/admin/requests.xhtml" rendered="#{login.roleAdmin}">Unresolved Requests</h:outputLink></li>
-                                </ul>
-                            </li>
+                                <li class="stick bg-yellow">
+                                    <a class="dropdown-toggle" href="#" ><i class="icon-tree-view"></i>Time-Table</a>
+                                    <ul class="dropdown-menu" data-role="dropdown">
+                                        <li><h:outputLink value="/labschedule.xhtml">Time-Table <h:outputLabel rendered="#{!login.roleAdmin}">(Make Request)</h:outputLabel></h:outputLink></li>                       
+                                        <li><h:outputLink value="/admin/all_requests.xhtml" rendered="#{!login.roleIntructor}">All Requests</h:outputLink></li>
+                                        <li><h:outputLink value="/admin/my_requests.xhtml" rendered="#{!login.roleAdmin}">My Requests</h:outputLink></li>
+                                        <li><h:outputLink value="/admin/requests.xhtml" rendered="#{login.roleAdmin}">Unresolved Requests</h:outputLink></li>
+                                    </ul>
+                                </li>
                             </h:outputLabel>
                             <li class="stick bg-black">
                                 <a class="dropdown-toggle" href="#"><i class="icon-tree-view"></i>Complaint</a>
                                 <ul class="dropdown-menu" data-role="dropdown">
                                     <li><h:outputLink value="/admin/create_complaint.xhtml">Make Complaint</h:outputLink></li>
                                     <h:outputLabel rendered="#{login.roleAdmin or login.roleHOD}">
-                                    <li><h:outputLink value="/admin/complaints.xhtml">All Complaints</h:outputLink></li>
+                                        <li><h:outputLink value="/admin/complaints.xhtml">All Complaints</h:outputLink></li>
                                     </h:outputLabel>
                                     <h:outputLabel rendered="#{login.roleIntructor or login.roleHOD}">
-                                    <li><h:outputLink value="/admin/my_complaints.xhtml">My Complaints</h:outputLink></li>
+                                        <li><h:outputLink value="/admin/my_complaints.xhtml">My Complaints</h:outputLink></li>
                                     </h:outputLabel>
                                     <li><h:outputLink value="/admin/unresolved_complaints.xhtml" rendered="#{login.roleAdmin}">Unresolved Complaints</h:outputLink></li>
                                     <li><h:outputLink value="/admin/completed_complaints.xhtml" rendered="#{login.roleAdmin}">Completed Complaints</h:outputLink></li>
