@@ -103,9 +103,7 @@ public class LabScheduleUI implements Serializable {
     public List<Lab> getFreeLab(Date date, int slot) {
         List<Lab> allLabs = labManager.displayLabs();
         List<LabSchedule> schedules = labScheduleManager.getScheduleByDS(date, slot);
-        System.out.println(allLabs.size()+" "+schedules.size()+" "+date+" "+slot);
         for (LabSchedule ls : schedules) {
-            System.out.println(ls);
             if (allLabs.contains(ls.getLabId())) {
                 allLabs.remove(ls.getLabId());
             }
@@ -115,15 +113,11 @@ public class LabScheduleUI implements Serializable {
 
     public void checkLab() {
         addPreparation = new LinkedList();
-//        System.out.println(date);
         String[] dates = date.split(",");
-        System.out.println("Dates[]: " +dates.length);
         for (String d : dates) {
             try {
                 LabSchedule ls = new LabSchedule();
-                System.out.println(d);
                 Date dd = new SimpleDateFormat("dd/MM/yyyy").parse(d);
-                System.out.println(labScheduleManager.getScheduleByDS(dd, slot).size());
                 List<Lab> freeLabs = getFreeLab(dd, slot);
                 if (freeLabs.isEmpty()) {
                     ls.setLabId(null);
