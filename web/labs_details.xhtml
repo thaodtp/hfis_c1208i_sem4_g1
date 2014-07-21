@@ -1,37 +1,37 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./main_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="head">
+        <h:outputScript name="/js/jquery.dataTables.js" />
+        <h:outputStylesheet name="/css/jquery.dataTables.css"/>
+    </ui:define>
+    
+    <ui:define name="content">
+        
 
-    <body>
-        <ui:composition template="./main_template.xhtml">
-            <ui:define name="content">
-                <legend><h2>Lab Room Details</h2></legend>
-                <h:dataTable value="#{labUI.labs}" var="lab" class="table hovered bordered">
-                    <h:column>
-                        <f:facet name="header">ID</f:facet>
-                        <p>    #{lab.id} </p>
-                    </h:column >
-                    <h:column>
-                        <f:facet name="header">Name</f:facet>
-                        <p> #{lab.name}</p>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Type</f:facet>
-                        <p> <h:outputText rendered="#{lab.type==1}" value="Lab Room"/> </p>
-                    </h:column>                
-                    <h:column>
-                        <f:facet name="header">Status</f:facet>
-                        <p>
-                            <h:outputText rendered="#{lab.status==1}" value="Busy"/> 
-                            <h:outputText rendered="#{lab.status==0}" value="Available"/> 
-                            <h:outputText rendered="#{lab.status==-1}" value="Closed"/> 
-                        </p>
-                    </h:column>               
-                </h:dataTable>
-            </ui:define>
-        </ui:composition>
-    </body>
-</html>
+        
+
+
+        <h:dataTable id="table" value="#{labUI.labs}" var="a">
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                <p> #{a.name}</p>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Detail</f:facet>
+                <p> #{a.detail}</p>
+            </h:column>                       
+
+        </h:dataTable>
+        <script>
+            $(document).ready(function() {
+                $('#table').DataTable();
+            });
+        </script>
+    </ui:define>
+
+</ui:composition>
+

@@ -7,7 +7,7 @@
 
     <body>
 
-        <ui:composition template="./../main_template.xhtml">
+        <ui:composition template="./../controlpanel_template.xhtml">
 
             <ui:define name="content">
                 <h:form style="margin-left: 30px;">
@@ -17,14 +17,13 @@
                         <div class="input-control textarea">
                             <h:inputTextarea value="#{requestUI.content}" style="width: 800px; height: auto;" />
                         </div>      
-                        <label>Type</label>
+<!--                        <label>Type</label>
                         <div class="input-control select">
                             <h:selectOneMenu value="#{requestUI.type}" >
                                 <f:selectItem itemLabel="Complaint" itemValue="2" />
                                 <f:selectItem itemLabel="Report" itemValue="3" />
-                                <f:selectItem itemLabel="Message" itemValue="4" />
                             </h:selectOneMenu>
-                        </div>
+                        </div>-->
                         <br/>
                         <h:commandButton action="#{requestUI.create()}" value="Submit" />
                         <p class="fg-red margin20"><h:outputText value="#{requestUI.msg}" /></p>

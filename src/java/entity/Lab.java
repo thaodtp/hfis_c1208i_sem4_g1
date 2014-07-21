@@ -37,6 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Lab.findByType", query = "SELECT l FROM Lab l WHERE l.type = :type"),
     @NamedQuery(name = "Lab.findByStatus", query = "SELECT l FROM Lab l WHERE l.status = :status")})
 public class Lab implements Serializable {
+    @Size(max = 2147483647)
+    @Column(name = "Detail")
+    private String detail;
     public static final int ROOM_LAB = 1;
     public static final int ROOM_SERVER = 2;
     
@@ -152,6 +155,14 @@ public class Lab implements Serializable {
     @Override
     public String toString() {
         return "entity.Lab[ id=" + id + " ]";
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
     
 }

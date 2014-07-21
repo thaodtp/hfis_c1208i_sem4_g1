@@ -93,10 +93,11 @@ public class Request implements Serializable {
         this.type = type;
     }
 
-    public Request(String content, int status, int type, Account requestAccount, Account resolveAccount) {
+    public Request(String content, Date time, int status, int type, Account requestAccount, Account resolveAccount) {
         this.content = content;
         this.status = status;
         this.type = type;
+        this.time = time;
         this.requestAccount = requestAccount;
         this.resolveAccount = resolveAccount;
     }

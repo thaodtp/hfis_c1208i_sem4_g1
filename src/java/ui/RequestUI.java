@@ -53,9 +53,11 @@ public class RequestUI implements Serializable {
         requestManager.edit(currrentReq);
 //        sendMessage(resolveAccount, "You have 1 new request");
     }
-    public List<Request> getMessages(){
+
+    public List<Request> getMessages() {
         return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_MESSAGE);
     }
+
     public void completeRequest() {
         currrentReq.setStatus(Request.STATUS_COMPLETE);
         requestManager.edit(currrentReq);
@@ -77,7 +79,6 @@ public class RequestUI implements Serializable {
 //    public void sendMessage(Account toUser, String content) {
 //        requestManager.sendMessage(toUser, content);
 //    }
-
     public Map<String, Integer> createStatistic(int type) {
         Map<String, Integer> result = new HashMap<>();
         List<Request> source = requestManager.getRequests(type);
@@ -124,7 +125,7 @@ public class RequestUI implements Serializable {
     public List<Request> getAllComplaint() {
         return requestManager.getRequests(Request.TYPE_COMPLAINT);
     }
-    
+
     public List<Request> getCompletedComplaints() {
         return requestManager.getRequestsByStatus(Request.STATUS_COMPLETE, Request.TYPE_COMPLAINT);
     }
@@ -135,8 +136,10 @@ public class RequestUI implements Serializable {
                 msg = "Content too short";
                 return "";
             }
-           // requestManager.create(new Request(content, status, type, requestAccount, resolveAccount));
-            requestManager.create(new Request(content, type));
+            requestManager.create(new Request(content, new Date(),
+                    Request.STATUS_PENDING,
+                    Request.TYPE_COMPLAINT, loginBean.getAccount(), null));
+//            requestManager.create(new Request(content, type));
             return "/success.xhtml";
         } catch (Exception ex) {
             msg = "Can't send complaint";
@@ -200,5 +203,5 @@ public class RequestUI implements Serializable {
     public void setLoginBean(Login loginBean) {
         this.loginBean = loginBean;
     }
-    
+
 }
