@@ -67,14 +67,11 @@ public class ScheduleSequenceJpaController implements Serializable {
             }
             List<LabSchedule> attachedLabScheduleList = new ArrayList<LabSchedule>();
             for (LabSchedule labScheduleListLabScheduleToAttach : scheduleSequence.getLabScheduleList()) {
-//                em.persist(labScheduleListLabScheduleToAttach);
-//                em.flush();
                 labScheduleListLabScheduleToAttach = em.getReference(labScheduleListLabScheduleToAttach.getClass(), labScheduleListLabScheduleToAttach.getId());
                 attachedLabScheduleList.add(labScheduleListLabScheduleToAttach);
             }
             scheduleSequence.setLabScheduleList(attachedLabScheduleList);
             em.persist(scheduleSequence);
-//            em.flush();
             if (requestAccount != null) {
                 requestAccount.getScheduleSequenceList().add(scheduleSequence);
                 requestAccount = em.merge(requestAccount);
@@ -94,9 +91,6 @@ public class ScheduleSequenceJpaController implements Serializable {
                 utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findScheduleSequence(scheduleSequence.getId()) != null) {
-                throw new PreexistingEntityException("ScheduleSequence " + scheduleSequence + " already exists.", ex);
             }
             throw ex;
         } finally {

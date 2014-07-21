@@ -85,7 +85,7 @@
                     <p>Requested:</p>
                     <ul>
                         <ui:repeat value="#{labScheduleUI.curSchedule.labScheduleList}" var="sd">
-                            <li>Lab: #{sd.labId.name} on #{sd.slot} on #{sd.displayDate}</li>
+                            <li>Lab: #{sd.labId.name} on slot #{sd.slot} on #{sd.displayDate}</li>
                         </ui:repeat>
                     </ul>
                     <!--
