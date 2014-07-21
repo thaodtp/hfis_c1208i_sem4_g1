@@ -45,7 +45,9 @@ public class LabScheduleManager {
         }
         return daController;
     }
-    
+    public List<LabSchedule> getScheduleByDS(Date date, int slot){
+        return getDaController().getScheduleByDS(date, slot);
+    }
     public void requestLab(LabSchedule schedule){
         try {
 //            schedule.getSequenceId().setStatus(LabSchedule.STATUS_PENDING);

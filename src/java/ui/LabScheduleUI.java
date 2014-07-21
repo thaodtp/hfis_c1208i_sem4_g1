@@ -45,6 +45,8 @@ public class LabScheduleUI implements Serializable {
     private ScheduleManager scheduleManager;
     @EJB
     private LabScheduleManager labScheduleManager;
+    @EJB
+    private LabManager labManager;
     @ManagedProperty(value = "#{login}")
     private Login loginBean;
     private String date;
@@ -54,6 +56,7 @@ public class LabScheduleUI implements Serializable {
     private Lab lab;
     private int slot;
     private String detail;
+    private List<LabSchedule> addPreparation;
 
     /**
      * Creates a new instance of LabScheduleUI
@@ -97,29 +100,55 @@ public class LabScheduleUI implements Serializable {
         curSchedule = null;
     }
 
+    public List<Lab> getFreeLab(Date d, int slot) {
+        List<Lab> allLabs = labManager.displayLabs();
+        List<LabSchedule> schedules = labScheduleManager.getScheduleByDS(d, slot);
+        for (LabSchedule ls : schedules) {
+            if (allLabs.contains(ls.getLabId())) {
+                allLabs.remove(ls.getLabId());
+            }
+        }
+        return allLabs;
+    }
+
+    public void checkLab() {
+        addPreparation = new LinkedList();
+        String[] dates = date.split(",");
+        for (String d : dates) {
+            try {
+                LabSchedule ls = new LabSchedule();
+                Date dd = new SimpleDateFormat("dd/MM/yyyy").parse(d);
+                List<Lab> freeLabs = getFreeLab(dd, slot);
+                if (freeLabs.isEmpty()) {
+                    ls.setLabId(null);
+                } else {
+                    ls.setLabId(freeLabs.get(0));
+                }
+                ls.setSlot(slot);
+                ls.setDate(dd);
+                addPreparation.add(ls);
+//                ls.setSequenceId(ss);
+//                labScheduleManager.requestLab(ls);
+            } catch (ParseException ex) {
+                Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     public void requestLab() {
         ScheduleSequence ss = new ScheduleSequence();
         ss.setDetail(detail);
         ss.setRequestAccount(loginBean.getAccount());
         scheduleManager.requestLabSequence(ss);
-        String[] dates = date.split(",");
-//        List<LabSchedule> schedules = new LinkedList<>();
-        for (String d : dates) {
-            try {
-                LabSchedule ls = new LabSchedule();
-                ls.setLabId(lab);
-                ls.setSlot(slot);
-                ls.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(date));
-                ls.setSequenceId(ss);
+        for (LabSchedule ls : addPreparation) {
+            if (ls.getLabId() != null) {
                 labScheduleManager.requestLab(ls);
-//                schedules.add(ls);
-            } catch (ParseException ex) {
-                Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-//        ss.setLabScheduleList(schedules);
+
         slot = 0;
         lab = null;
+        addPreparation = null;
     }
 
     public String getDetail() {
@@ -191,4 +220,13 @@ public class LabScheduleUI implements Serializable {
     public void setCurrentLabSchedule(LabSchedule currentLabSchedule) {
         this.currentLabSchedule = currentLabSchedule;
     }
+
+    public List<LabSchedule> getAddPreparation() {
+        return addPreparation;
+    }
+
+    public void setAddPreparation(List<LabSchedule> addPreparation) {
+        this.addPreparation = addPreparation;
+    }
+
 }
