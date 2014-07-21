@@ -116,9 +116,9 @@ public class Department implements Serializable {
     public String toString() {
         return "entity.Department[ id=" + id + " ]";
     }
-
+    
     public boolean isEmpty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+}
     
 }

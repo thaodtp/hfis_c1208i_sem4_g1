@@ -7,9 +7,11 @@ package ui;
 
 import biz.LabManager;
 import biz.LabScheduleManager;
+import biz.ScheduleManager;
 import entity.Account;
 import entity.Lab;
 import entity.LabSchedule;
+import entity.ScheduleSequence;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -39,15 +42,19 @@ import javax.faces.event.ValueChangeEvent;
 public class LabScheduleUI implements Serializable {
 
     @EJB
-    private LabScheduleManager scheduleManager;
-    @ManagedProperty(value="#{login}")
+    private ScheduleManager scheduleManager;
+    @EJB
+    private LabScheduleManager labScheduleManager;
+    @ManagedProperty(value = "#{login}")
     private Login loginBean;
     private String date;
     private List<Integer> slots;
-    private LabSchedule curSchedule;
+    private ScheduleSequence curSchedule;
+    private LabSchedule currentLabSchedule;
     private Lab lab;
     private int slot;
     private String detail;
+
     /**
      * Creates a new instance of LabScheduleUI
      */
@@ -61,7 +68,6 @@ public class LabScheduleUI implements Serializable {
         this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
-   
     public boolean isValidDay() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, 3);
@@ -73,12 +79,14 @@ public class LabScheduleUI implements Serializable {
         }
     }
 
-    public List<LabSchedule> getUnacceptedSchedule() {
+    public List<ScheduleSequence> getUnacceptedSchedule() {
         return scheduleManager.getUnacceptedSchedule();
     }
-    public List<LabSchedule> getAllSchedule(){
+
+    public List<ScheduleSequence> getAllSchedule() {
         return scheduleManager.getAllSchedule();
     }
+
     public void denyLabRequest() {
         scheduleManager.denyLabRequest(curSchedule);
         curSchedule = null;
@@ -90,18 +98,27 @@ public class LabScheduleUI implements Serializable {
     }
 
     public void requestLab() {
-        LabSchedule ls = new LabSchedule();
-        ls.setLabId(lab);
-        try {
-            ls.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(date));
-        } catch (ParseException ex) {
-            Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
-            ls.setDate(new Date());
+        ScheduleSequence ss = new ScheduleSequence();
+        ss.setDetail(detail);
+        ss.setRequestAccount(loginBean.getAccount());
+        scheduleManager.requestLabSequence(ss);
+        String[] dates = date.split(",");
+//        List<LabSchedule> schedules = new LinkedList<>();
+        for (String d : dates) {
+            try {
+                LabSchedule ls = new LabSchedule();
+                ls.setLabId(lab);
+                ls.setSlot(slot);
+                ls.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(date));
+                ls.setSequenceId(ss);
+                labScheduleManager.requestLab(ls);
+//                schedules.add(ls);
+            } catch (ParseException ex) {
+                Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        ls.setSlot(slot);
-        ls.setDetail(detail);
-        ls.setRequestAccount(loginBean.getAccount());
-        scheduleManager.requestLab(ls);
+//        ss.setLabScheduleList(schedules);
+        slot = 0;
         lab = null;
     }
 
@@ -128,7 +145,7 @@ public class LabScheduleUI implements Serializable {
     public void setSlot(int slot) {
         this.slot = slot;
     }
-    
+
     public String getDate() {
         return date;
     }
@@ -139,22 +156,21 @@ public class LabScheduleUI implements Serializable {
 
     public LabSchedule getSchedule(Lab lab, int slot) {
         try {
-            curSchedule = scheduleManager.getSchedule(new SimpleDateFormat("dd/MM/yyyy").parse(date), slot, lab);
-            return curSchedule;
+            currentLabSchedule = labScheduleManager.getSchedule(new SimpleDateFormat("dd/MM/yyyy").parse(date), slot, lab);
+            return currentLabSchedule;
         } catch (ParseException ex) {
             Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
 
-    public LabSchedule getCurSchedule() {
+    public ScheduleSequence getCurSchedule() {
         return curSchedule;
     }
 
-    public void setCurSchedule(LabSchedule curSchedule) {
+    public void setCurSchedule(ScheduleSequence curSchedule) {
         this.curSchedule = curSchedule;
     }
-
 
     public List<Integer> getSlots() {
         return slots;
@@ -167,5 +183,12 @@ public class LabScheduleUI implements Serializable {
     public void setLoginBean(Login loginBean) {
         this.loginBean = loginBean;
     }
-    
+
+    public LabSchedule getCurrentLabSchedule() {
+        return currentLabSchedule;
+    }
+
+    public void setCurrentLabSchedule(LabSchedule currentLabSchedule) {
+        this.currentLabSchedule = currentLabSchedule;
+    }
 }

@@ -7,14 +7,9 @@
 
     <body>
 
-        <ui:composition template="./../controlpanel_template.xhtml">
-            <f:metadata>
-                <f:viewParam value="#{requestUI.requestAccount}" name="requestAccount"/>
-            </f:metadata>
+        <ui:composition template="./../main_template.xhtml">
+
             <ui:define name="content">
-                <h:form rendered="#{!login.roleTechnical and !login.roleHOD and !login.roleIntructor and !login.roleAdmin} ">
-                    <h:inputHidden value="#{login.autoLogin}"/>
-                </h:form>
                 <h:form style="margin-left: 30px;">
                     <fieldset>
                         <legend>Complaint / Report</legend>

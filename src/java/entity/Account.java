@@ -87,14 +87,14 @@ public class Account implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "Phone")
     private String phone;
-    @OneToMany(mappedBy = "requestAccount")
-    private List<LabSchedule> labScheduleList;
     @JoinColumn(name = "DepartmentId", referencedColumnName = "Id")
     @ManyToOne
     private Department departmentId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resolveAccount")
+    @OneToMany(mappedBy = "requestAccount")
+    private List<ScheduleSequence> scheduleSequenceList;
+    @OneToMany(mappedBy = "resolveAccount")
     private List<Request> requestList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "requestAccount")
+    @OneToMany(mappedBy = "requestAccount")
     private List<Request> requestList1;
 
     public Account() {
@@ -189,21 +189,21 @@ public class Account implements Serializable {
         this.phone = phone;
     }
 
-    @XmlTransient
-    public List<LabSchedule> getLabScheduleList() {
-        return labScheduleList;
-    }
-
-    public void setLabScheduleList(List<LabSchedule> labScheduleList) {
-        this.labScheduleList = labScheduleList;
-    }
-
     public Department getDepartmentId() {
         return departmentId;
     }
 
     public void setDepartmentId(Department departmentId) {
         this.departmentId = departmentId;
+    }
+
+    @XmlTransient
+    public List<ScheduleSequence> getScheduleSequenceList() {
+        return scheduleSequenceList;
+    }
+
+    public void setScheduleSequenceList(List<ScheduleSequence> scheduleSequenceList) {
+        this.scheduleSequenceList = scheduleSequenceList;
     }
 
     @XmlTransient
@@ -248,5 +248,5 @@ public class Account implements Serializable {
     public String toString() {
         return "entity.Account[ username=" + username + " ]";
     }
-
+    
 }
