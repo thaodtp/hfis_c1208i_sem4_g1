@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import da.exceptions.NonexistentEntityException;
@@ -39,30 +38,36 @@ public class LabJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    public List<Lab> getAllLabs(){
+
+    public List<Lab> getAllLabs() {
         TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l", Lab.class);
-        return query.getResultList();  
+        return query.getResultList();
     }
-    public List<Lab> displayLabs(){
+
+    public List<Lab> displayLabs() {
         TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l WHERE l.type = :type", Lab.class);
-        query.setParameter("type",1);
-        return  query.getResultList();  
+        query.setParameter("type", 1);
+        return query.getResultList();
     }
-    public List<Lab> displayServerRoom(){
+
+    public List<Lab> displayServerRoom() {
         TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l WHERE l.type = :type", Lab.class);
         query.setParameter("type", 2);
-        return  query.getResultList();  
+        return query.getResultList();
     }
-    public List<Lab> getRoomByType(int type){
+
+    public List<Lab> getRoomByType(int type) {
         TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l WHERE l.type = :type", Lab.class);
         query.setParameter("type", type);
-        return  query.getResultList();
+        return query.getResultList();
     }
-    public Lab getLabById(int id){
+
+    public Lab getLabById(int id) {
         TypedQuery<Lab> query = getEntityManager().createQuery("SELECT l FROM Lab l WHERE l.id = :id", Lab.class);
         query.setParameter("id", id);
         return query.getResultList().get(0);
     }
+
     public void create(Lab lab) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (lab.getLabScheduleList() == null) {
             lab.setLabScheduleList(new ArrayList<LabSchedule>());
@@ -93,9 +98,6 @@ public class LabJpaController implements Serializable {
                 utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findLab(lab.getId()) != null) {
-                throw new PreexistingEntityException("Lab " + lab + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -238,5 +240,5 @@ public class LabJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

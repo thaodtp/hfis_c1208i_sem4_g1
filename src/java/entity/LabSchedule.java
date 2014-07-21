@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,16 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "LabSchedule.findAll", query = "SELECT l FROM LabSchedule l"),
     @NamedQuery(name = "LabSchedule.findById", query = "SELECT l FROM LabSchedule l WHERE l.id = :id"),
     @NamedQuery(name = "LabSchedule.findBySlot", query = "SELECT l FROM LabSchedule l WHERE l.slot = :slot"),
-    @NamedQuery(name = "LabSchedule.findByDate", query = "SELECT l FROM LabSchedule l WHERE l.date = :date"),
-    @NamedQuery(name = "LabSchedule.findByDetail", query = "SELECT l FROM LabSchedule l WHERE l.detail = :detail")})
+    @NamedQuery(name = "LabSchedule.findByDate", query = "SELECT l FROM LabSchedule l WHERE l.date = :date")})
 public class LabSchedule implements Serializable {
 
-    public static final int STATUS_PENDING = 0;
-    public static final int STATUS_ACCEPTED = 1;
-    public static final int STATUS_DENIED = 2;
-
-    @Column(name = "Status")
-    private Integer status;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -57,15 +51,13 @@ public class LabSchedule implements Serializable {
     @Column(name = "Date")
     @Temporal(TemporalType.DATE)
     private Date date;
-    @Size(max = 50)
-    @Column(name = "Detail")
-    private String detail;
+    @JoinColumn(name = "SequenceId", referencedColumnName = "Id")
+//    @Column(name="SequenceId")
+    @ManyToOne
+    private ScheduleSequence sequenceId;
     @JoinColumn(name = "LabId", referencedColumnName = "Id")
     @ManyToOne
     private Lab labId;
-    @JoinColumn(name = "RequestAccount", referencedColumnName = "Username")
-    @ManyToOne
-    private Account requestAccount;
 
     public LabSchedule() {
     }
@@ -102,22 +94,12 @@ public class LabSchedule implements Serializable {
         this.date = date;
     }
 
-    public String getSummary() {
-        try {
-            return this.detail.substring(0, 11) + "...";
-        } catch (IndexOutOfBoundsException ex) {
-            return this.detail;
-        } catch (NullPointerException ex) {
-            return "No detail";
-        }
+    public ScheduleSequence getSequenceId() {
+        return sequenceId;
     }
 
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setSequenceId(ScheduleSequence sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public Lab getLabId() {
@@ -126,14 +108,6 @@ public class LabSchedule implements Serializable {
 
     public void setLabId(Lab labId) {
         this.labId = labId;
-    }
-
-    public Account getRequestAccount() {
-        return requestAccount;
-    }
-
-    public void setRequestAccount(Account requestAccount) {
-        this.requestAccount = requestAccount;
     }
 
     @Override
@@ -160,24 +134,5 @@ public class LabSchedule implements Serializable {
     public String toString() {
         return "entity.LabSchedule[ id=" + id + " ]";
     }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public String getStatuss() {
-        if (status == 0) {
-            return "Pending";
-        } else if (status == 1) {
-            return "Accept";
-        } else {
-            return "Denied";
-        }
-
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
+    
 }

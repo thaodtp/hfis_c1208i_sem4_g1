@@ -37,14 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Request.findAll", query = "SELECT r FROM Request r"),
     @NamedQuery(name = "Request.findById", query = "SELECT r FROM Request r WHERE r.id = :id"),
     @NamedQuery(name = "Request.findByStatus", query = "SELECT r FROM Request r WHERE r.status = :status"),
-    @NamedQuery(name = "Request.findByType", query = "SELECT r FROM Request r WHERE r.type = :type")})
+    @NamedQuery(name = "Request.findByType", query = "SELECT r FROM Request r WHERE r.type = :type"),
+    @NamedQuery(name = "Request.findByTime", query = "SELECT r FROM Request r WHERE r.time = :time")})
 public class Request implements Serializable {
 
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date time;
     public static final int TYPE_REQUEST = 1;
     public static final int TYPE_COMPLAINT = 2;
     public static final int TYPE_REPORT = 3;
@@ -72,6 +68,11 @@ public class Request implements Serializable {
     @NotNull
     @Column(name = "Type")
     private int type;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
     @JoinColumn(name = "ResolveAccount", referencedColumnName = "Username")
     @ManyToOne(optional = true)
     private Account resolveAccount;
@@ -166,6 +167,14 @@ public class Request implements Serializable {
         this.type = type;
     }
 
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
     public Account getResolveAccount() {
         return resolveAccount;
     }
@@ -206,13 +215,5 @@ public class Request implements Serializable {
     public String toString() {
         return "entity.Request[ id=" + id + " ]";
     }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
+    
 }
