@@ -54,7 +54,9 @@ public class RequestManager {
             Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    public List<Request> getMessages(String username){
+        return getDaController().getRequestsByResolver(username, Request.TYPE_MESSAGE);    
+    }
     public List<Request> getRequests(String username, int type) {
         return getDaController().getRequests(username, type);
     }

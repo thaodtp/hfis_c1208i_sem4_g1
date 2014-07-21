@@ -51,7 +51,6 @@ public class RequestUI implements Serializable {
     public void assignResolver() {
         currrentReq.setResolveAccount(resolveAccount);
         requestManager.edit(currrentReq);
-//        sendMessage(resolveAccount, "You have 1 new request");
     }
 
     public List<Request> getMessages() {
@@ -61,24 +60,24 @@ public class RequestUI implements Serializable {
     public void completeRequest() {
         currrentReq.setStatus(Request.STATUS_COMPLETE);
         requestManager.edit(currrentReq);
-//        List<Account> admins = accountManager.getAccountByRole(Account.ROLE_ADMIN);
-//        if (!admins.isEmpty()) {
-//            for (Account a : admins) {
-//                try {
-//                    sendMessage(a, currrentReq.getRequestAccount().getName() + " has completed a request");
-//                } catch (Exception ex) {
-//                }
-//            }
-//        }
+        List<Account> admins = accountManager.getAccountByRole(Account.ROLE_ADMIN);
+        if (!admins.isEmpty()) {
+            for (Account a : admins) {
+                try {
+                    sendMessage(a, currrentReq.getRequestAccount().getName() + " has completed a request");
+                } catch (Exception ex) {
+                }
+            }
+        }
     }
 
     public List<Request> getUserUnresolvedComplaint() {
         return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_COMPLAINT);
     }
 
-//    public void sendMessage(Account toUser, String content) {
-//        requestManager.sendMessage(toUser, content);
-//    }
+    public void sendMessage(Account toUser, String content) {
+        requestManager.sendMessage(toUser, content);
+    }
     public Map<String, Integer> createStatistic(int type) {
         Map<String, Integer> result = new HashMap<>();
         List<Request> source = requestManager.getRequests(type);

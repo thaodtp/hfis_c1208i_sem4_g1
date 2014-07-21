@@ -7,6 +7,7 @@ package ui;
 
 import biz.LabManager;
 import biz.LabScheduleManager;
+import biz.RequestManager;
 import biz.ScheduleManager;
 import entity.Account;
 import entity.Lab;

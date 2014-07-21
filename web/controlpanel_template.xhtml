@@ -27,7 +27,7 @@
 
     <h:body class="metro">
         <header>         
-            <nav class="navigation-bar bg-blue" style="position: fixed; z-index: 999;" >
+            <nav class="navigation-bar fixed-top" >
                 <div class="navigation-bar-content">
                     <a href="/" class="element">Home</a>
                     <a class="element">About</a>
@@ -80,7 +80,7 @@
 
                         </div>
                     </h:panelGroup>
-                    <h:panelGroup rendered="#{login.account!=null}">
+                    <h:panelGroup rendered="#{login.account!=null}" class="place-right">
                         <a href="/admin/index.xhtml" class="element">Control Panel</a>
                     </h:panelGroup>
                 </div>
