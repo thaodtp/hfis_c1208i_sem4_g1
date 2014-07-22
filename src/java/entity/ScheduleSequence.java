@@ -81,10 +81,13 @@ public class ScheduleSequence implements Serializable {
             return this.detail.substring(0, 11) + "...";
         } catch (IndexOutOfBoundsException ex) {
             return this.detail;
+        } catch (NullPointerException ex) {
+            return "<Empty>";
         }
     }
 
     public String getDetail() {
+        if(detail==null) return "<Empty>";
         return detail;
     }
 

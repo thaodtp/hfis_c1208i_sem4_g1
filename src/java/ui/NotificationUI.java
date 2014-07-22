@@ -51,8 +51,8 @@ public class NotificationUI {
         List<Request> requests = requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
         int count = requests.size();
         for (Request r : requests) {
-            if (r.getRequestAccount() == null) {
-                count -= 1;
+            if (r.getResolveAccount()!=null) {
+                count = count - 1;
             }
         }
         return count;
