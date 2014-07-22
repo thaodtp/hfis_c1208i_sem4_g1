@@ -55,7 +55,7 @@ public class ScheduleSequence implements Serializable {
     private String detail;
     @Column(name = "Status")
     private Integer status;
-    @OneToMany(mappedBy = "sequenceId")
+    @OneToMany(mappedBy = "sequenceId", cascade = CascadeType.ALL)
     private List<LabSchedule> labScheduleList = new LinkedList<>();
     @JoinColumn(name = "RequestAccount", referencedColumnName = "Username")
     @ManyToOne

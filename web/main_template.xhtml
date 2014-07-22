@@ -26,7 +26,7 @@
 
     <h:body class="metro">
         <header>         
-            <nav class="navigation-bar bg-blue" style="position: fixed; z-index: 999;" >
+            <nav class="navigation-bar fixed-top" >
                 <div class="navigation-bar-content">
                     <a href="/" class="element">Home</a>
                     <a class="element">About</a>
@@ -54,7 +54,7 @@
 
                                 </div>  
                                 <h:commandLink class="element" action="#{login.login()}" value="Login" /> 
-                               
+
                             </div>     
                         </h:form>
                         <h:panelGroup rendered="#{login.haveMsg()}">
@@ -70,7 +70,7 @@
                         <div class="place-right">
                             <h:form>
                                 <div class="element bg-transparent">
-                                    <span class="icon-star-2"></span>
+                                    <span class="icon-user-2"></span>
                                     Welcome, 
                                     #{login.account.username}
                                 </div>
@@ -80,8 +80,22 @@
 
                         </div>
                     </h:panelGroup>
-                    <h:panelGroup rendered="#{login.account!=null}">      
+                    <h:panelGroup rendered="#{login.account!=null}" class="place-right">      
                         <a href="/admin/index.xhtml" class="element">Control Panel</a>
+                        <div class="element">
+                            <a class="dropdown-toggle #{notificationUI.totalNoti==0?'':'fg-lightRed'}" href="#">
+                                <span class="icon-star-3"></span> #{notificationUI.totalNoti}
+                            </a>
+                            <ul class="dropdown-menu place-right span5" data-role="dropdown">
+                                <h:panelGroup rendered="#{login.roleAdmin}">
+                                <li><a href="/admin/requests.xhtml">There're #{notificationUI.unresolvedLabRequestsCount} lab requests need to be approved</a></li>
+                                <li><a href="/admin/unresolved_complaints.xhtml">There're #{notificationUI.unassignComplaintsCount} unassigned complaints</a></li>
+                                <ui:repeat value="#{notificationUI.messages}" var="mess">
+                                    <li><span>#{mess.content}</span></li>
+                                </ui:repeat>
+                                </h:panelGroup>
+                            </ul>
+                        </div>
                     </h:panelGroup>
                 </div>
             </nav>

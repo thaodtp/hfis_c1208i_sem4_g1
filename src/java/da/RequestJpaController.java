@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package da;
 
 import com.google.common.collect.Lists;
@@ -40,24 +39,33 @@ public class RequestJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List<Request> getRequests(String username,int type){
+    public List<Request> getRequestsByResolver(String username, int type) {
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.resolveAccount.username = :username AND r.type=:type  ORDER BY r.time DESC", Request.class);
+        query.setParameter("username", username);
+        query.setParameter("type", type);
+        return Lists.reverse(query.getResultList());
+    }
+
+    public List<Request> getRequests(String username, int type) {
         TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username AND r.type=:type  ORDER BY r.time DESC", Request.class);
         query.setParameter("username", username);
         query.setParameter("type", type);
         return Lists.reverse(query.getResultList());
     }
-    public List<Request> getRequests(int type){
+
+    public List<Request> getRequests(int type) {
         TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.type=:type ORDER BY r.time DESC", Request.class);
         query.setParameter("type", type);
         return Lists.reverse(query.getResultList());
     }
-    
-    public List<Request> getRequestsByStatus(int status,int type){
+
+    public List<Request> getRequestsByStatus(int status, int type) {
         TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.status=:status AND r.type=:type  ORDER BY r.time DESC", Request.class);
         query.setParameter("type", type);
         query.setParameter("status", status);
         return query.getResultList();
     }
+
     public void create(Request request) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
@@ -237,5 +245,5 @@ public class RequestJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

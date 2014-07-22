@@ -7,6 +7,7 @@ package ui;
 
 import biz.LabManager;
 import biz.LabScheduleManager;
+import biz.RequestManager;
 import biz.ScheduleManager;
 import entity.Account;
 import entity.Lab;
@@ -57,6 +58,7 @@ public class LabScheduleUI implements Serializable {
     private int slot;
     private String detail;
     private List<LabSchedule> addPreparation;
+    private String msg;
 
     /**
      * Creates a new instance of LabScheduleUI
@@ -96,13 +98,18 @@ public class LabScheduleUI implements Serializable {
     }
 
     public void acceptLabRequest() {
+        for(LabSchedule schedule : curSchedule.getLabScheduleList()){
+            if(schedule.getDate().before(new Date())){
+                schedule.setLabId(null);
+            }
+        }
         scheduleManager.acceptLabRequest(curSchedule);
         curSchedule = null;
     }
 
-    public List<Lab> getFreeLab(Date d, int slot) {
+    public List<Lab> getFreeLab(Date date, int slot) {
         List<Lab> allLabs = labManager.displayLabs();
-        List<LabSchedule> schedules = labScheduleManager.getScheduleByDS(d, slot);
+        List<LabSchedule> schedules = labScheduleManager.getScheduleByDS(date, slot);
         for (LabSchedule ls : schedules) {
             if (allLabs.contains(ls.getLabId())) {
                 allLabs.remove(ls.getLabId());
@@ -114,6 +121,8 @@ public class LabScheduleUI implements Serializable {
     public void checkLab() {
         addPreparation = new LinkedList();
         String[] dates = date.split(",");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, 2);
         for (String d : dates) {
             try {
                 LabSchedule ls = new LabSchedule();
@@ -124,14 +133,21 @@ public class LabScheduleUI implements Serializable {
                 } else {
                     ls.setLabId(freeLabs.get(0));
                 }
-                ls.setSlot(slot);
+                if (cal.getTime().after(dd)) {
+                    ls.setSlot(-1);
+                } else {
+                    ls.setSlot(slot);
+                }
                 ls.setDate(dd);
                 addPreparation.add(ls);
 //                ls.setSequenceId(ss);
 //                labScheduleManager.requestLab(ls);
             } catch (ParseException ex) {
-                Logger.getLogger(LabScheduleUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        if (addPreparation.isEmpty()) {
+            msg = "You haven't choose any day to check";
+            addPreparation = null;
         }
     }
 
@@ -141,7 +157,7 @@ public class LabScheduleUI implements Serializable {
         ss.setRequestAccount(loginBean.getAccount());
         scheduleManager.requestLabSequence(ss);
         for (LabSchedule ls : addPreparation) {
-            if (ls.getLabId() != null) {
+            if (ls.getLabId() != null && ls.getSlot()!=-1) {
                 labScheduleManager.requestLab(ls);
             }
         }
@@ -149,6 +165,12 @@ public class LabScheduleUI implements Serializable {
         slot = 0;
         lab = null;
         addPreparation = null;
+    }
+
+    public String getMessage() {
+        String t = msg;
+        msg = "";
+        return t;
     }
 
     public String getDetail() {
