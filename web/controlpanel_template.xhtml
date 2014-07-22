@@ -109,7 +109,8 @@
                                     <a class="dropdown-toggle" href="#" ><i class="icon-tree-view"></i>Time-Table</a>
                                     <ul class="dropdown-menu" data-role="dropdown">
                                         <li><h:outputLink value="/labschedule.xhtml">Time-Table <h:outputLabel rendered="#{!login.roleAdmin}">(Make Request)</h:outputLabel></h:outputLink></li>                       
-                                        <li><h:outputLink value="/admin/all_requests.xhtml" rendered="#{!login.roleIntructor}">All Requests</h:outputLink></li>
+                                        <li><h:outputLink value="/admin/requestlab.xhtml" rendered="#{login.roleIntructor}">Request Lab</h:outputLink></li>
+                                        <li><h:outputLink value="/admin/all_requests.xhtml" rendered="#{!login.roleIntructor and !login.roleHOD}">All Requests</h:outputLink></li>
                                         <li><h:outputLink value="/admin/my_requests.xhtml" rendered="#{!login.roleAdmin}">My Requests</h:outputLink></li>
                                         <li><h:outputLink value="/admin/requests.xhtml" rendered="#{login.roleAdmin}">Unresolved Requests</h:outputLink></li>
                                     </ul>
