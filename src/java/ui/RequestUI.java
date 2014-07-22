@@ -39,7 +39,7 @@ public class RequestUI implements Serializable {
     @ManagedProperty(value = "#{login}")
     private Login loginBean;
 
-    private Request currrentReq;
+    private Request currentReq;
     private String content;
     private int status;
     private int type;
@@ -49,30 +49,34 @@ public class RequestUI implements Serializable {
     private Account resolveAccount;
 
     public void assignResolver() {
-        currrentReq.setResolveAccount(resolveAccount);
-        requestManager.edit(currrentReq);
+        currentReq.setResolveAccount(resolveAccount);
+        requestManager.edit(currentReq);
     }
 
     public List<Request> getMessages() {
-        return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_MESSAGE);
+        return requestManager.getMessages(loginBean.getAccount().getUsername());
     }
 
     public void completeRequest() {
-        currrentReq.setStatus(Request.STATUS_COMPLETE);
-        requestManager.edit(currrentReq);
+        currentReq.setStatus(Request.STATUS_COMPLETE);
+        requestManager.edit(currentReq);
+        sendMessage(currentReq.getRequestAccount(), "Your request has been resolved");
         List<Account> admins = accountManager.getAccountByRole(Account.ROLE_ADMIN);
         if (!admins.isEmpty()) {
             for (Account a : admins) {
                 try {
-                    sendMessage(a, currrentReq.getRequestAccount().getName() + " has completed a request");
+                    sendMessage(a, currentReq.getResolveAccount().getName() + " has completed a request");
                 } catch (Exception ex) {
                 }
             }
         }
     }
-
+    
+    public List<Request> getMyTechnicalWork(){
+        return requestManager.getUnresolvedComplaints(loginBean.getAccount().getUsername());
+    }
     public List<Request> getUserUnresolvedComplaint() {
-        return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_COMPLAINT);
+        return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_COMPLAINT, Request.STATUS_PENDING);
     }
 
     public void sendMessage(Account toUser, String content) {
@@ -98,11 +102,11 @@ public class RequestUI implements Serializable {
     }
 
     public Request getCurrrentReq() {
-        return currrentReq;
+        return currentReq;
     }
 
     public void setCurrrentReq(Request currrentReq) {
-        this.currrentReq = currrentReq;
+        this.currentReq = currrentReq;
     }
 
     public Map<String, Integer> getComplaintStatisticByDay() {

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -37,12 +36,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Lab.findByType", query = "SELECT l FROM Lab l WHERE l.type = :type"),
     @NamedQuery(name = "Lab.findByStatus", query = "SELECT l FROM Lab l WHERE l.status = :status")})
 public class Lab implements Serializable {
-    
+
     public static final int ROOM_LAB = 1;
     public static final int ROOM_SERVER = 2;
-    
+
     public static final int STATUS_AVAILABLE = 0;
-    public static final int STATUS_UNAVAILABLE= 1;
+    public static final int STATUS_UNAVAILABLE = 1;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -75,6 +74,17 @@ public class Lab implements Serializable {
         this.id = id;
     }
 
+    public String getStatusS() {
+        switch (status) {
+            case 0:
+                return "<span class='icon-cancel-2 fg-red'></span>";
+            case 1:
+                return "<span class='icon-checkmark fg-green'></span>";
+            default:
+                return "";
+        }
+    }
+
     public Lab(Integer id, String name, int type, int status) {
         this.id = id;
         this.name = name;
@@ -91,7 +101,7 @@ public class Lab implements Serializable {
     public Lab(int status) {
         this.status = status;
     }
-    
+
     public Integer getId() {
         return id;
     }
@@ -165,5 +175,5 @@ public class Lab implements Serializable {
     public void setDetail(String detail) {
         this.detail = detail;
     }
-    
+
 }

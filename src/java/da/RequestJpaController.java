@@ -46,10 +46,18 @@ public class RequestJpaController implements Serializable {
         return Lists.reverse(query.getResultList());
     }
 
-    public List<Request> getRequests(String username, int type) {
-        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username AND r.type=:type  ORDER BY r.time DESC", Request.class);
+    public List<Request> getRequestsByResolver(String username, int status, int type) {
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.resolveAccount.username = :username AND r.type=:type AND r.status=:status ORDER BY r.time DESC", Request.class);
         query.setParameter("username", username);
         query.setParameter("type", type);
+        query.setParameter("status", status);
+        return Lists.reverse(query.getResultList());
+    }
+    public List<Request> getRequests(String username, int type, int status) {
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.requestAccount.username = :username AND r.type=:type AND r.status=:status ORDER BY r.time DESC", Request.class);
+        query.setParameter("username", username);
+        query.setParameter("type", type);
+        query.setParameter("status",status);
         return Lists.reverse(query.getResultList());
     }
 

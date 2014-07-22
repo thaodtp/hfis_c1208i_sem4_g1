@@ -55,7 +55,9 @@ public class RequestManager {
             Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    public List<Request> getUnresolvedComplaints(String resolver){
+        return getDaController().getRequestsByResolver(resolver, Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
+    }
     public List<Request> getUnassignedComplaints() {
         List<Request> requests = getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
         List<Request> result = new LinkedList<>();
@@ -66,13 +68,24 @@ public class RequestManager {
         }
         return result;
     }
-
+    public void clearMessages(String username){
+        List<Request> targets = getDaController().getRequestsByResolver(username, Request.TYPE_MESSAGE);
+        for(Request t: targets){
+            try {
+                getDaController().destroy(t.getId());
+            } catch (RollbackFailureException ex) {
+                Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     public List<Request> getMessages(String username) {
         return getDaController().getRequestsByResolver(username, Request.TYPE_MESSAGE);
     }
 
-    public List<Request> getRequests(String username, int type) {
-        return getDaController().getRequests(username, type);
+    public List<Request> getRequests(String username, int type, int status) {
+        return getDaController().getRequests(username, type, status);
     }
 
     public List<Request> getRequests(int type) {
