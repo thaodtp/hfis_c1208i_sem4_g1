@@ -8,6 +8,7 @@ package ui;
 import biz.RequestManager;
 import biz.ScheduleManager;
 import entity.Request;
+import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -52,7 +53,10 @@ public class NotificationUI {
     }
 
     public List<Request> getMessages() {
-        return requestManager.getMessages(loginBean.getUsername());
+        if (loginBean.getAccount() != null) {
+            return requestManager.getMessages(loginBean.getAccount().getUsername());
+        }
+        return new LinkedList<>();
     }
 
     public Login getLoginBean() {
