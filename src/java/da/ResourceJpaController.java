@@ -42,6 +42,38 @@ public class ResourceJpaController implements Serializable {
          TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r", Resource.class);
         return query.getResultList();
     }
+    
+    public Resource getResourceById(int id) {
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE r.id = :id", Resource.class);
+        query.setParameter("id", id);
+        return query.getResultList().get(0);
+    }
+    
+    public List<Resource> displaySoftware() {
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE r.type = :type", Resource.class);
+        query.setParameter("type", 1);
+        return query.getResultList();
+    }
+    
+    public List<Resource> displayHardware() {
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE r.type = :type", Resource.class);
+        query.setParameter("type", 2);
+        return query.getResultList();
+    }
+    
+    public List<Resource> displaySyllabus() {
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE r.type = :type", Resource.class);
+        query.setParameter("type", 3);
+        return query.getResultList();
+    }
+    
+    public List<Resource> displayELearning() {
+        TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE r.type = :type", Resource.class);
+        query.setParameter("type", 4);
+        return query.getResultList();
+    }
+    
+    
     public List<Resource> searchResource(String keyword){
         TypedQuery<Resource> query = getEntityManager().createQuery("SELECT r FROM Resource r WHERE  r.title like :title or r.content like :content", Resource.class);     
         query.setParameter("title", "%"+ keyword + "%");     

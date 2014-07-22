@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../controlpanel_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="head">
+        <h:outputScript name="/js/jquery.dataTables.js" />
+    </ui:define>
+
+    <ui:define name="content">    
+        <h:form rendered="#{!login.roleAdmin and !login.roleIntructor}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
+
+        <h:outputLink style="margin-left: 605px; color: black;"  value="/instructor/create_resource.xhtml">Add New Resource</h:outputLink>
+
+
+        <h:dataTable id="table" value="#{resourceUI.hardware}" var="s">
+            <h:column >
+                <f:facet name="header" class="text-left">Title</f:facet>
+                <p class="right"> #{s.title}</p>
+            </h:column>
+            <h:column >
+                <f:facet name="header" class="text-left">Content</f:facet>
+                <p class="right"> #{s.content}</p>
+            </h:column>           
+            <h:column>
+                <f:facet name="header" class="text-center"></f:facet>  
+                <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/instructor/delete_resource.xhtml?id=#{s.id}">
+                    <small class="icon-cancel-2"></small>
+                </h:outputLink>
+                <h:outputLink class="fg-blue place-right" style="padding-left: 10px;" value="/instructor/edit_resource.xhtml?id=#{s.id}">
+                    <small class="icon-pencil"></small>
+                </h:outputLink>               
+            </h:column>
+        </h:dataTable> 
+
+        <script>
+            $(document).ready(function() {
+                $('#table').DataTable();
+            });
+        </script>
+    </ui:define>
+</ui:composition>
