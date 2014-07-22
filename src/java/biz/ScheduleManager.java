@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package biz;
 
 import da.LabScheduleJpaController;
@@ -46,10 +45,12 @@ public class ScheduleManager {
         }
         return daController;
     }
-    public List<ScheduleSequence> getUnacceptedSchedule(){
+
+    public List<ScheduleSequence> getUnacceptedSchedule() {
         return getDaController().getUnacceptedSchedule();
     }
-    public void denyLabRequest(ScheduleSequence schedule){
+
+    public void denyLabRequest(ScheduleSequence schedule) {
         try {
             schedule.setStatus(ScheduleSequence.STATUS_DENIED);
             getDaController().edit(schedule);
@@ -59,7 +60,8 @@ public class ScheduleManager {
             Logger.getLogger(LabScheduleManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void acceptLabRequest(ScheduleSequence schedule){
+
+    public void acceptLabRequest(ScheduleSequence schedule) {
         try {
             schedule.setStatus(ScheduleSequence.STATUS_ACCEPTED);
             getDaController().edit(schedule);
@@ -69,17 +71,13 @@ public class ScheduleManager {
             Logger.getLogger(LabScheduleManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void requestLabSequence(ScheduleSequence schedule){
-        try {
-            schedule.setStatus(ScheduleSequence.STATUS_PENDING);
-            getDaController().create(schedule);
-        } catch (RollbackFailureException ex) {
-            Logger.getLogger(LabScheduleManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(LabScheduleManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+    public void requestLabSequence(ScheduleSequence schedule) throws Exception {
+        schedule.setStatus(ScheduleSequence.STATUS_PENDING);
+        getDaController().create(schedule);
     }
-    public void edit(ScheduleSequence schedule){
+
+    public void edit(ScheduleSequence schedule) {
         try {
             getDaController().edit(schedule);
         } catch (RollbackFailureException ex) {
@@ -88,8 +86,8 @@ public class ScheduleManager {
             Logger.getLogger(ScheduleManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public List<ScheduleSequence> getAllSchedule(){
+
+    public List<ScheduleSequence> getAllSchedule() {
         return getDaController().getAllSchedule();
     }
 }

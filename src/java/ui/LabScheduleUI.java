@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class LabScheduleUI implements Serializable {
     private int slot;
     private String detail;
     private List<LabSchedule> addPreparation;
+    private Map<String, List<Lab>> freeLabPreparation;
     private String msg;
 
     /**
@@ -98,8 +100,8 @@ public class LabScheduleUI implements Serializable {
     }
 
     public void acceptLabRequest() {
-        for(LabSchedule schedule : curSchedule.getLabScheduleList()){
-            if(schedule.getDate().before(new Date())){
+        for (LabSchedule schedule : curSchedule.getLabScheduleList()) {
+            if (schedule.getDate().before(new Date())) {
                 schedule.setLabId(null);
             }
         }
@@ -120,6 +122,7 @@ public class LabScheduleUI implements Serializable {
 
     public void checkLab() {
         addPreparation = new LinkedList();
+        freeLabPreparation = new HashMap<>();
         String[] dates = date.split(",");
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, 2);
@@ -128,11 +131,11 @@ public class LabScheduleUI implements Serializable {
                 LabSchedule ls = new LabSchedule();
                 Date dd = new SimpleDateFormat("dd/MM/yyyy").parse(d);
                 List<Lab> freeLabs = getFreeLab(dd, slot);
-                if (freeLabs.isEmpty()) {
-                    ls.setLabId(null);
-                } else {
-                    ls.setLabId(freeLabs.get(0));
-                }
+//                if (freeLabs.isEmpty()) {
+//                    ls.setLabId(null);
+//                } else {
+//                    ls.setLabId(freeLabs.get(0));
+//                }
                 if (cal.getTime().after(dd)) {
                     ls.setSlot(-1);
                 } else {
@@ -140,6 +143,7 @@ public class LabScheduleUI implements Serializable {
                 }
                 ls.setDate(dd);
                 addPreparation.add(ls);
+                freeLabPreparation.put(d, freeLabs);
 //                ls.setSequenceId(ss);
 //                labScheduleManager.requestLab(ls);
             } catch (ParseException ex) {
@@ -148,24 +152,31 @@ public class LabScheduleUI implements Serializable {
         if (addPreparation.isEmpty()) {
             msg = "You haven't choose any day to check";
             addPreparation = null;
+            freeLabPreparation = null;
         }
     }
 
     public void requestLab() {
-        ScheduleSequence ss = new ScheduleSequence();
-        ss.setDetail(detail);
-        ss.setRequestAccount(loginBean.getAccount());
-        scheduleManager.requestLabSequence(ss);
-        for (LabSchedule ls : addPreparation) {
-            if (ls.getLabId() != null && ls.getSlot()!=-1) {
-                ls.setSequenceId(ss);
-                labScheduleManager.requestLab(ls);
+        try {
+            ScheduleSequence ss = new ScheduleSequence();
+            ss.setDetail(detail);
+            ss.setRequestAccount(loginBean.getAccount());
+            scheduleManager.requestLabSequence(ss);
+            for (LabSchedule ls : addPreparation) {
+                if (ls.getLabId() != null && ls.getSlot() != -1) {
+                    ls.setSequenceId(ss);
+                    labScheduleManager.requestLab(ls);
+                }
             }
+            msg = "Your request've been sent";
+            detail = "";
+            slot = 0;
+            lab = null;
+            addPreparation = null;
+            freeLabPreparation = null;
+        } catch (Exception ex) {
+            msg = "System error";
         }
-
-        slot = 0;
-        lab = null;
-        addPreparation = null;
     }
 
     public String getMessage() {
@@ -250,6 +261,10 @@ public class LabScheduleUI implements Serializable {
 
     public void setAddPreparation(List<LabSchedule> addPreparation) {
         this.addPreparation = addPreparation;
+    }
+
+    public List<Lab> getFreeLabPreparation(String date) {
+        return freeLabPreparation.get(date);
     }
 
 }

@@ -73,8 +73,20 @@
                                                     <h:outputText class="fg-red" rendered="#{ls.slot==-1}" value="Date: #{ls.displayDate} Too late to request schedule" />
                                                     <h:panelGroup rendered="#{ls.slot!=-1}">
                                                         <h:outputText escape="false" value="Date: #{ls.displayDate} &lt;br /&gt; Slot: #{ls.slot} &lt;br /&gt;" />                                                    
-                                                        <h:outputText rendered="#{ls.labId!=null}" value="Lab: #{ls.labId.name}"/>
-                                                        <h:outputText class="fg-red" rendered="#{ls.labId==null}" value="No lab available (this entry won't be include in the request)"/>
+                                                        <!--<h:outputText rendered="{ls.labId!=null}" value="Lab: {ls.labId.name}"/>-->
+                                                        <h:outputText class="fg-red" 
+                                                                      rendered="#{labScheduleUI.getFreeLabPreparation(ls.displayDate).size()==0}" 
+                                                                      value="No lab available (this entry won't be include in the request)"/>
+                                                        <h:panelGroup rendered="#{labScheduleUI.getFreeLabPreparation(ls.displayDate).size()!=0}"
+                                                                      class="input-control select size2">
+                                                            <h:selectOneMenu value="#{ls.labId}" 
+                                                                             converter="#{labConverter}">
+                                                                <f:selectItems value="#{labScheduleUI.getFreeLabPreparation(ls.displayDate)}"
+                                                                               var="fl"
+                                                                               itemValue="#{fl}"
+                                                                               itemLabel="#{fl.name}"/>
+                                                            </h:selectOneMenu>
+                                                        </h:panelGroup>
                                                     </h:panelGroup>
                                                 </li>
                                             </ui:repeat>

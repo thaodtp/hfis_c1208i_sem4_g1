@@ -5,6 +5,9 @@
  */
 package ui;
 
+import biz.LabManager;
+import entity.Lab;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -18,7 +21,8 @@ import javax.faces.convert.FacesConverter;
 @ManagedBean
 @FacesConverter(value = "labConverter")
 public class LabConverter implements Converter {
-
+    @EJB
+    private LabManager labManager; 
     /**
      * Creates a new instance of LabConverter
      */
@@ -27,19 +31,12 @@ public class LabConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return value;
+        return labManager.getLabById(Integer.parseInt(value));
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value.equals(1)) {
-            return "Busy";
-        } else if (value.equals(0)) {
-            return "Available";
-        } else {
-            return "Closed";
-        }
-
+        return ((Lab)value).getId()+"";
     }
 
 }
