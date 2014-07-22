@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+        <ui:composition template="./../controlpanel_template.xhtml">
+            <f:metadata>
+                <f:viewParam name="id" value="#{resourceUI.id}"/>
+            </f:metadata>
+            <ui:define name="content">
+                <h:form rendered="#{!login.roleAdmin and !login.roleIntructor}">
+                    <h:inputHidden value="#{login.autoLogin}"/>
+                </h:form>
+                <h:form style="margin-left: 30px;">  
+                    <fieldset>
+                        <legend>Edit Resource</legend>
+                        <label>Title</label>
+                        <div class="input-control text">
+                            <h:inputText value="#{resourceUI.title}"/>
+                        </div>
+                        <label>Content</label>
+                        <div class="input-control text">
+                            <h:inputText value="#{resourceUI.content}"/>
+                        </div>
+                        <label>Type</label>
+                        <div class="input-control select">
+                            <h:selectOneMenu value="#{resourceUI.type}" >
+                                <f:selectItems value="#{resourceUI.typeS}" />
+                            </h:selectOneMenu>
+                        </div>                       
+                        <h:commandButton action="#{resourceUI.edit()}" value="Edit"/>                  
+                        <h:outputText value="#{resourceUI.msg}"/>
+                    </fieldset>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

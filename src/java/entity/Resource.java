@@ -10,6 +10,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -32,10 +34,17 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Resource.findByType", query = "SELECT r FROM Resource r WHERE r.type = :type"),
     @NamedQuery(name = "Resource.findByTitle", query = "SELECT r FROM Resource r WHERE r.title = :title")})
 public class Resource implements Serializable {
+    
+    public static final int SOFTWARE = 1;
+    public static final int HARDWARE = 2;
+    public static final int SYLLABUS = 3;
+    public static final int ELEARNING = 4;
+    
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
+    //@NotNull
     @Column(name = "Id")
     private Integer id;
     @Column(name = "Type")
@@ -63,6 +72,19 @@ public class Resource implements Serializable {
         this.id = id;
         this.title = title;
         this.content = content;
+    }
+    
+    public Resource(String title, String content, int type) {
+        this.title = title;
+        this.content = content;
+        this.type = type;
+    }
+    
+    public Resource(Integer id, String title, String content, int type) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.type = type;
     }
 
     public Integer getId() {

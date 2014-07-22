@@ -67,14 +67,51 @@ public class ResourceManager {
             Logger.getLogger(ResourceManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void edit(int id, String title, String content, int type) {
+        try {
+            Resource resource = getResourceById(id);
+            resource.setTitle(title);
+            resource.setContent(content);
+            resource.setType(type);
+            getDaController().edit(resource);
+        } catch (RollbackFailureException ex) {
+            Logger.getLogger(ResourceManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ResourceManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
     public List<Resource> getAllResource(){
         return getDaController().getAllResources();
     }
+    
+    public List<Resource> displaySoftware() {
+        return getDaController().displaySoftware();
+    }
+    
+    public List<Resource> displayHardware() {
+        return getDaController().displayHardware();
+    }
+    
+    public List<Resource> displaySyllabus() {
+        return getDaController().displaySyllabus();
+    }
+    
+    public List<Resource> displayELearning() {
+        return getDaController().displayELearning();
+    }
+    
     public List<Resource> searchResource(String keyword){
         return getDaController().searchResource(keyword);
     }
     public List<Resource> getResourceByType(int type){
         return getDaController().getResourceByType(type);
+    }
+    
+    public Resource getResourceById(int id) {
+        return getDaController().getResourceById(id);
     }
 
 }

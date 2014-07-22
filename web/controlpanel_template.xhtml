@@ -131,10 +131,13 @@
                                     <li><h:outputLink value="/admin/complaint_resolve.xhtml" rendered="#{login.roleTechnical}">Complaint Resolve</h:outputLink></li>
                                 </ul>
                             </li>
+                            <h:outputLabel rendered="#{login.roleAdmin or login.roleIntructor}">
                             <li class="title">Resource</li>
-                            <li><h:outputLink value="/admin/software.xhtml">Software</h:outputLink></li>
-                            <li><h:outputLink value="/admin/hardware.xhtml">Hardware</h:outputLink></li>
-                            <li><h:outputLink value="/admin/syllabus.xhtml">Syllabus</h:outputLink></li>
+                            <li><h:outputLink value="/instructor/software.xhtml">Software</h:outputLink></li>
+                            <li><h:outputLink value="/instructor/hardware.xhtml">Hardware</h:outputLink></li>
+                            <li><h:outputLink value="/instructor/syllabus.xhtml">Syllabus</h:outputLink></li>
+                            <li><h:outputLink value="/instructor/elearning.xhtml">e-Learning</h:outputLink></li>
+                            </h:outputLabel>
                         </ul>
                     </nav>
                 </div>
