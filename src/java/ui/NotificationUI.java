@@ -48,14 +48,7 @@ public class NotificationUI {
     }
 
     public int getUnassignComplaintsCount() {
-        List<Request> requests = requestManager.getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
-        int count = requests.size();
-        for (Request r : requests) {
-            if (r.getRequestAccount() == null) {
-                count -= 1;
-            }
-        }
-        return count;
+        return requestManager.getUnassignedComplaints().size();
     }
 
     public List<Request> getMessages() {

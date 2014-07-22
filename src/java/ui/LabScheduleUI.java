@@ -158,6 +158,7 @@ public class LabScheduleUI implements Serializable {
         scheduleManager.requestLabSequence(ss);
         for (LabSchedule ls : addPreparation) {
             if (ls.getLabId() != null && ls.getSlot()!=-1) {
+                ls.setSequenceId(ss);
                 labScheduleManager.requestLab(ls);
             }
         }

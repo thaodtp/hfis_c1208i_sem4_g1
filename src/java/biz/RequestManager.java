@@ -11,6 +11,7 @@ import da.exceptions.RollbackFailureException;
 import entity.Account;
 import entity.Request;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,9 +55,22 @@ public class RequestManager {
             Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public List<Request> getMessages(String username){
-        return getDaController().getRequestsByResolver(username, Request.TYPE_MESSAGE);    
+
+    public List<Request> getUnassignedComplaints() {
+        List<Request> requests = getRequestsByStatus(Request.STATUS_PENDING, Request.TYPE_COMPLAINT);
+        List<Request> result = new LinkedList<>();
+        for (Request r : requests) {
+            if (r.getResolveAccount() == null) {
+                result.add(r);
+            }
+        }
+        return result;
     }
+
+    public List<Request> getMessages(String username) {
+        return getDaController().getRequestsByResolver(username, Request.TYPE_MESSAGE);
+    }
+
     public List<Request> getRequests(String username, int type) {
         return getDaController().getRequests(username, type);
     }

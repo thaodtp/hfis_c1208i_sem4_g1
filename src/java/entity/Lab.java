@@ -54,9 +54,9 @@ public class Lab implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "Name")
     private String name;
-//    @Size(max = 2147483647)
-//    @Column(name = "Detail")
-//    private String detail;
+    @Size(max = 2147483647)
+    @Column(name = "Detail")
+    private String detail;
     @Basic(optional = false)
     @NotNull
     @Column(name = "Type")
@@ -158,12 +158,12 @@ public class Lab implements Serializable {
         return "entity.Lab[ id=" + id + " ]";
     }
 
-//    public String getDetail() {
-//        return detail;
-//    }
-//
-//    public void setDetail(String detail) {
-//        this.detail = detail;
-//    }
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
     
 }

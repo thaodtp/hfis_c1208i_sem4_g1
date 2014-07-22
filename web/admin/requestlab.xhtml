@@ -64,6 +64,9 @@
                                 <h:panelGroup id="preparationDetail">
                                     <h:outputText class="fg-red" value="#{labScheduleUI.message}"></h:outputText>
                                     <h:panelGroup rendered="#{labScheduleUI.addPreparation!=null}">
+                                        <div class="input-control textarea">
+                                            <h:inputTextarea value="#{labScheduleUI.detail}"></h:inputTextarea>
+                                        </div>
                                         <ul>
                                             <ui:repeat value="#{labScheduleUI.addPreparation}" var="ls">
                                                 <li>

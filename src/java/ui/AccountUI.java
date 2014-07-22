@@ -48,7 +48,6 @@ public class AccountUI {
     private Department department;
     private String msg;
     private String keyword;
-    private int departmentId;
 
     public AccountUI() {
         username = "";
