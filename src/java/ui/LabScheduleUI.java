@@ -5,11 +5,14 @@
  */
 package ui;
 
+import biz.AccountManager;
+import biz.DepartmentManager;
 import biz.LabManager;
 import biz.LabScheduleManager;
 import biz.RequestManager;
 import biz.ScheduleManager;
 import entity.Account;
+import entity.Department;
 import entity.Lab;
 import entity.LabSchedule;
 import entity.ScheduleSequence;
@@ -44,6 +47,10 @@ import javax.faces.event.ValueChangeEvent;
 public class LabScheduleUI implements Serializable {
 
     @EJB
+    private AccountManager accountManager;
+    @EJB
+    private DepartmentManager departmentManager;
+    @EJB
     private RequestManager requestManager;
     @EJB
     private ScheduleManager scheduleManager;
@@ -63,6 +70,8 @@ public class LabScheduleUI implements Serializable {
     private List<LabSchedule> addPreparation;
     private Map<String, List<Lab>> freeLabPreparation;
     private String msg;
+    private Department departmentId;
+    private int id;
 
     /**
      * Creates a new instance of LabScheduleUI
@@ -94,6 +103,10 @@ public class LabScheduleUI implements Serializable {
 
     public List<ScheduleSequence> getAllSchedule() {
         return scheduleManager.getAllSchedule();
+    }
+    
+    public List<ScheduleSequence> getAllScheduleOfOneDepartment() {
+        return scheduleManager.getAllScheduleOfOneDepartment(departmentId);
     }
 
     public void denyLabRequest() {
@@ -269,5 +282,29 @@ public class LabScheduleUI implements Serializable {
     public List<Lab> getFreeLabPreparation(String date) {
         return freeLabPreparation.get(date);
     }
+
+    public Department getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+    //    this.departmentId = departmentId;
+        Account target = accountManager.getAccountByUsername("bnguyen");
+        if (target != null) {
+            this.departmentId = target.getDepartmentId();
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+        
+    }
+    
+    
+    
 
 }

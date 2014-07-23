@@ -52,7 +52,7 @@ public class LabScheduleJpaController implements Serializable {
         query.setParameter("date", new Date());
         return query.getResultList();
     }
-
+    
     public List<LabSchedule> getScheduleByDS(Date date, int slot) {
         TypedQuery<LabSchedule> query = getEntityManager().createQuery("SELECT l FROM LabSchedule l WHERE l.slot = :slot AND l.date=:date AND (l.sequenceId.status=1 OR l.sequenceId.status=0)", LabSchedule.class);
         query.setParameter("slot", slot);

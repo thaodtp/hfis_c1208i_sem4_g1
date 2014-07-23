@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Account;
+import entity.Department;
 import entity.Lab;
 import entity.LabSchedule;
 import entity.ScheduleSequence;
@@ -50,6 +51,17 @@ public class ScheduleSequenceJpaController implements Serializable {
     public List<ScheduleSequence> getAllSchedule() {
         TypedQuery<ScheduleSequence> query = getEntityManager().createQuery("SELECT l FROM ScheduleSequence l", ScheduleSequence.class);
         return query.getResultList();
+    }
+    
+    public List<ScheduleSequence> getAllScheduleOfOneDepartment(Department departmentId) {
+        TypedQuery<ScheduleSequence> query = getEntityManager().createQuery("SELECT l FROM ScheduleSequence l WHERE l.requestAccount.departmentId = :departmentId", ScheduleSequence.class);
+        query.setParameter("departmentId", departmentId);
+        List<ScheduleSequence> result = query.getResultList();
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
     }
 
     public void create(ScheduleSequence scheduleSequence) throws PreexistingEntityException, RollbackFailureException, Exception {
