@@ -45,7 +45,6 @@ public class LabStatistic {
             for (String key : keys) {
                 int count = 0;
                 for (LabSchedule req : l.getLabScheduleList()) {
-                    System.out.println(req.getDisplayDate() + " " + key);
                     if (key.equals("\"" + req.getDisplayDate() + "\"")) {
                         count += 1;
                     }
