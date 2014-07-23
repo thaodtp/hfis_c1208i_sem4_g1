@@ -8,6 +8,7 @@ package biz;
 import da.LabScheduleJpaController;
 import da.ScheduleSequenceJpaController;
 import da.exceptions.RollbackFailureException;
+import entity.Department;
 import entity.Lab;
 import entity.LabSchedule;
 import entity.ScheduleSequence;
@@ -89,5 +90,9 @@ public class ScheduleManager {
 
     public List<ScheduleSequence> getAllSchedule() {
         return getDaController().getAllSchedule();
+    }
+    
+    public List<ScheduleSequence> getAllScheduleOfOneDepartment(Department departmentId) {
+        return getDaController().getAllScheduleOfOneDepartment(departmentId);
     }
 }

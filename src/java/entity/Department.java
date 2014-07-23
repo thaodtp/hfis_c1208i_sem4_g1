@@ -49,7 +49,7 @@ public class Department implements Serializable {
     @Column(name = "Name")
     private String name;
     @OneToMany(mappedBy = "departmentId")
-    private List<Account> accountList;
+    private List<Account> accountList;   
 
     public Department() {
     }
@@ -66,7 +66,7 @@ public class Department implements Serializable {
     public Department(String name) {
         this.name = name;
     }
-    
+  
     public Integer getId() {
         return id;
     }

@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../controlpanel_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="head">
+        <h:outputScript name="/js/jquery.dataTables.js" />
+    </ui:define>
+    <f:metadata>
+        <f:viewParam name="departmentId" value="#{labScheduleUI.departmentId}"/>
+    </f:metadata>
+    <ui:define name="content">
+        <h:form rendered="#{!login.roleHOD}">
+            <h:inputHidden value="#{login.autoLogin}"/>
+        </h:form>
+        <h:form id="fSchedule">
+            <legend>All request</legend>
+            <h:dataTable id="table" value="#{labScheduleUI.allScheduleOfOneDepartment}" var="schedule">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                        #{schedule.id}
+                </h:column>
+                <!--                <h:column>
+                                    <f:facet name="header">Date</f:facet>
+                                        {schedule.displayDate}
+                                </h:column>-->
+                <!--                <h:column>
+                                    <f:facet name="header">Lab</f:facet>
+                                        {schedule.}
+                                </h:column>-->
+                <!--                <h:column>
+                                    <f:facet name="header">Slot</f:facet>
+                                        {schedule.slot}
+                                </h:column>-->
+                <h:column>
+                    <f:facet name="header">Detail</f:facet>
+                        #{schedule.summary}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">From</f:facet>
+                        #{schedule.requestAccount.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                        #{schedule.statuss}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">&nbsp;</f:facet>
+                    <h:commandLink id="btnDetail" value="Detail" onclick="window.scrollTo(0, window.scrollMaxY)">
+                        <f:setPropertyActionListener target="#{labScheduleUI.curSchedule}" value="${schedule}" />
+                        <f:ajax render=":detailForm"/>
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+            <script >
+                function doAfterAjax() {
+                    $(document.getElementById("fSchedule:table")).DataTable();
+                }
+                $(document).ready(function() {
+                    $(document.getElementById("fSchedule:table")).DataTable();
+                });
+                function displayConfirm(x, y) {
+                    document.getElementById('divAccept').style.display = x;
+                    document.getElementById('divDeny').style.display = x;
+                    document.getElementById('divConfirm').style.display = y;
+                }
+                function displayConfirmDeny(x, y) {
+                    document.getElementById('divAccept').style.display = x;
+                    document.getElementById('divDeny').style.display = x;
+                    document.getElementById('divConfirmDeny').style.display = y;
+                }
+            </script>
+        </h:form>
+        <a id="anchorDetail"></a>
+        <h:form id="detailForm" prependId="false">
+            <h:panelGroup class="panel" rendered="#{labScheduleUI.curSchedule!=null}">
+                <div class="panel-header bg-lightBlue fg-white">Lab request detail</div>
+                <div class="panel-content padding10">
+                    <p><span class="span2">ID:</span> #{labScheduleUI.curSchedule.id}</p>
+                    <!--                    <p><span class="span2">Date:</span> {labScheduleUI.curSchedule.displayDate}</p>
+                                        <p><span class="span2">Lab:</span> {labScheduleUI.curSchedule.labId.name}</p>-->
+                    <!--<p><span class="span2">Slot:</span> {labScheduleUI.curSchedule.slot}</p>-->
+                    <p><p><span class="span2">Requested by:</span> <a href="account_detail.xhtml?user=#{labScheduleUI.curSchedule.requestAccount.username}">#{labScheduleUI.curSchedule.requestAccount.name}&nbsp;</a></p></p>
+                    <p><span class="span2">Detail:</span> #{labScheduleUI.curSchedule.detail}</p>
+                    <p><span class="span2">Status:</span> #{labScheduleUI.curSchedule.statuss}</p>
+                    <p>Requested:</p>
+                    <ul>
+                        <ui:repeat value="#{labScheduleUI.curSchedule.labScheduleList}" var="sd">
+                            <li>Lab: #{sd.labId.name} on slot #{sd.slot} on #{sd.displayDate}</li>
+                        </ui:repeat>
+                    </ul>
+                    <div id='divConfirmDeny' style="display: none;">
+                        <h:commandLink id="btnDeny" class="button large fg-white bg-blue offset7 span2" value="Confirm" action="#{labScheduleUI.denyLabRequest()}">
+                            <f:ajax execute="@form" render="@form :fSchedule" onevent="doAfterAjax" />
+                        </h:commandLink>
+                        <a class="button large fg-white bg-blue offset1 span2" 
+                           onclick="displayConfirmDeny('inherit', 'none')">
+                            Cancel
+                        </a>
+                    </div>
+
+                    <div id='divConfirm' style="display: none;">
+                        <h:commandLink id="btnAccept" class="button large fg-white bg-blue offset7 span2" value="Confirm" action="#{labScheduleUI.acceptLabRequest()}">
+                            <f:ajax execute="@form" render="@form :fSchedule" onevent="doAfterAjax" />
+                        </h:commandLink>
+                        <a class="button large fg-white bg-blue offset1 span2" 
+                           onclick="displayConfirm('inherit', 'none')">
+                            Cancel
+                        </a>
+                    </div>
+                    <div id='divAccept'>
+                        <a class="button large fg-white bg-blue offset7 span2" 
+                           onclick="displayConfirm('none', 'inherit')">
+                            Accept
+                        </a>
+                    </div>
+                    <div id='divDeny'>
+                        <a class="button large fg-white bg-blue offset1 span2" 
+                           onclick="displayConfirmDeny('none', 'inherit')">
+                            Deny
+                        </a>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

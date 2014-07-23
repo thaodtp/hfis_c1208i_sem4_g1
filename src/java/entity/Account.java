@@ -162,7 +162,7 @@ public class Account implements Serializable {
         this.name = name;
     }
 
-    public String getDisplayBirthday(){
+    public String getDisplayBirthday() {
         return new SimpleDateFormat("dd/MM/yyyy").format(birthday);
     }
     public Date getBirthday() {
@@ -248,5 +248,5 @@ public class Account implements Serializable {
     public String toString() {
         return "entity.Account[ username=" + username + " ]";
     }
-    
+
 }
