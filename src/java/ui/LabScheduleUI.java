@@ -106,7 +106,7 @@ public class LabScheduleUI implements Serializable {
     }
     
     public List<ScheduleSequence> getAllScheduleOfOneDepartment() {
-        return scheduleManager.getAllScheduleOfOneDepartment(departmentId);
+        return scheduleManager.getAllScheduleOfOneDepartment(loginBean.getAccount().getDepartmentId());
     }
 
     public void denyLabRequest() {
