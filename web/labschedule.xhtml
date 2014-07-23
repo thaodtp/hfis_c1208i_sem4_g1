@@ -63,7 +63,7 @@
                             <ui:repeat value="#{labScheduleUI.slots}" var="slot">
                                 <tr>
                                     <td>#{slot} (#{slotUI.getDisplaySlot(slot)})</td>
-                                    <ui:repeat value="#{labUI.allLabs}" var="lab">
+                                    <ui:repeat value="#{labUI.labs}" var="lab">
                                         <td class="text-center">
                                             <h:commandLink rendered="#{labScheduleUI.getSchedule(lab,slot)!=null and labScheduleUI.currentLabSchedule.sequenceId.status==1}" 
                                                            value="#{labScheduleUI.currentLabSchedule.sequenceId.summary}" 
@@ -72,7 +72,7 @@
                                                 <f:setPropertyActionListener target="#{labScheduleUI.slot}" value="#{slot}"/>
                                                 <f:ajax execute="@this" render=":fSchedule:requestLab" />
                                             </h:commandLink>
-                                            <h:commandLink value="Make request" 
+                                            <h:commandLink value="Available" 
                                                            rendered="#{labScheduleUI.currentLabSchedule==null and labScheduleUI.validDay}"
                                                            onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>
@@ -99,7 +99,7 @@
                         <label>Detail:</label>
                         <p>#{labScheduleUI.currentLabSchedule.sequenceId.detail}</p>
                     </h:panelGroup>
-                    <h:panelGroup rendered="#{labScheduleUI.currentLabSchedule==null}">
+<!--                    <h:panelGroup rendered="#{labScheduleUI.currentLabSchedule==null}">
                         <div class="input-control textarea">
                             <label>Detail: </label>
                             <h:inputTextarea id="inpDetail" value="#{labScheduleUI.detail}" required="true" requiredMessage="You must provide some infomation about this lab request (purpose)" />
@@ -107,7 +107,7 @@
                     </h:panelGroup>
                     <h:commandButton id="makeRequest" action="#{labScheduleUI.requestLab()}" value="Make Request" onclick="window.scroll(0, 0)">
                         <f:ajax execute="@form" render=":fSchedule:requestLab :fSchedule:scheduleTable" />
-                    </h:commandButton>
+                    </h:commandButton>-->
                 </h:panelGroup>
             </h:panelGroup>
             <script>

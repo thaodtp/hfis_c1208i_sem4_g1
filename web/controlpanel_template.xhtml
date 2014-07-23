@@ -138,11 +138,11 @@
                                 <li class="stick bg-yellow">
                                     <a class="dropdown-toggle" href="#" ><i class="icon-tree-view"></i>Time-Table</a>
                                     <ul class="dropdown-menu" data-role="dropdown">
-                                        <li><h:outputLink value="/labschedule.xhtml">Time-Table <h:outputLabel rendered="#{!login.roleAdmin}">(Make Request)</h:outputLabel></h:outputLink></li>                       
-                                        <li><h:outputLink value="/admin/requestlab.xhtml" rendered="#{login.roleIntructor}">Request Lab</h:outputLink></li>
+                                        <li><h:outputLink value="/labschedule.xhtml">Time-Table</h:outputLink></li>               
+                                        <li><h:outputLink value="/instructor/requestlab.xhtml" rendered="#{!login.roleAdmin}">Make Request</h:outputLink></li>                       
                                         <li><h:outputLink value="/admin/all_requests.xhtml" rendered="#{!login.roleIntructor and !login.roleHOD}">All Lab Requests</h:outputLink></li>
                                         <li><h:outputLink value="/hod/all_requests.xhtml" rendered="#{!login.roleIntructor and !login.roleAdmin}">All Lab Requests</h:outputLink></li>
-                                        <li><h:outputLink value="/admin/my_requests.xhtml" rendered="#{!login.roleAdmin}">My Lab Requests</h:outputLink></li>
+                                        <li><h:outputLink value="/instructor/my_requests.xhtml" rendered="#{!login.roleAdmin}">My Lab Requests</h:outputLink></li>
                                         <li><h:outputLink value="/admin/requests.xhtml" rendered="#{login.roleAdmin}">Unresolved Lab Requests</h:outputLink></li>
                                     </ul>
                                 </li>
@@ -150,19 +150,19 @@
                             <li class="stick bg-black">
                                 <a class="dropdown-toggle" href="#"><i class="icon-tree-view"></i>Complaint</a>
                                 <ul class="dropdown-menu" data-role="dropdown">
-                                    <li><h:outputLink value="/admin/create_complaint.xhtml">Make Complaint</h:outputLink></li>
+                                    <li><h:outputLink value="/instructor/create_complaint.xhtml">Make Complaint</h:outputLink></li>
                                     <h:outputLabel rendered="#{login.roleAdmin}">
-                                        <li><h:outputLink value="/admin/complaints.xhtml">All Complaints</h:outputLink></li>
+                                        <li><h:outputLink value="/admin/all_complaints.xhtml">All Complaints</h:outputLink></li>
                                     </h:outputLabel>
                                     <h:outputLabel rendered="#{login.roleHOD}">
                                         <li><h:outputLink value="/hod/all_complaints.xhtml">All Complaints</h:outputLink></li>
                                     </h:outputLabel>
-                                    <h:outputLabel rendered="#{login.roleIntructor or login.roleHOD}">
-                                        <li><h:outputLink value="/admin/my_complaints.xhtml">My Complaints</h:outputLink></li>
+                                    <h:outputLabel rendered="#{login.roleIntructor or login.roleHOD or login.roleTechnical}">
+                                        <li><h:outputLink value="/instructor/my_complaints.xhtml">My Complaints</h:outputLink></li>
                                     </h:outputLabel>
                                     <li><h:outputLink value="/admin/unresolved_complaints.xhtml" rendered="#{login.roleAdmin}">Unresolved Complaints</h:outputLink></li>
                                     <li><h:outputLink value="/admin/completed_complaints.xhtml" rendered="#{login.roleAdmin}">Completed Complaints</h:outputLink></li>
-                                    <li><h:outputLink value="/admin/complaint_resolve.xhtml" rendered="#{login.roleTechnical}">Complaint Resolve</h:outputLink></li>
+                                    <li><h:outputLink value="/technician/complaint_resolve.xhtml" rendered="#{login.roleTechnical}">Complaint Resolve</h:outputLink></li>
                                 </ul>
                             </li>
                             <h:outputLabel rendered="#{login.roleAdmin or login.roleIntructor}">
