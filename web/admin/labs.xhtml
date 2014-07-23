@@ -36,8 +36,7 @@
             <h:column >
                 <f:facet name="header" class="text-left">Status</f:facet>  
                 <p>
-                    <h:outputText value="#{lab.status}">
-                        <f:converter converterId="labConverter"/>
+                    <h:outputText escape="false" value="#{lab.statusS}">
                     </h:outputText>     
                 </p>                   
             </h:column> 

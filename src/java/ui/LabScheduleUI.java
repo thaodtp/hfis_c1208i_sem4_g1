@@ -44,6 +44,8 @@ import javax.faces.event.ValueChangeEvent;
 public class LabScheduleUI implements Serializable {
 
     @EJB
+    private RequestManager requestManager;
+    @EJB
     private ScheduleManager scheduleManager;
     @EJB
     private LabScheduleManager labScheduleManager;
@@ -106,6 +108,7 @@ public class LabScheduleUI implements Serializable {
             }
         }
         scheduleManager.acceptLabRequest(curSchedule);
+        requestManager.sendMessage(curSchedule.getRequestAccount(), "Your lab request has been approved");
         curSchedule = null;
     }
 

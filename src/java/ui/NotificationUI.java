@@ -35,15 +35,26 @@ public class NotificationUI {
      */
     public NotificationUI() {
     }
-
+    public void clearMessage(){
+        requestManager.clearMessages(loginBean.getAccount().getUsername());
+    }
     public int getTotalNoti() {
         if (loginBean.getRoleAdmin()) {
             return getUnassignComplaintsCount() + getUnresolvedLabRequestsCount() + getMessages().size();
+        } else if (loginBean.getRoleTechnical()) {
+            return getUnresolvedComplaintsCount() + getMessages().size();
         } else {
-            return 0;
+            return getMessages().size();
         }
     }
 
+    //Technical Staff
+    public int getUnresolvedComplaintsCount() {
+        return requestManager.getUnresolvedComplaints(
+                loginBean.getAccount().getUsername()).size();
+    }
+
+    //Admin
     public int getUnresolvedLabRequestsCount() {
         return scheduleManager.getUnacceptedSchedule().size();
     }
