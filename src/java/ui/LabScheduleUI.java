@@ -96,7 +96,9 @@ public class LabScheduleUI implements Serializable {
             return false;
         }
     }
-
+    public List<ScheduleSequence> getUserSchedule(){
+        return loginBean.getAccount().getScheduleSequenceList();
+    }
     public List<ScheduleSequence> getUnacceptedSchedule() {
         return scheduleManager.getUnacceptedSchedule();
     }
