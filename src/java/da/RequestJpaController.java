@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Account;
+import entity.Department;
 import entity.Request;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -72,6 +73,17 @@ public class RequestJpaController implements Serializable {
         query.setParameter("type", type);
         query.setParameter("status", status);
         return query.getResultList();
+    }
+    
+    public List<Request> getAllComplaintOfOneDepartment(Department departmentId) {
+        TypedQuery<Request> query = getEntityManager().createQuery("SELECT r FROM Request r WHERE r.type=2 AND r.requestAccount.departmentId = :departmentId", Request.class);
+        query.setParameter("departmentId", departmentId);
+        List<Request> result = query.getResultList();
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
     }
 
     public void create(Request request) throws PreexistingEntityException, RollbackFailureException, Exception {

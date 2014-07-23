@@ -62,7 +62,7 @@
             </script>
         </h:form>
         <a id="anchorDetail"></a>
-        <h:form id="detailForm" prependId="false">
+                <h:form id="detailForm" prependId="false">
             <h:panelGroup class="panel" rendered="#{requestUI.currrentReq!=null}">
                 <div class="panel-header bg-lightBlue fg-white">Complaint Detail</div>
                 <div class="panel-content padding10">
@@ -71,31 +71,20 @@
                         <p><span class="span2">Sent at:</span> #{requestUI.currrentReq.displayTime}</p>
                         <p><span class="span2">By:</span> <a href="account_detail.xhtml?user=#{requestUI.currrentReq.requestAccount.username}">#{requestUI.currrentReq.requestAccount.name}</a></p>
                         <p><span class="span2">Detail:</span> #{requestUI.currrentReq.content}</p>
-                        <p><h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount!=null}">
+                        <p><h:panelGroup rendered="#{requestUI.currrentReq.status==1}">
                                 <span class="span2">Status:</span>
                                 <h:outputText value="#{requestUI.currrentReq.statusName}"/>
                             </h:panelGroup>
                         </p>
-                        <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount==null}">
-                            <p><span class="span2">Status:</span> Unassigned</p>
-                            <b>Who will solve this?</b>
-                            <div class="input-control select">
-                                <h:selectOneMenu id="resolveAccount" 
-                                                 value="#{requestUI.resolveAccount}" 
-                                                 converter="#{accountConverter}">
-                                    <f:selectItems value="#{accountUI.staffs}" 
-                                                   var="acc" 
-                                                   itemValue="#{acc}" 
-                                                   itemLabel="#{acc.name}" 
-                                                   itemDescription="#{acc.roleName}" />
-                                </h:selectOneMenu>
-                            </div>
-
+                        <h:panelGroup rendered="#{requestUI.currrentReq.status==0}">
+                            <p><span class="span2">Status:</span> Pending</p>
+                            
                             <div id='divConfirm' style="display: none;">
+                                <p class="offset7"><b>Are you sure?</b></p>
                                 <h:commandLink id="btnAccept" 
                                                class="button large fg-white bg-blue offset7 span2" 
                                                value="Confirm" 
-                                               action="#{requestUI.assignResolver()}">
+                                               action="#{requestUI.completeRequest()}">
                                     <f:ajax execute="@form" render="@form :fComplaint" onevent="doAfterAjax" />
                                 </h:commandLink>
                                 <a class="button large fg-white bg-blue offset1 span2" 
@@ -106,20 +95,20 @@
                             <div id='divAccept'>
                                 <a class="button large fg-white bg-blue offset10 span2" 
                                    onclick="displayConfirm('none', 'inherit')">
-                                    Accept
+                                    Done
                                 </a>
                             </div>
 
 
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount!=null}">
+<!--                        <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount!=null}">
                             <p>
                                 <span class="span2">Assigned to:</span> 
                                 <h:outputLink value="account_detail.xhtml?user=#{requestUI.currrentReq.resolveAccount.username}">
                                     #{requestUI.currrentReq.resolveAccount.name}
                                 </h:outputLink>
                             </p>
-                        </h:panelGroup>
+                        </h:panelGroup>-->
                     </dl>
                 </div>
             </h:panelGroup>

@@ -10,7 +10,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form rendered="#{!login.roleAdmin and !login.roleHOD}">
+        <h:form rendered="#{!login.roleAdmin}">
             <h:inputHidden value="#{login.autoLogin}"/>
         </h:form>
         <h:form id="fSchedule">

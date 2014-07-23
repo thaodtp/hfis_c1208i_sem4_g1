@@ -287,12 +287,8 @@ public class LabScheduleUI implements Serializable {
         return departmentId;
     }
 
-    public void setDepartmentId(int departmentId) {
-    //    this.departmentId = departmentId;
-        Account target = accountManager.getAccountByUsername("bnguyen");
-        if (target != null) {
-            this.departmentId = target.getDepartmentId();
-        }
+    public void setDepartmentId(Department departmentId) {
+        this.departmentId = departmentId;
     }
 
     public int getId() {

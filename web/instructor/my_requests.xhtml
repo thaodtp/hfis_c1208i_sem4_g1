@@ -88,7 +88,7 @@
                             <li>Lab: #{sd.labId.name} on slot #{sd.slot} on #{sd.displayDate}</li>
                         </ui:repeat>
                     </ul>
-                    <!--
+                    
                     <div id='divConfirmDeny' style="display: none;">
                         <h:commandLink id="btnDeny" class="button large fg-white bg-blue offset7 span2" value="Confirm" action="#{labScheduleUI.denyLabRequest()}">
                             <f:ajax execute="@form" render="@form :fSchedule" onevent="doAfterAjax" />
@@ -108,7 +108,7 @@
                             Cancel
                         </a>
                     </div>
-                    <div id='divAccept'>
+<!--                    <div id='divAccept'>
                         <a class="button large fg-white bg-blue offset7 span2" 
                            onclick="displayConfirm('none', 'inherit')">
                             Accept

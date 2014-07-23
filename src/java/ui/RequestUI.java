@@ -128,6 +128,10 @@ public class RequestUI implements Serializable {
     public List<Request> getAllComplaint() {
         return requestManager.getRequests(Request.TYPE_COMPLAINT);
     }
+    
+    public List<Request> getAllComplaintOfOneDepartment() {
+        return requestManager.getAllComplaintOfOneDepartment(loginBean.getAccount().getDepartmentId());
+    }
 
     public List<Request> getCompletedComplaints() {
         return requestManager.getRequestsByStatus(Request.STATUS_COMPLETE, Request.TYPE_COMPLAINT);

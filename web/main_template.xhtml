@@ -13,6 +13,7 @@
         <h:outputStylesheet name="/css/iconFont.css"/>
         <h:outputStylesheet name="/css/metro-bootstrap-responsive.css"/>
         <h:outputStylesheet name="/css/docs.css"/>
+        <h:outputStylesheet name="/css/jquery.dataTables.css"/>
         <h:outputStylesheet name="/js/prettify/prettify.css"/>
         <title>e-Administration</title>
         <!-- Load JavaScript -->       
@@ -24,9 +25,11 @@
         <h:outputScript name="/js/metro.min.js" />
         <link rel="shortcut icon" type="image/x-icon" href="/resources/images/favicon.ico"/>
     </h:head>
-
+        
     <h:body class="metro">
-        <header>         
+        
+        <header>   
+
             <nav class="navigation-bar fixed-top" >
                 <div class="navigation-bar-content">
                     <a href="/" class="element"><span class="icon-home"></span> Home</a>
@@ -124,21 +127,21 @@
                 <div class="span3">
                     <nav class="vertical-menu">
                         <ul>
-                            <form action="/search.xhtml">
+<!--                            <form action="/search.xhtml">
                                 <div class="element input-element" style="width: 215px;">
                                     <div class="input-control text">
                                         <input name="keyword" placeholder="Search" />
 
                                     </div>
                                 </div>
-                            </form>
+                            </form>-->
                             <li class="title">Lab Info</li>
-                            <li><h:outputLink value="/serverroom_details.xhtml?id=">Server Room Details</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">e-Learning</h:outputLink></li>
-                            <li><h:outputLink value="/labs_details.xhtml?id=">View Lab Details</h:outputLink></li>
-                            <li><h:outputLink value="/labschedule.xhtml?id=">Lab Time-Table</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">View SW Installation Procedure</h:outputLink></li>
-                            <li><h:outputLink value="/details.xhtml?id=">View syllabus copy</h:outputLink></li>
+                            <li><h:outputLink value="/serverroom_details.xhtml">Server Room Details</h:outputLink></li>
+                            <li><h:outputLink value="/labs_details.xhtml">View Lab Details</h:outputLink></li>
+                            <li><h:outputLink value="/labschedule.xhtml">Lab Time-Table</h:outputLink></li>                                                                             
+                            <li><h:outputLink value="/software.xhtml">Software</h:outputLink></li>    
+                            <li><h:outputLink value="/syllabus.xhtml">Syllabus</h:outputLink></li>
+                            <li><h:outputLink value="/elearning.xhtml">e-Learning</h:outputLink></li>                           
                         </ul>
                     </nav>
                 </div>
