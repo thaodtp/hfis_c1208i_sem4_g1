@@ -9,6 +9,7 @@ import da.AccountJpaController;
 import da.RequestJpaController;
 import da.exceptions.RollbackFailureException;
 import entity.Account;
+import entity.Department;
 import entity.Request;
 import java.util.Date;
 import java.util.LinkedList;
@@ -124,5 +125,9 @@ public class RequestManager {
         } catch (Exception ex) {
             Logger.getLogger(RequestManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public List<Request> getAllComplaintOfOneDepartment(Department departmentId) {
+        return getDaController().getAllComplaintOfOneDepartment(departmentId);
     }
 }

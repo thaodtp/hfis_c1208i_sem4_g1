@@ -8,16 +8,12 @@
     <ui:define name="head">
         <h:outputScript name="/js/jquery.dataTables.js" />
     </ui:define>
-    <f:metadata>
-        <f:viewParam value="#{login.account.username}" name="username"/>
-    </f:metadata>
     <ui:define name="content">
-        <h:form rendered="#{!login.roleTechnical}">
+        <h:form rendered="#{!login.roleHOD}">
             <h:inputHidden value="#{login.autoLogin}"/>
         </h:form>
         <h:form  id="fComplaint">
-            <legend>My complaints</legend>
-            <h:dataTable id="table" value="#{requestUI.loginBean.account.requestList}" var="req">
+            <h:dataTable id="table" value="#{requestUI.allComplaintOfOneDepartment}" var="req">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                         #{req.id}
@@ -76,7 +72,7 @@
                                 <h:outputText value="#{requestUI.currrentReq.statusName}"/>
                             </h:panelGroup>
                         </p>
-<!--                        <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount==null}">
+                        <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount==null}">
                             <p><span class="span2">Status:</span> Unassigned</p>
                             <b>Who will solve this?</b>
                             <div class="input-control select">
@@ -89,13 +85,13 @@
                                                    itemLabel="#{acc.name}" 
                                                    itemDescription="#{acc.roleName}" />
                                 </h:selectOneMenu>
-                            </div>-->
+                            </div>
 
                             <div id='divConfirm' style="display: none;">
                                 <h:commandLink id="btnAccept" 
                                                class="button large fg-white bg-blue offset7 span2" 
                                                value="Confirm" 
-                                               action="#{requestUI.completeRequest()}">
+                                               action="#{requestUI.assignResolver()}">
                                     <f:ajax execute="@form" render="@form :fComplaint" onevent="doAfterAjax" />
                                 </h:commandLink>
                                 <a class="button large fg-white bg-blue offset1 span2" 
@@ -111,7 +107,7 @@
                             </div>
 
 
-<!--                        </h:panelGroup>-->
+                        </h:panelGroup>
                         <h:panelGroup rendered="#{requestUI.currrentReq.resolveAccount!=null}">
                             <p>
                                 <span class="span2">Assigned to:</span> 
