@@ -73,6 +73,7 @@
                                                 <f:ajax execute="@this" render=":fSchedule:requestLab" />
                                             </h:commandLink>
                                             <h:commandLink value="Available" 
+                                                           action="#{labScheduleUI.checkLab()}"
                                                            rendered="#{labScheduleUI.currentLabSchedule==null and labScheduleUI.validDay}"
                                                            onclick="window.scroll(0, window.scrollMaxY)">
                                                 <f:setPropertyActionListener target="#{labScheduleUI.lab}" value="#{lab}"/>
@@ -99,15 +100,31 @@
                         <label>Detail:</label>
                         <p>#{labScheduleUI.currentLabSchedule.sequenceId.detail}</p>
                     </h:panelGroup>
-<!--                    <h:panelGroup rendered="#{labScheduleUI.currentLabSchedule==null}">
+                    <h:panelGroup rendered="#{labScheduleUI.currentLabSchedule==null and (login.roleHOD or login.roleIntructor)}">
                         <div class="input-control textarea">
                             <label>Detail: </label>
                             <h:inputTextarea id="inpDetail" value="#{labScheduleUI.detail}" required="true" requiredMessage="You must provide some infomation about this lab request (purpose)" />
                         </div>
+                        <div id='divConfirm' style="display: none;">
+                            <h:commandLink id="makeRequest" 
+                                           class="button large fg-white bg-blue offset6 span3"
+                                           action="#{labScheduleUI.requestLab()}" 
+                                           value="Make Request" 
+                                           onclick="window.scroll(0, 0)">
+                                <f:ajax execute="@form" render=":fSchedule:requestLab :fSchedule:scheduleTable" />
+                            </h:commandLink>
+                            <a class="button large fg-white bg-blue offset1 span2" 
+                               onclick="displayConfirm('inherit', 'none')">
+                                Cancel
+                            </a>
+                        </div>
+                        <div id='divAccept'>
+                            <a class="button large fg-white bg-blue offset10 span2" 
+                               onclick="displayConfirm('none', 'inherit')">
+                                Accept
+                            </a>
+                        </div>
                     </h:panelGroup>
-                    <h:commandButton id="makeRequest" action="#{labScheduleUI.requestLab()}" value="Make Request" onclick="window.scroll(0, 0)">
-                        <f:ajax execute="@form" render=":fSchedule:requestLab :fSchedule:scheduleTable" />
-                    </h:commandButton>-->
                 </h:panelGroup>
             </h:panelGroup>
             <script>
@@ -116,6 +133,11 @@
                     axis: 'x',
                     height: 255
                 });
+                function displayConfirm(x, y) {
+                    document.getElementById('divAccept').style.display = x;
+//                    document.getElementById('divDeny').style.display = x;
+                    document.getElementById('divConfirm').style.display = y;
+                }
             </script>
         </h:form>
     </ui:define>
