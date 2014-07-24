@@ -33,9 +33,9 @@
             <nav class="navigation-bar fixed-top" >
                 <div class="navigation-bar-content">
                     <a href="/" class="element"><span class="icon-home"></span> Home</a>
-                    <a class="element"><span class="icon-info-2"></span> About</a>
-                    <a class="element"><span class="icon-download-2"></span> Downloads</a>
-                    <a class="element"><span class="icon-phone"></span> Contact</a>
+                    <a href="/about.xhtml" class="element"><span class="icon-info-2"></span> About</a>
+                    <a href="/syllabus.xhtml" class="element"><span class="icon-download-2"></span> Downloads</a>
+                    <a href="/contact.xhtml" class="element"><span class="icon-phone"></span> Contact</a>
                     <!--                    <form action="/search.xhtml">
                                             <div class="element input-element">
                                                 <div class="input-control text">
@@ -99,7 +99,7 @@
                                 <li><a href="/admin/unresolved_complaints.xhtml">There're #{notificationUI.unassignComplaintsCount} unassigned complaints</a></li>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{login.roleTechnical}">
-                                    <li><a href="/staff/requests.xhtml">You have #{notificationUI.unresolvedComplaintsCount} requests need to be done</a></li>
+                                    <li><a href="/technician/complaint_resolve.xhtml">You have #{notificationUI.unresolvedComplaintsCount} requests need to be done</a></li>
                                 </h:panelGroup>
                                 <li class="divider"></li>
                                 <h:form>

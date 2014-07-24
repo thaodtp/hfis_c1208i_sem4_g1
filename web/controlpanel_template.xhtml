@@ -96,7 +96,7 @@
                                 <li><a href="/admin/unresolved_complaints.xhtml">There're #{notificationUI.unassignComplaintsCount} unassigned complaints</a></li>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{login.roleTechnical}">
-                                    <li><a href="/technician/complaints_resolve.xhtml">You have #{notificationUI.unresolvedComplaintsCount} requests need to be done</a></li>
+                                    <li><a href="/technician/complaint_resolve.xhtml">You have #{notificationUI.unresolvedComplaintsCount} requests need to be done</a></li>
                                 </h:panelGroup>
                                 <li class="divider"></li>
                                 <h:form>
@@ -157,7 +157,7 @@
                                     <h:outputLabel rendered="#{login.roleHOD}">
                                         <li><h:outputLink value="/hod/all_complaints.xhtml">All Complaints</h:outputLink></li>
                                     </h:outputLabel>
-                                    <h:outputLabel rendered="#{login.roleIntructor or login.roleHOD or login.roleTechnical}">
+                                    <h:outputLabel rendered="#{login.roleIntructor or login.roleHOD or login.roleTechnical or login.roleAdmin}">
                                         <li><h:outputLink value="/instructor/my_complaints.xhtml">My Complaints</h:outputLink></li>
                                     </h:outputLabel>
                                     <li><h:outputLink value="/admin/unresolved_complaints.xhtml" rendered="#{login.roleAdmin}">Unresolved Complaints</h:outputLink></li>

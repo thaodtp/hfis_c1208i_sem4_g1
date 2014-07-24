@@ -14,7 +14,7 @@
         </h:form>
         <h:form  id="fComplaint">
             <legend>My complaints</legend>
-            <h:dataTable id="table" value="#{requestUI.userUnresolvedComplaint}" var="req">
+            <h:dataTable id="table" value="#{requestUI.userComplaint}" var="req">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                         #{req.id}
