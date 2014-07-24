@@ -75,8 +75,18 @@ public class RequestUI implements Serializable {
     public List<Request> getMyTechnicalWork(){
         return requestManager.getUnresolvedComplaints(loginBean.getAccount().getUsername());
     }
-    public List<Request> getUserUnresolvedComplaint() {
-        return requestManager.getRequests(loginBean.getAccount().getUsername(), Request.TYPE_COMPLAINT, Request.STATUS_PENDING);
+    public List<Request> getUserComplaint() {
+        List<Request> pending = requestManager.getRequests(
+                loginBean.getAccount().getUsername(), 
+                Request.TYPE_COMPLAINT, 
+                Request.STATUS_PENDING);
+        List<Request> completed = requestManager.getRequests(
+                loginBean.getAccount().getUsername(), 
+                Request.TYPE_COMPLAINT, 
+                Request.STATUS_COMPLETE);
+        pending.addAll(completed);
+        return pending;
+        
     }
 
     public void sendMessage(Account toUser, String content) {
