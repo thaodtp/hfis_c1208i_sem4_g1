@@ -96,7 +96,9 @@ public class LabScheduleUI implements Serializable {
             return false;
         }
     }
-
+    public List<ScheduleSequence> getUserSchedule(){
+        return loginBean.getAccount().getScheduleSequenceList();
+    }
     public List<ScheduleSequence> getUnacceptedSchedule() {
         return scheduleManager.getUnacceptedSchedule();
     }
@@ -104,7 +106,7 @@ public class LabScheduleUI implements Serializable {
     public List<ScheduleSequence> getAllSchedule() {
         return scheduleManager.getAllSchedule();
     }
-    
+
     public List<ScheduleSequence> getAllScheduleOfOneDepartment() {
         return scheduleManager.getAllScheduleOfOneDepartment(loginBean.getAccount().getDepartmentId());
     }
@@ -178,10 +180,17 @@ public class LabScheduleUI implements Serializable {
             ss.setDetail(detail);
             ss.setRequestAccount(loginBean.getAccount());
             scheduleManager.requestLabSequence(ss);
-            for (LabSchedule ls : addPreparation) {
-                if (ls.getLabId() != null && ls.getSlot() != -1) {
-                    ls.setSequenceId(ss);
-                    labScheduleManager.requestLab(ls);
+            if (addPreparation.size() == 1 && lab != null) {
+                LabSchedule ls = addPreparation.get(0);
+                ls.setSequenceId(ss);
+                ls.setLabId(lab);
+                labScheduleManager.requestLab(ls);
+            } else {
+                for (LabSchedule ls : addPreparation) {
+                    if (ls.getLabId() != null && ls.getSlot() != -1) {
+                        ls.setSequenceId(ss);
+                        labScheduleManager.requestLab(ls);
+                    }
                 }
             }
             msg = "Your request've been sent";
@@ -297,10 +306,7 @@ public class LabScheduleUI implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-        
+
     }
-    
-    
-    
 
 }

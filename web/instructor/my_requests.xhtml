@@ -14,7 +14,7 @@
         </h:form>
         <h:form id="fSchedule">
             <legend>My requests</legend>
-            <h:dataTable id="table" value="#{labScheduleUI.loginBean.account.scheduleSequenceList}" var="schedule">
+            <h:dataTable id="table" value="#{labScheduleUI.userSchedule}" var="schedule">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                         #{schedule.id}
